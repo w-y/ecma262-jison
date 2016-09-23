@@ -1,0 +1,299 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/Users/wangyue/.nvm/v4.1.2/bin/node',
+1 verbose cli   '/Users/wangyue/.nvm/v4.1.2/bin/npm',
+1 verbose cli   'i',
+1 verbose cli   'zlib' ]
+2 info using npm@3.10.6
+3 info using node@v4.1.2
+4 silly loadCurrentTree Starting
+5 silly install loadCurrentTree
+6 silly install readLocalPackageData
+7 silly fetchPackageMetaData zlib
+8 silly fetchNamedPackageData zlib
+9 silly mapToRegistry name zlib
+10 silly mapToRegistry using default registry
+11 silly mapToRegistry registry http://r.npm.sankuai.com/
+12 silly mapToRegistry data Result {
+12 silly mapToRegistry   raw: 'zlib',
+12 silly mapToRegistry   scope: null,
+12 silly mapToRegistry   escapedName: 'zlib',
+12 silly mapToRegistry   name: 'zlib',
+12 silly mapToRegistry   rawSpec: '',
+12 silly mapToRegistry   spec: 'latest',
+12 silly mapToRegistry   type: 'tag' }
+13 silly mapToRegistry uri http://r.npm.sankuai.com/zlib
+14 verbose request uri http://r.npm.sankuai.com/zlib
+15 verbose request no auth needed
+16 info attempt registry request try #1 at 17:19:06
+17 verbose request id e013eaaee27053d5
+18 verbose etag "1e95-38utFgtA9YCkmPy9Rmp35g"
+19 http request GET http://r.npm.sankuai.com/zlib
+20 http 304 http://r.npm.sankuai.com/zlib
+21 verbose headers { server: 'Tengine',
+21 verbose headers   date: 'Mon, 12 Sep 2016 09:19:06 GMT',
+21 verbose headers   connection: 'keep-alive',
+21 verbose headers   'x-current-requests': '1',
+21 verbose headers   etag: '"1e95-38utFgtA9YCkmPy9Rmp35g"',
+21 verbose headers   'x-readtime': '17' }
+22 silly get cb [ 304,
+22 silly get   { server: 'Tengine',
+22 silly get     date: 'Mon, 12 Sep 2016 09:19:06 GMT',
+22 silly get     connection: 'keep-alive',
+22 silly get     'x-current-requests': '1',
+22 silly get     etag: '"1e95-38utFgtA9YCkmPy9Rmp35g"',
+22 silly get     'x-readtime': '17' } ]
+23 verbose etag http://r.npm.sankuai.com/zlib from cache
+24 verbose get saving zlib to /Users/wangyue/Develop/ecma262/npmcache/r.npm.sankuai.com/zlib/.cache.json
+25 verbose correctMkdir /Users/wangyue/Develop/ecma262/npmcache correctMkdir not in flight; initializing
+26 silly install normalizeTree
+27 silly loadCurrentTree Finishing
+28 silly loadIdealTree Starting
+29 silly install loadIdealTree
+30 silly cloneCurrentTree Starting
+31 silly install cloneCurrentTreeToIdealTree
+32 silly cloneCurrentTree Finishing
+33 silly loadShrinkwrap Starting
+34 silly install loadShrinkwrap
+35 silly loadShrinkwrap Finishing
+36 silly loadAllDepsIntoIdealTree Starting
+37 silly install loadAllDepsIntoIdealTree
+38 silly resolveWithNewModule zlib@1.0.5 checking installable status
+39 silly cache add args [ 'zlib', null ]
+40 verbose cache add spec zlib
+41 silly cache add parsed spec Result {
+41 silly cache add   raw: 'zlib',
+41 silly cache add   scope: null,
+41 silly cache add   escapedName: 'zlib',
+41 silly cache add   name: 'zlib',
+41 silly cache add   rawSpec: '',
+41 silly cache add   spec: 'latest',
+41 silly cache add   type: 'tag' }
+42 silly addNamed zlib@latest
+43 verbose addNamed "latest" is being treated as a dist-tag for zlib
+44 info addNameTag [ 'zlib', 'latest' ]
+45 silly mapToRegistry name zlib
+46 silly mapToRegistry using default registry
+47 silly mapToRegistry registry http://r.npm.sankuai.com/
+48 silly mapToRegistry data Result {
+48 silly mapToRegistry   raw: 'zlib',
+48 silly mapToRegistry   scope: null,
+48 silly mapToRegistry   escapedName: 'zlib',
+48 silly mapToRegistry   name: 'zlib',
+48 silly mapToRegistry   rawSpec: '',
+48 silly mapToRegistry   spec: 'latest',
+48 silly mapToRegistry   type: 'tag' }
+49 silly mapToRegistry uri http://r.npm.sankuai.com/zlib
+50 verbose addNameTag registry:http://r.npm.sankuai.com/zlib not in flight; fetching
+51 verbose get http://r.npm.sankuai.com/zlib not expired, no request
+52 silly addNameTag next cb for zlib with tag latest
+53 silly addNamed zlib@1.0.5
+54 verbose addNamed "1.0.5" is a plain semver version for zlib
+55 silly cache afterAdd zlib@1.0.5
+56 verbose afterAdd /Users/wangyue/Develop/ecma262/npmcache/zlib/1.0.5/package/package.json not in flight; writing
+57 verbose correctMkdir /Users/wangyue/Develop/ecma262/npmcache correctMkdir not in flight; initializing
+58 verbose afterAdd /Users/wangyue/Develop/ecma262/npmcache/zlib/1.0.5/package/package.json written
+59 silly loadAllDepsIntoIdealTree Finishing
+60 silly loadIdealTree Finishing
+61 silly currentTree Develop
+61 silly currentTree ├─┬ express@4.10.1
+61 silly currentTree │ ├─┬ accepts@1.1.2
+61 silly currentTree │ │ ├─┬ mime-types@2.0.2
+61 silly currentTree │ │ │ └── mime-db@1.1.2
+61 silly currentTree │ │ └── negotiator@0.4.9
+61 silly currentTree │ ├── content-disposition@0.5.0
+61 silly currentTree │ ├── cookie-signature@1.0.5
+61 silly currentTree │ ├── cookie@0.1.2
+61 silly currentTree │ ├─┬ debug@2.1.0
+61 silly currentTree │ │ └── ms@0.6.2
+61 silly currentTree │ ├── depd@1.0.0
+61 silly currentTree │ ├── escape-html@1.0.1
+61 silly currentTree │ ├─┬ etag@1.5.0
+61 silly currentTree │ │ └── crc@3.0.0
+61 silly currentTree │ ├── finalhandler@0.3.2
+61 silly currentTree │ ├── fresh@0.2.4
+61 silly currentTree │ ├── media-typer@0.3.0
+61 silly currentTree │ ├── merge-descriptors@0.0.2
+61 silly currentTree │ ├── methods@1.1.0
+61 silly currentTree │ ├─┬ on-finished@2.1.1
+61 silly currentTree │ │ └── ee-first@1.1.0
+61 silly currentTree │ ├── parseurl@1.3.0
+61 silly currentTree │ ├── path-to-regexp@0.1.3
+61 silly currentTree │ ├─┬ proxy-addr@1.0.3
+61 silly currentTree │ │ ├── forwarded@0.1.0
+61 silly currentTree │ │ └── ipaddr.js@0.1.3
+61 silly currentTree │ ├── qs@2.3.2
+61 silly currentTree │ ├── range-parser@1.0.2
+61 silly currentTree │ ├─┬ send@0.10.1
+61 silly currentTree │ │ ├── destroy@1.0.3
+61 silly currentTree │ │ ├── mime@1.2.11
+61 silly currentTree │ │ └── ms@0.6.2
+61 silly currentTree │ ├── serve-static@1.7.1
+61 silly currentTree │ ├─┬ type-is@1.5.2
+61 silly currentTree │ │ └─┬ mime-types@2.0.2
+61 silly currentTree │ │   └── mime-db@1.1.2
+61 silly currentTree │ ├── utils-merge@1.0.0
+61 silly currentTree │ └── vary@1.0.0
+61 silly currentTree ├─┬ jison@0.4.13
+61 silly currentTree │ ├── cjson@0.2.1
+61 silly currentTree │ ├── ebnf-parser@0.1.10
+61 silly currentTree │ ├─┬ escodegen@0.0.21
+61 silly currentTree │ │ ├── estraverse@0.0.4
+61 silly currentTree │ │ └─┬ source-map@0.1.40
+61 silly currentTree │ │   └── amdefine@0.1.0
+61 silly currentTree │ ├── esprima@1.0.4
+61 silly currentTree │ ├── jison-lex@0.2.1
+61 silly currentTree │ ├── JSONSelect@0.4.0
+61 silly currentTree │ ├── lex-parser@0.1.4
+61 silly currentTree │ └─┬ nomnom@1.5.2
+61 silly currentTree │   ├── colors@0.5.1
+61 silly currentTree │   └── underscore@1.1.7
+61 silly currentTree └── jquery-deferred@0.3.0
+62 silly idealTree Develop
+62 silly idealTree ├─┬ express@4.10.1
+62 silly idealTree │ ├─┬ accepts@1.1.2
+62 silly idealTree │ │ ├─┬ mime-types@2.0.2
+62 silly idealTree │ │ │ └── mime-db@1.1.2
+62 silly idealTree │ │ └── negotiator@0.4.9
+62 silly idealTree │ ├── content-disposition@0.5.0
+62 silly idealTree │ ├── cookie-signature@1.0.5
+62 silly idealTree │ ├── cookie@0.1.2
+62 silly idealTree │ ├─┬ debug@2.1.0
+62 silly idealTree │ │ └── ms@0.6.2
+62 silly idealTree │ ├── depd@1.0.0
+62 silly idealTree │ ├── escape-html@1.0.1
+62 silly idealTree │ ├─┬ etag@1.5.0
+62 silly idealTree │ │ └── crc@3.0.0
+62 silly idealTree │ ├── finalhandler@0.3.2
+62 silly idealTree │ ├── fresh@0.2.4
+62 silly idealTree │ ├── media-typer@0.3.0
+62 silly idealTree │ ├── merge-descriptors@0.0.2
+62 silly idealTree │ ├── methods@1.1.0
+62 silly idealTree │ ├─┬ on-finished@2.1.1
+62 silly idealTree │ │ └── ee-first@1.1.0
+62 silly idealTree │ ├── parseurl@1.3.0
+62 silly idealTree │ ├── path-to-regexp@0.1.3
+62 silly idealTree │ ├─┬ proxy-addr@1.0.3
+62 silly idealTree │ │ ├── forwarded@0.1.0
+62 silly idealTree │ │ └── ipaddr.js@0.1.3
+62 silly idealTree │ ├── qs@2.3.2
+62 silly idealTree │ ├── range-parser@1.0.2
+62 silly idealTree │ ├─┬ send@0.10.1
+62 silly idealTree │ │ ├── destroy@1.0.3
+62 silly idealTree │ │ ├── mime@1.2.11
+62 silly idealTree │ │ └── ms@0.6.2
+62 silly idealTree │ ├── serve-static@1.7.1
+62 silly idealTree │ ├─┬ type-is@1.5.2
+62 silly idealTree │ │ └─┬ mime-types@2.0.2
+62 silly idealTree │ │   └── mime-db@1.1.2
+62 silly idealTree │ ├── utils-merge@1.0.0
+62 silly idealTree │ └── vary@1.0.0
+62 silly idealTree ├─┬ jison@0.4.13
+62 silly idealTree │ ├── cjson@0.2.1
+62 silly idealTree │ ├── ebnf-parser@0.1.10
+62 silly idealTree │ ├─┬ escodegen@0.0.21
+62 silly idealTree │ │ ├── estraverse@0.0.4
+62 silly idealTree │ │ └─┬ source-map@0.1.40
+62 silly idealTree │ │   └── amdefine@0.1.0
+62 silly idealTree │ ├── esprima@1.0.4
+62 silly idealTree │ ├── jison-lex@0.2.1
+62 silly idealTree │ ├── JSONSelect@0.4.0
+62 silly idealTree │ ├── lex-parser@0.1.4
+62 silly idealTree │ └─┬ nomnom@1.5.2
+62 silly idealTree │   ├── colors@0.5.1
+62 silly idealTree │   └── underscore@1.1.7
+62 silly idealTree ├── jquery-deferred@0.3.0
+62 silly idealTree └── zlib@1.0.5
+63 silly generateActionsToTake Starting
+64 silly install generateActionsToTake
+65 silly generateActionsToTake Finishing
+66 silly diffTrees action count 1
+67 silly diffTrees add zlib@1.0.5
+68 silly decomposeActions action count 8
+69 silly decomposeActions fetch zlib@1.0.5
+70 silly decomposeActions extract zlib@1.0.5
+71 silly decomposeActions test zlib@1.0.5
+72 silly decomposeActions preinstall zlib@1.0.5
+73 silly decomposeActions build zlib@1.0.5
+74 silly decomposeActions install zlib@1.0.5
+75 silly decomposeActions postinstall zlib@1.0.5
+76 silly decomposeActions finalize zlib@1.0.5
+77 silly executeActions Starting
+78 silly install executeActions
+79 silly doSerial global-install 0
+80 silly doParallel fetch 1
+81 verbose correctMkdir /Users/wangyue/Develop/ecma262/npmcache/_locks correctMkdir not in flight; initializing
+82 verbose lock using /Users/wangyue/Develop/ecma262/npmcache/_locks/staging-137bdb17eaf9c8df.lock for /Users/wangyue/Develop/node_modules/.staging
+83 silly doParallel extract 1
+84 silly extract zlib@1.0.5
+85 verbose unbuild node_modules/.staging/zlib-c2d11e9b
+86 silly gentlyRm /Users/wangyue/Develop/node_modules/.staging/zlib-c2d11e9b is being purged from base /Users/wangyue/Develop
+87 verbose gentlyRm don't care about contents; nuking /Users/wangyue/Develop/node_modules/.staging/zlib-c2d11e9b
+88 verbose tar unpack /Users/wangyue/Develop/ecma262/npmcache/zlib/1.0.5/package.tgz
+89 verbose tar unpacking to /Users/wangyue/Develop/node_modules/.staging/zlib-c2d11e9b
+90 silly gentlyRm /Users/wangyue/Develop/node_modules/.staging/zlib-c2d11e9b is being purged
+91 verbose gentlyRm don't care about contents; nuking /Users/wangyue/Develop/node_modules/.staging/zlib-c2d11e9b
+92 silly gunzTarPerm modes [ '755', '644' ]
+93 silly gunzTarPerm extractEntry .gitignore
+94 silly gunzTarPerm extractEntry configure
+95 silly gunzTarPerm extractEntry index.js
+96 silly gunzTarPerm extractEntry LICENSE
+97 silly gunzTarPerm extractEntry Makefile
+98 silly gunzTarPerm extractEntry package.json
+99 silly gunzTarPerm extractEntry README.md
+100 silly gunzTarPerm extractEntry wscript
+101 silly gunzTarPerm extractEntry lib/zlib.js
+102 silly gunzTarPerm extractEntry src/node-zlib.cc
+103 silly gunzTarPerm extractEntry test/deflate.test.js
+104 silly gunzTarPerm extractEntry test/inflate.test.js
+105 silly gentlyRm /Users/wangyue/Develop/node_modules/.staging/zlib-c2d11e9b/node_modules is being purged
+106 verbose gentlyRm don't care about contents; nuking /Users/wangyue/Develop/node_modules/.staging/zlib-c2d11e9b/node_modules
+107 silly doParallel preinstall 1
+108 silly preinstall zlib@1.0.5 /Users/wangyue/Develop/node_modules/.staging/zlib-c2d11e9b
+109 info lifecycle zlib@1.0.5~preinstall: zlib@1.0.5
+110 verbose lifecycle zlib@1.0.5~preinstall: unsafe-perm in lifecycle true
+111 verbose lifecycle zlib@1.0.5~preinstall: PATH: /Users/wangyue/.nvm/v4.1.2/lib/node_modules/npm/bin/node-gyp-bin:/Users/wangyue/Develop/node_modules/.staging/zlib-c2d11e9b/node_modules/.bin:/Users/wangyue/Develop/node_modules/.bin:/Users/wangyue/.nvm/v4.1.2/bin:/usr/local/git/bin:/usr/local/sbin:/usr/local/heroku/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin
+112 verbose lifecycle zlib@1.0.5~preinstall: CWD: /Users/wangyue/Develop/node_modules/.staging/zlib-c2d11e9b
+113 silly lifecycle zlib@1.0.5~preinstall: Args: [ '-c', 'node-waf clean || true; node-waf configure build' ]
+114 info lifecycle zlib@1.0.5~preinstall: Failed to exec preinstall script
+115 verbose unlock done using /Users/wangyue/Develop/ecma262/npmcache/_locks/staging-137bdb17eaf9c8df.lock for /Users/wangyue/Develop/node_modules/.staging
+116 silly rollbackFailedOptional Starting
+117 silly rollbackFailedOptional Finishing
+118 silly runTopLevelLifecycles Starting
+119 silly runTopLevelLifecycles Finishing
+120 silly install printInstalled
+121 warn enoent ENOENT: no such file or directory, open '/Users/wangyue/Develop/package.json'
+122 warn Develop No description
+123 warn Develop No repository field.
+124 warn Develop No README data
+125 warn Develop No license field.
+126 verbose stack Error: zlib@1.0.5 preinstall: `node-waf clean || true; node-waf configure build`
+126 verbose stack spawn ENOENT
+126 verbose stack     at ChildProcess.<anonymous> (/Users/wangyue/.nvm/v4.1.2/lib/node_modules/npm/lib/utils/spawn.js:33:16)
+126 verbose stack     at emitTwo (events.js:87:13)
+126 verbose stack     at ChildProcess.emit (events.js:172:7)
+126 verbose stack     at maybeClose (internal/child_process.js:818:16)
+126 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)
+127 verbose pkgid zlib@1.0.5
+128 verbose cwd /Users/wangyue/Develop/ecma262
+129 error Darwin 13.3.0
+130 error argv "/Users/wangyue/.nvm/v4.1.2/bin/node" "/Users/wangyue/.nvm/v4.1.2/bin/npm" "i" "zlib"
+131 error node v4.1.2
+132 error npm  v3.10.6
+133 error file sh
+134 error code ELIFECYCLE
+135 error errno ENOENT
+136 error syscall spawn
+137 error zlib@1.0.5 preinstall: `node-waf clean || true; node-waf configure build`
+137 error spawn ENOENT
+138 error Failed at the zlib@1.0.5 preinstall script 'node-waf clean || true; node-waf configure build'.
+138 error Make sure you have the latest version of node.js and npm installed.
+138 error If you do, this is most likely a problem with the zlib package,
+138 error not with npm itself.
+138 error Tell the author that this fails on your system:
+138 error     node-waf clean || true; node-waf configure build
+138 error You can get information on how to open an issue for this project with:
+138 error     npm bugs zlib
+138 error Or if that isn't available, you can get their info via:
+138 error     npm owner ls zlib
+138 error There is likely additional logging output above.
+139 verbose exit [ 1, true ]
