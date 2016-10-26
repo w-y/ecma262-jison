@@ -19,3 +19,15 @@ hello\u0050连续
 +
 ++
 -
+
+100
+993443
+0999
+3.1415926
+0.123
+.123
+break
+default
+null
+true
+false
