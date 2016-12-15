@@ -29,5 +29,9 @@ hello\u0050连续
 break
 default
 null
+'test'
+"test"
 true
 false
+''
+""
