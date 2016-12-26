@@ -30,7 +30,15 @@ break
 default
 null
 'test'
-"test"
+"test hello "
+"test\6"
+"test\64"
+"test\645"
+"test\u0065"
+'test\6'
+'test\64'
+'test\645'
+'test\u0065'
 true
 false
 ''
