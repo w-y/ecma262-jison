@@ -7,8 +7,8 @@ $$hello
 $test
 test
 $test_ $$test__
-_test
 __test
+_test
 \u0050\u0059
 \u0051
 \u0051Y\u0059
@@ -39,7 +39,16 @@ null
 'test\64'
 'test\645'
 'test\u0065'
+'test_test'
+'test$test'
 true
 false
 ''
 ""
+"[]"
+
+this
+
+[]
+[100]
+[100, 200]
