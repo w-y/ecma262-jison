@@ -533,16 +533,16 @@ ArrayLiteral
   ;
 
 ElementList
-  : PrimaryExpression {
+  : AssignmentExpression_In {
     $$ = $1;
   }
-  | Elision PrimaryExpression {
+  | Elision AssignmentExpression_In {
     $$ = $1 + $2;
   }
-  | ElementList  ',' PrimaryExpression {
+  | ElementList  ',' AssignmentExpression_In {
     $$ = $1 + $2 + $3;
   }
-  | ElementList  ',' Elision PrimaryExpression {
+  | ElementList  ',' Elision AssignmentExpression_In {
     $$ = $1 + $2 + $3 + $4;
   }
   ;
@@ -556,3 +556,80 @@ Elision
   }
   ;
 
+AssignmentExpression_In
+  : ConditionalExpression_In
+  ;
+
+ConditionalExpression_In
+  : LogicalORExpression_In
+  ;
+
+LogicalORExpression_In
+  : LogicalANDExpression_In
+  | LogicalORExpression_In '||' LogicalANDExpression_In
+  ;
+
+LogicalANDExpression_In
+  : BitwiseORExpression_In
+  | LogicalANDExpression_In '&&' BitwiseORExpression_In
+  ;
+
+BitwiseORExpression_In
+  : BitwiseXORExpression_In 
+  | BitwiseORExpression_In '|' BitwiseXORExpression_In
+  ;
+
+BitwiseXORExpression_In
+  : BitwiseANDExpression_In
+  | BitwiseXORExpression_In '^' BitwiseANDExpression_In
+  ;
+
+BitwiseANDExpression_In
+  : EqualityExpression_In
+  | BitwiseANDExpression_In & EqualityExpression_In
+  ;
+
+EqualityExpression_In
+  : RelationalExpression_In
+  ;
+
+RelationalExpression_In
+  : ShiftExpression
+  ;
+
+ShiftExpression
+  : AdditiveExpression
+  ;
+
+AdditiveExpression
+  : MultiplicativeExpression
+  ;
+
+MultiplicativeExpression
+  : ExponentiationExpression
+  ;
+
+ExponentiationExpression
+  : UnaryExpression
+  ;
+
+
+UnaryExpression
+  : UpdateExpression
+  ;
+
+UpdateExpression
+  : LeftHandSideExpression
+  ;
+
+LeftHandSideExpression
+  : NewExpression
+  ;
+
+NewExpression
+  : MemberExpression
+  ;
+  
+MemberExpression
+  : PrimaryExpression
+  ;
