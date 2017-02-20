@@ -55,47 +55,63 @@
   };
 
   function parseOperator(operator, alias) {
-    let hasFunctionLookBehind = false;
-    let i = this.matches.index + 1;
+    let i = this.matches.index + this.match.length;
     const input = this.matches.input;
-    while(i < input.length && isWhiteSpace(input[i])) {
-      i++;
-    }
+
+    while(i < input.length && isWhiteSpace(input[i])) { i++; }
     let res = '';
 
     switch(this.topState()) {
       case 'single_string_start':
         res = 'SingleStringCharacter';
+        break;
       case 'double_string_start':
         res = 'DoubleStringCharacter';
+        break;
       case 'identifier_start':
         this.popState();
         res = alias || operator;
+        break;
       case 'decimal_digit_start':
         this.popState();
+        break;
       case 'decimal_digit_dot_start':
         this.popState();
         this.popState();
+        break;
       default:
         res = alias || operator;
+        break;
     };
 
+    // TODO: 具体情况具体分析
+    // case : 后面的{ 应该是语句块而不是表达式的开头
+    // } 后面的{是语句块开头？
+    // ) 后面的{是语句块开头?
     if (/^function/.test(input.substring(i))) {
       this.begin('function_start');
-    }
-    if (this.match !== ')' && this.match !== '}' && /^{/.test(input.substring(i))) {
+    } else if (this.match === ':') {
+      if (/^{/.test(input.substring(i))) {
+        if (this.topState() === 'case_start') {
+          this.popState();
+        } else {
+          this.begin('block_start');
+        }
+      }
+    } else if (this.match === ')') {
+      ;
+    } else if (this.match === '}') {
+      ;
+    } else if (/^{/.test(input.substring(i))) {
       this.begin('block_start');
     }
-
-    if (res) {
-      return res;
-    }
+    if (res) { return res; }
   }
 %}
 
 %lex
 
-%s  identifier_start identifier_start_unicode decimal_digit_start single_string_start double_string_start single_escape_string double_escape_string new_target decimal_digit_dot_start function_start block_start
+%s  identifier_start identifier_start_unicode decimal_digit_start single_string_start double_string_start single_escape_string double_escape_string new_target decimal_digit_dot_start function_start block_start case_start
 
 %%
 
@@ -138,6 +154,20 @@
 
 'super' %{
   return parseKeyword.call(this, 'super');
+%}
+
+'switch' %{
+  return parseKeyword.call(this, 'switch');
+%}
+
+'case' %{
+  this.begin('case_start');
+  return parseKeyword.call(this, 'case');
+%}
+
+'default' %{
+  this.begin('case_start');
+  return parseKeyword.call(this, 'default');
 %}
 
 'new'(?=\s*[.]\s*'target') %{
@@ -204,6 +234,90 @@
 
 'while' %{
   return parseKeyword.call(this, 'while');
+%}
+
+'continue'[u0009|\u0020]*[\u000A] %{
+  console.log('continue with line terminator');
+  return parseKeyword.call(this, 'continue', 'CONTINUE_LF');
+%}
+
+'continue' %{
+  return parseKeyword.call(this, 'continue');
+%}
+
+'break'[u0009|\u0020]*[\u000A] %{
+  console.log('break with line terminator');
+  return parseKeyword.call(this, 'break', 'BREAK_LF');
+%}
+
+'break' %{
+  return parseKeyword.call(this, 'break');
+%}
+
+'throw'[u0009|\u0020]*[\u000A] %{
+  console.log('throw with line terminator');
+  return parseKeyword.call(this, 'throw', 'THROW_LF');
+%}
+
+'throw' %{
+  {
+    let i = this.matches.index + this.match.length;
+    const input = this.matches.input;
+
+    while(i < input.length && isWhiteSpace(input[i])) { i++; }
+    const res = parseKeyword.call(this, this.match);
+
+    // TODO: 合并到parse keyword
+    // throw 后面的{ 应该是表达式
+    // throw 后面的function应该是表达式
+    if (/^{/.test(input.substring(i))) {
+      this.begin('block_start');
+    }
+    if (/^function/.test(input.substring(i))) {
+      this.begin('function_start');
+    }
+    return res;
+  }
+%}
+
+'with' %{
+  return parseKeyword.call(this, 'with');
+%}
+
+'return' %{
+  {
+    let i = this.matches.index + this.match.length;
+    const input = this.matches.input;
+
+    while(i < input.length && isWhiteSpace(input[i])) { i++; }
+    const res = parseKeyword.call(this, this.match);
+
+    // reutrn 后面的{ 应该是表达式
+    if (/^{/.test(input.substring(i))) {
+      this.begin('block_start');
+    }
+    if (/^function/.test(input.substring(i))) {
+      this.begin('function_start');
+    }
+
+    return res;
+  }
+%}
+
+'debugger' %{
+  return parseKeyword.call(this, 'debugger');
+%}
+
+'try' %{
+  return parseKeyword.call(this, 'try');
+%}
+
+'catch' %{
+  return parseKeyword.call(this, 'catch');
+%}
+
+'finally' %{
+  return parseKeyword.call(this, 'finally');
 %}
 
 <single_string_start>'$' return 'SingleStringCharacter';
@@ -303,7 +417,6 @@
 %}
 
 '{' %{
-  console.log('================');
   return parseOperator.call(this, this.match);
 %}
 
@@ -609,14 +722,18 @@
 
 /lex
 
-%start Program
+%start Script
 
 %nonassoc 'if'
 %nonassoc 'else'
 
 %%
 
-Program
+Script
+  : ScriptBody
+  ;
+
+ScriptBody
   : StatementList
   ;
 
@@ -1290,6 +1407,69 @@ Statement
   | BreakableStatement {
     console.log('breakable statement');
   }
+  | ContinueStatement {
+    console.log('continue statement');
+  }
+  | BreakStatement {
+    console.log('break statement');
+  }
+  | WithStatement {
+    console.log('with statement');
+  }
+  | ThrowStatement {
+    console.log('throw statement');
+  }
+  | DebuggerStatement {
+    console.log('debugger statement');
+  }
+  | TryStatement {
+    console.log('try statement');
+  }
+  ;
+
+Statement_Return
+  : EmptyStatement {
+    console.log('empty statement');
+  }
+  | ExpressionStatement {
+    console.log('expression statement');
+  }
+  | VariableStatement {
+    console.log('var statement');
+  }
+  | BlockStatement_Return {
+    console.log('block statement');
+  }
+  | LabelledStatement {
+    console.log('label statement');
+  }
+  /* | IfStatement_Return {
+    console.log('if statement');
+  } */
+  | BreakableStatement_Return {
+    console.log('breakable statement');
+  }
+  | ContinueStatement_Return {
+    console.log('continue statement');
+  }
+  | ReturnStatement {
+    console.log('return statement');
+  }
+  | BreakStatement {
+    console.log('break statement');
+  }
+  | WithStatement_Return {
+    console.log('with statement');
+  }
+  | ThrowStatement {
+    console.log('throw statement');
+  }
+  | DebuggerStatement {
+    console.log('debugger statement');
+  }
+  | TryStatement_Return {
+    console.log('try statement');
+  }
   ;
 
 VariableStatement
@@ -1322,8 +1502,17 @@ BlockStatement
   : Block
   ;
 
+BlockStatement_Return
+  : Block_Return
+  ;
+
 Block
   : '{' StatementList '}'
+  | '{' '}'
+  ;
+
+Block_Return
+  : '{' StatementList_Return '}'
   | '{' '}'
   ;
 
@@ -1332,8 +1521,24 @@ IfStatement
   | 'if' '(' Expression_In ')' Statement 'else' Statement %prec 'else'
   ;
 
+IfStatement_Return
+  : 'if' '(' Expression_In ')' Statement_Return %prec 'if'
+  | 'if' '(' Expression_In ')' Statement_Return 'else' Statement_Return %prec 'else'
+  ;
+
+
 BreakableStatement
   : IterationStatement
+  | SwitchStatement {
+    console.log('switch statement');
+  }
+  ;
+
+BreakableStatement_Return
+  : IterationStatement_Return
+  | SwitchStatement_Return {
+    console.log('switch statement');
+  }
   ;
 
 IterationStatement
@@ -1342,9 +1547,6 @@ IterationStatement
   }
   | 'while' '(' Expression_In ')' Statement {
     console.log('while statement');
-  }
-  | 'for' '(' Expression ';' Expression_In ';' Expression_In ')' Statement {
-    console.log('for expression statement');
   }
   | 'for' '(' LexicalDeclaration Expression_In ';' Expression_In ')' Statement {
     console.log('for lexical declaration statement');
@@ -1366,6 +1568,89 @@ IterationStatement
   }
   | 'for' '(' ForDeclaration 'of' AssignmentExpression_In ')' Statement {
     console.log('for delaration of statement');
+  }
+
+  | 'for' '(' Expression ';' Expression_In ';' Expression_In ')' Statement {
+    console.log('for expression statement');
+  }
+  | 'for' '(' Expression ';' ';' Expression_In ')' Statement {
+    console.log('for expression statement');
+  }
+  | 'for' '(' Expression ';' ';' ')' Statement {
+    console.log('for expression statement');
+  }
+  | 'for' '(' Expression ';' Expression_In ';' ')' Statement {
+    console.log('for expression statement');
+  }
+
+  | 'for' '(' ';' Expression_In ';' Expression_In ')' Statement {
+    console.log('for expression statement');
+  }
+  | 'for' '(' ';' ';' Expression_In ')' Statement {
+    console.log('for expression statement');
+  }
+  | 'for' '(' ';' ';' ')' Statement {
+    console.log('for expression statement');
+  }
+  | 'for' '(' ';' Expression_In ';' ')' Statement {
+    console.log('for expression statement');
+  }
+
+  ;
+
+IterationStatement_Return
+  : 'do' Statement_Return 'while' '(' Expression_In ')' ';' {
+    console.log('do while statement return');
+  }
+  | 'while' '(' Expression_In ')' Statement_Return {
+    console.log('while statement');
+  }
+  | 'for' '(' LexicalDeclaration Expression_In ';' Expression_In ')' Statement_Return {
+    console.log('for lexical declaration statement return');
+  }
+  | 'for' '(' 'var' VariableDeclarationList ';' Expression_In ';' Expression_In ')' Statement_Return {
+    console.log('for var statement');
+  }
+  | 'for' '(' LeftHandSideExpression 'in' Expression_In ')' Statement_Return {
+    console.log('for left hand side exp in statement');
+  }
+  | 'for' '(' ForDeclaration 'in' Expression_In ')' Statement_Return {
+    console.log('for declaration side exp statement');
+  }
+  | 'for' '(' LeftHandSideExpression 'of' AssignmentExpression_In ')' Statement_Return {
+    console.log('for of statement');
+  }
+  | 'for' '(' 'var' ForBinding 'of' AssignmentExpression_In ')' Statement_Return {
+    console.log('for var of statement');
+  }
+  | 'for' '(' ForDeclaration 'of' AssignmentExpression_In ')' Statement_Return {
+    console.log('for delaration of statement');
+  }
+
+  | 'for' '(' Expression ';' Expression_In ';' Expression_In ')' Statement_Return {
+    console.log('for expression statement');
+  }
+  | 'for' '(' Expression ';' ';' Expression_In ')' Statement_Return {
+    console.log('for expression statement');
+  }
+  | 'for' '(' Expression ';' ';' ')' Statement_Return {
+    console.log('for expression statement');
+  }
+  | 'for' '(' Expression ';' Expression_In ';' ')' Statement_Return {
+    console.log('for expression statement');
+  }
+
+  | 'for' '(' ';' Expression_In ';' Expression_In ')' Statement_Return {
+    console.log('for expression statement');
+  }
+  | 'for' '(' ';' ';' Expression_In ')' Statement_Return {
+    console.log('for expression statement');
+  }
+  | 'for' '(' ';' ';' ')' Statement_Return {
+    console.log('for expression statement');
+  }
+  | 'for' '(' ';' Expression_In ';' ')' Statement_Return {
+    console.log('for expression statement');
   }
   ;
 
@@ -1395,6 +1680,112 @@ LabelledItem
   | FunctionDeclaration
   ;
 
+SwitchStatement
+  : 'switch' '(' Expression_In ')' CaseBlock
+  ;
+
+SwitchStatement_Return
+  : 'switch' '(' Expression_In ')' CaseBlock_Return
+  ;
+
+CaseBlock
+  : '{' '}'
+  | '{' CaseClauses '}'
+  | '{' DefaultClause CaseClauses '}'
+  | '{' DefaultClause '}'
+  | '{' CaseClauses DefaultClause '}'
+  | '{' CaseClauses DefaultClause CaseClauses '}'
+  ;
+
+CaseBlock_Return
+  : '{' '}'
+  | '{' CaseClauses_Return '}'
+  | '{' DefaultClause_Return CaseClauses_Return '}'
+  | '{' DefaultClause_Return '}'
+  | '{' CaseClauses_Return DefaultClause_Return '}'
+  | '{' CaseClauses_Return DefaultClause_Return CaseClauses_Return '}'
+  ;
+
+CaseClauses
+  : CaseClause {
+
+  }
+  | CaseClauses CaseClause {
+
+  }
+  ;
+
+CaseClause
+  : 'case' Expression_In ':' StatementList
+  | 'case' Expression_In ':'
+  ;
+
+DefaultClause
+  : 'default' ':' StatementList
+  | 'default' ':'
+  ;
+
+CaseClauses_Return
+  : CaseClause_Return {
+
+  }
+  | CaseClauses_Return CaseClause_Return {
+
+  }
+  ;
+
+CaseClause_Return
+  : 'case' Expression_In ':' StatementList_Return
+  | 'case' Expression_In ':'
+  ;
+
+DefaultClause_Return
+  : 'default' ':' StatementList_Return
+  | 'default' ':'
+  ;
+
+ContinueStatement
+  : 'continue' ';'
+  | 'CONTINUE_LF' ';'
+  | 'continue' LabelIdentifier ';'
+  ;
+
+BreakStatement
+  : 'break' ';'
+  | 'BREAK_LF' ';'
+  | 'break' LabelIdentifier ';'
+  ;
+
+WithStatement
+  : 'with' '(' Expression_In ')' Statement
+  ;
+
+WithStatement_Return
+  : 'with' '(' Expression_In ')' Statement_Return
+  ;
+
+ThrowStatement
+  : 'throw' Expression_In ';' {
+
+  }
+  | 'THROW_LF' ';' {
+    console.log('throw with lf');
+  }
+  ;
+
+ReturnStatement
+  : 'return' ';' {
+
+  }
+  | 'return' Expression_In ';' {
+
+  }
+  ;
+
+DebuggerStatement
+  : 'debugger' ';'
+  ;
+
 StatementList
   : StatementListItem
   | StatementList StatementListItem
@@ -1402,6 +1793,16 @@ StatementList
 
 StatementListItem
   : Statement
+  | Declaration
+  ;
+
+StatementList_Return
+  : StatementListItem_Return
+  | StatementList_Return StatementListItem_Return
+  ;
+
+StatementListItem_Return
+  : Statement_Return
   | Declaration
   ;
 
@@ -1488,7 +1889,7 @@ FunctionBody
   ;
 
 FunctionStatementList
-  : StatementList
+  : StatementList_Return
   ;
 
 BindingIdentifier
@@ -1577,3 +1978,35 @@ BindingElisionElement
   | Elision BindingElement
   ;
 
+TryStatement
+  : 'try' Block Catch
+  | 'try' Block Finally
+  | 'try' Block Catch Finally
+  ;
+
+TryStatement_Return
+  : 'try' Block_Return Catch_Return
+  | 'try' Block_Return Finally_Return
+  | 'try' Block_Return Catch_Return Finally_Return
+  ;
+
+Catch
+  : 'catch' '(' CatchParameter ')' Block
+  ;
+
+Catch_Return
+  : 'catch' '(' CatchParameter ')' Block_Return
+  ;
+
+Finally
+  : 'finally' Block
+  ;
+
+Finally_Return
+  : 'finally' Block_Return
+  ;
+
+CatchParameter
+  : BindingIdentifier
+  | BindingPattern
+  ;
