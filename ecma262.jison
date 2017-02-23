@@ -42,17 +42,45 @@
   }
 
   function parseKeyword(keyword, alias) {
-    switch(this.topState()) {
-      case 'single_string_start':
-        return 'SingleStringCharacter';
-      case 'double_string_start':
-        return 'DoubleStringCharacter';
-      case 'identifier_start':
-        return 'UnicodeIDContinue';
-      default:
-        return alias || keyword;
-    };
-  };
+    {
+      let res = '';
+      switch(this.topState()) {
+        case 'single_string_start':
+          res = 'SingleStringCharacter';
+          break;
+        case 'double_string_start':
+          res = 'DoubleStringCharacter';
+          break;
+        case 'identifier_start':
+          res = 'UnicodeIDContinue';
+          break;
+        default:
+          res = alias || keyword;
+          break;
+      };
+
+      // look behind { 和 function
+      let i = this.matches.index + this.match.length;
+      const input = this.matches.input;
+
+      // 跳过空白字符
+      while(i < input.length && isWhiteSpace(input[i])) { i++; }
+
+      // throw 后面的{ 应该是表达式
+      // throw 后面的function应该是表达式
+      // return 后面的{ 应该是表达式
+      // return 后面的function应该是表达式
+      if (this.match === 'throw' || this.match === 'return') {
+        if (/^{/.test(input.substring(i))) {
+          this.begin('block_start');
+        }
+        if (/^function/.test(input.substring(i))) {
+          this.begin('function_start');
+        }
+      }
+      return res;
+    }
+  }
 
   function parseOperator(operator, alias) {
     let i = this.matches.index + this.match.length;
@@ -74,10 +102,12 @@
         break;
       case 'decimal_digit_start':
         this.popState();
+        res = alias || operator;
         break;
       case 'decimal_digit_dot_start':
         this.popState();
         this.popState();
+        res = alias || operator;
         break;
       default:
         res = alias || operator;
@@ -260,24 +290,7 @@
 %}
 
 'throw' %{
-  {
-    let i = this.matches.index + this.match.length;
-    const input = this.matches.input;
-
-    while(i < input.length && isWhiteSpace(input[i])) { i++; }
-    const res = parseKeyword.call(this, this.match);
-
-    // TODO: 合并到parse keyword
-    // throw 后面的{ 应该是表达式
-    // throw 后面的function应该是表达式
-    if (/^{/.test(input.substring(i))) {
-      this.begin('block_start');
-    }
-    if (/^function/.test(input.substring(i))) {
-      this.begin('function_start');
-    }
-    return res;
-  }
+  return parseKeyword.call(this, 'throw');
 %}
 
 'with' %{
@@ -285,23 +298,7 @@
 %}
 
 'return' %{
-  {
-    let i = this.matches.index + this.match.length;
-    const input = this.matches.input;
-
-    while(i < input.length && isWhiteSpace(input[i])) { i++; }
-    const res = parseKeyword.call(this, this.match);
-
-    // reutrn 后面的{ 应该是表达式
-    if (/^{/.test(input.substring(i))) {
-      this.begin('block_start');
-    }
-    if (/^function/.test(input.substring(i))) {
-      this.begin('function_start');
-    }
-
-    return res;
-  }
+  return parseKeyword.call(this, 'return');
 %}
 
 'debugger' %{
@@ -735,54 +732,6 @@ Script
 
 ScriptBody
   : StatementList
-  ;
-
-InputElementDiv
-  : WhiteSpace {
-    console.log('WhiteSpace');
-  }
-  | DivPunctuator {
-    console.log('Div Punctuator');
-  }
-  | LineTerminator {
-  }
-  | CommonToken {
-
-  }
-  ;
-
-CommonToken
-  : Expression_In {
-    console.log('primary expressiton ' + $1);
-  }
-  ;
-
-WhiteSpace
-  : TAB {
-    console.log('tab');
-  }
-  | VT
-  | FF
-  | SP {
-    console.log('space');
-  }
-  | NBSP
-  | ZWNBSP
-  ;
-
-LineTerminator
-  : LF {
-    console.log('LF');
-  }
-  ;
-
-DivPunctuator
-  : '/' {
-    console.log('DIV');
-  }
-  | '/=' {
-    console.log('DIV EQ');
-  }
   ;
 
 PrimaryExpression
@@ -1220,16 +1169,16 @@ LeftHandSideExpression
 
 NewExpression
   : MemberExpression
-  /* | 'new' NewExpression {
+  | 'new' NewExpression {
     console.log('new expression');
-  } */
+  }
   ;
 
 CallExpression
   : MemberExpression Arguments {
     console.log('call expression');
   }
-  /* | SuperCall {
+  | SuperCall {
     console.log('super call expression');
   }
   | CallExpression Arguments {
@@ -1240,7 +1189,7 @@ CallExpression
   }
   | CallExpression '.' IdentifierName {
     console.log('call expression identifier name');
-  } */
+  }
   ;
 
 SuperCall
@@ -1251,7 +1200,7 @@ MemberExpression
   : PrimaryExpression {
     console.log('primary ' + $1);
   }
-  /* | MemberExpression '[' Expression_In ']' {
+  | MemberExpression '[' Expression_In ']' {
     console.log('member expression');
   }
   | MemberExpression '.' IdentifierName {
@@ -1265,7 +1214,7 @@ MemberExpression
   }
   | 'new' MemberExpression Arguments {
     console.log('new member arguments');
-  } */
+  }
   ;
 
 Arguments
@@ -1401,9 +1350,9 @@ Statement
   | LabelledStatement {
     console.log('label statement');
   }
-  /* | IfStatement {
+  | IfStatement {
     console.log('if statement');
-  } */
+  }
   | BreakableStatement {
     console.log('breakable statement');
   }
@@ -1443,9 +1392,9 @@ Statement_Return
   | LabelledStatement {
     console.log('label statement');
   }
-  /* | IfStatement_Return {
+  | IfStatement_Return {
     console.log('if statement');
-  } */
+  }
   | BreakableStatement_Return {
     console.log('breakable statement');
   }
@@ -1525,7 +1474,6 @@ IfStatement_Return
   : 'if' '(' Expression_In ')' Statement_Return %prec 'if'
   | 'if' '(' Expression_In ')' Statement_Return 'else' Statement_Return %prec 'else'
   ;
-
 
 BreakableStatement
   : IterationStatement
@@ -1849,6 +1797,10 @@ HoistableDeclaration
   : FunctionDeclaration
   ;
 
+HoistableDeclaration_Default
+  : FunctionDeclaration_Default
+  ;
+
 FunctionDeclaration
   : 'FUNCTION' BindingIdentifier '(' ')' '{' FunctionBody '}' {
     console.log('function delaration');
@@ -1861,6 +1813,29 @@ FunctionDeclaration
   }
   | 'FUNCTION' BindingIdentifier '(' FormalParameters ')' '{' '}' {
     console.log('function delaration');
+  }
+  ;
+
+FunctionDeclaration_Default
+  : 'FUNCTION' BindingIdentifier '(' ')' '{' FunctionBody '}' {
+    console.log('function delaration');
+  }
+  | 'FUNCTION' BindingIdentifier '(' ')' '{' '}' {
+    console.log('function delaration');
+  }
+  | 'FUNCTION' BindingIdentifier '(' FormalParameters ')' '{' FunctionBody '}' {
+    console.log('function delaration');
+  }
+  | 'FUNCTION' BindingIdentifier '(' FormalParameters ')' '{' '}' {
+    console.log('function delaration');
+  }
+  | 'FUNCTION' '(' ')' '{' '}' {
+  }
+  | 'FUNCTION' '(' ')' '{' FunctionBody '}' {
+  }
+  | 'FUNCTION' '(' FormalParameters ')' '{' '}' {
+  }
+  | 'FUNCTION' '(' FormalParameters ')' '{' FunctionBody '}' {
   }
   ;
 
