@@ -1,11 +1,22 @@
 const EmptyStatement = require('./emptystatement');
-const BlockStatement = require('./blockstatement');
 
-const Statement = Object.assign({
-  Statement: [
-    ['EmptyStatement', ';'],
-    ['BlockStatement', ';'],
+const ExpressionStatement = require('./expressionstatement');
+
+const Statement = {
+  conditions: [''],
+  name: 'Statement',
+  rules: [
+    `${EmptyStatement.name}`,
+    `${ExpressionStatement.name} ;`
   ],
-}, EmptyStatement, BlockStatement);
+  handlers: [
+    `;`,
+    `;`,
+  ],
+  subRules: [
+    EmptyStatement,
+    ExpressionStatement,
+  ],
+}
 
 module.exports = Statement;

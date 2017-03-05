@@ -1,9 +1,10 @@
 const Generator = require("jison/lib/jison").Generator;
+const Script = require('./bnf/script');
 const Statement = require('./bnf/statement');
 const { decimalPoint, decimalNonZero, decimalZero, decimalDigit } = require('./lex/decimal');
 const { hexDigit } = require('./lex/hex');
 
-const { 
+const {
   identity,
   inequality,
   equality,
@@ -55,14 +56,40 @@ const {
   rightBlock,
 } = require('./lex/operators');
 
-const { 
-  unicodeIDStart, 
+const {
+  unicodeIDStart,
   unicodeIDContinue,
   unicodeEscapeSequenceStart,
 } = require('./lex/identifier');
 
 const trans = (token) => {
   return [token.conditions, token.rule, token.handler];
+};
+
+const transBnf = (bnf) => {
+  const table = {};
+  _transBnf(bnf, table);
+  return table;
+}
+
+
+const _transBnf = (bnf, table) => {
+  table[bnf.name] = [];
+
+  for (let i = 0; i < bnf.conditions.length; i++) {
+    const condition = bnf.conditions[i] || 'INITIAL';
+    const rules = bnf.rules[condition] || bnf.rules;
+    const subRules = bnf.subRules[condition] || bnf.subRules;
+    const handlers = bnf.handlers[condition] || bnf.handlers;
+
+    for (let ii = 0; ii < rules.length; ii++) {
+      table[bnf.name].push([rules[ii], handlers[ii]]);
+    }
+
+    for (let i = 0; i < subRules.length; i++) {
+      _transBnf(subRules[i], table);
+    }
+  }
 };
 
 exports.grammar = {
@@ -180,20 +207,15 @@ exports.grammar = {
       //[idStart, `this.begin('identifier_start');return 'UnicodeIDStart';`],
 
       /*[unicodeEscapeSequenceStart.conditions, unicodeEscapeSequenceStart.rule, unicodeEscapeSequenceStart.handler],
-      [hexDigit.conditions, hexDigit.rule, hexDigit.handler], 
-      [unicodeIDContinue.conditions, unicodeIDContinue.rule, unicodeIDContinue.handler], 
+      [hexDigit.conditions, hexDigit.rule, hexDigit.handler],
+      [unicodeIDContinue.conditions, unicodeIDContinue.rule, unicodeIDContinue.handler],
       [unicodeIDStart.conditions, unicodeIDStart.rule, unicodeIDStart.handler],*/
-
-      trans(unicodeEscapeSequenceStart),
-      trans(hexDigit),
-      trans(unicodeIDContinue),
-      trans(unicodeIDStart),
-
+ 
       /*[decimalPoint.conditions, decimalPoint.rule, decimalPoint.handler],
       [decimalDigit.conditions, decimalDigit.rule, decimalDigit.handler],
       [decimalZero.conditions, decimalZero.rule, decimalZero.handler],
       [decimalNonZero.conditions, decimalNonZero.rule, decimalNonZero.handler],*/
-      
+
       trans(condition),
       trans(colon),
       trans(semicolon),
@@ -243,7 +265,7 @@ exports.grammar = {
       trans(unsignedRightShift),
       trans(rightShift),
       trans(leftShift),
- 
+
       trans(leftBracket),
       trans(rightBracket),
       trans(leftParenthesis),
@@ -251,7 +273,12 @@ exports.grammar = {
       trans(leftBlockExp),
       trans(leftBlock),
       trans(rightBlock),
-      
+
+      trans(unicodeEscapeSequenceStart),
+      trans(hexDigit),
+      trans(unicodeIDContinue),
+      trans(unicodeIDStart),
+
       // [['*'], ',', `return require('./util').parseOperator.call(this, this.match)`],
       // [['*'], ';', `console.log('=============');return ';'`],
 
@@ -273,7 +300,8 @@ exports.grammar = {
 
   start: 'Script',
 
-  bnf: Object.assign({
+  bnf: transBnf(Script),
+  /*bnf: Object.assign({
       Script: [
         ['ScriptBody', ''],
       ],
@@ -291,7 +319,7 @@ exports.grammar = {
       Test: [
         ['UnicodeIDStart', ''],
       ],
-  }, Statement),
+  }, transBnf(Statement)),*/
 };
 
 const options = { type: "lr", moduleType: "commonjs", moduleName: "esparse" };

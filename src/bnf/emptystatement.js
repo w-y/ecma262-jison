@@ -1,4 +1,4 @@
-module.exports = {
+/*module.exports = {
   EmptyStatement: [
     [
       ';',
@@ -7,16 +7,16 @@ module.exports = {
       `
     ],
   ],
-}
-
-/*module.exports = {
-  EmptyStatement: {
-      name: EmptyStatement,
-      conditions: [],
-      rule: [';'],
-      handler: `
-        console.log('empty statement');
-      `,
-    }
-  }
 }*/
+
+module.exports = {
+  name: 'EmptyStatement',
+  conditions: [''],
+  rules: [';'],
+  handlers: [
+    `
+      console.log('empty statement');
+    `,
+  ],
+  subRules: [],
+};
