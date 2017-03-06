@@ -276,7 +276,7 @@ exports.bitwiseAND = {
 
 exports.bitwiseXOR = {
   conditions: ['*'],
-  rule: /[^]/,
+  rule: '\\^',
   handler: `
     return require('./util').parseOperator.call(this, this.match);
   `,

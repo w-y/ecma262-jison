@@ -69,6 +69,7 @@ const trans = (token) => {
 const transBnf = (bnf) => {
   const table = {};
   _transBnf(bnf, table);
+  // console.log(table);
   return table;
 }
 
@@ -181,8 +182,8 @@ exports.grammar = {
       [['*'], 'catch', `return require('./util').parseKeyword.call(this, this.match)`],
       [['*'], 'finally', `return require('./util').parseKeyword.call(this, this.match)`],
 
-      [['*'], '$', `return require('./util').parseIdentifier.call(this, this.match)`],
-      [['*'], '_', `return require('./util').parseIdentifier.call(this, this.match)`],
+      //[['*'], '$', `return require('./util').parseIdentifier.call(this, this.match)`],
+      //[['*'], '_', `return require('./util').parseIdentifier.call(this, this.match)`],
 
       [['single_string_start'], '.', `return require('./util').parseString.call(this, 'SingleStringCharacter')`],
       [['single_escape_string'], '[u|U]', `return require('./util').parseEscapeString.call(this, this.match)`],
