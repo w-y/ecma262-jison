@@ -348,7 +348,7 @@ exports.semicolon = {
 
 exports.comma = {
   conditions: ['*'],
-  rule: ',',
+  rule: '\\,',
   handler: `
     return require('./util').parseOperator.call(this, this.match);
   `,

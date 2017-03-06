@@ -18,6 +18,9 @@ const isDecimalDigit = function(ch) {
   return /[0-9]/.test(ch);
 }
 
+exports.isWhiteSpace = isWhiteSpace;
+exports.isDecimalDigit = isDecimalDigit;
+
 exports.parseKeyword = function(keyword, alias) {
   {
     let res = '';

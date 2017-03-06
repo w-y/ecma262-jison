@@ -1,15 +1,16 @@
 const decimalPoint = {
   conditions: ['*'],
-  rule: '.',
+  rule: '\\.',
   handler: `
     {
       let hasDigitBehind = false;
-      let i = this.matches.index + 1;
+      let i = this.matches.index + this.match.length;
+      const utils = require('./util');
       const input = this.matches.input;
-      while(i < input.length && isWhiteSpace(input[i])) {
+      while(i < input.length && utils.isWhiteSpace(input[i])) {
         i++;
       }
-      if (i < input.length && isDecimalDigit(input[i])) {
+      if (i < input.length && utils.isDecimalDigit(input[i])) {
         hasDigitBehind = true;
       }
 
@@ -39,7 +40,7 @@ const decimalPoint = {
 
 const decimalDigit = {
   conditions: ['decimal_digit_start', 'decimal_digit_dot_start'],
-  rule: /[0-9]/,
+  rule: '[0-9]',
   handler: `
     return 'DecimalDigit';
   `,
@@ -47,7 +48,7 @@ const decimalDigit = {
 
 const decimalZero = {
   conditions: ['INITIAL'],
-  rule: /[0]/,
+  rule: '0',
   handler: `
     this.begin('decimal_digit_start');
     return '0';
@@ -56,7 +57,7 @@ const decimalZero = {
 
 const decimalNonZero = {
   conditions: ['INITIAL'],
-  rule: /[1-9]/,
+  rule: '[1-9]',
   handler: `
     this.begin('decimal_digit_start');
     return 'NonZeroDigit';

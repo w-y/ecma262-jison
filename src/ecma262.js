@@ -145,7 +145,7 @@ exports.grammar = {
       [['*'], 'default', `this.begin('case_start');return require('./util').parseKeyword.call(this, this.match)`],
 
       [['*'], 'new(?=\\s*[.]\\s*target)', `this.begin('new_start');return require('./util').parseKeyword.call(this, this.match)`],
-      [['*'], '\\.', `return '.'`],
+      //[['*'], '\\.', `return '.'`],
       [['new_target'], 'target', `return '.'`],
       [['*'], 'new', `return require('./util').parseKeyword.call(this, this.match)`],
 
@@ -280,6 +280,12 @@ exports.grammar = {
       trans(semicolon),
       trans(dollar),
       trans(underscore),
+
+      trans(decimalPoint),
+      trans(decimalDigit),
+      trans(decimalZero),
+      trans(decimalNonZero),
+
       trans(unicodeEscapeSequenceStart),
       trans(hexDigit),
       trans(unicodeIDContinue),
