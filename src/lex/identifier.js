@@ -24,7 +24,7 @@ const unicodeIDContinue = {
 
 const unicodeEscapeSequenceStart = {
   conditions: ['INITIAL', 'identifier_start'],
-  rule: /\\[u|U]/,
+  rule: '\\\\u|\\\\U',
   handler: `
     if (this.topState() === 'identifier_start') {
       this.begin('identifier_start_unicode');
@@ -37,6 +37,25 @@ const unicodeEscapeSequenceStart = {
   `,
 };
 
+const dollar = {
+  conditions: ['INITIAL', 'identifier_start'],
+  rule: '\\$',
+  handler: `
+    return require('./util').parseIdentifier.call(this, this.match); 
+  `,
+};
+
+const underscore = {
+  conditions: ['INITIAL', 'identifier_start'],
+  rule: '_',
+  handler: `
+    return require('./util').parseIdentifier.call(this, this.match); 
+  `,
+};
+
 exports.unicodeIDStart = unicodeIDStart;
 exports.unicodeIDContinue = unicodeIDContinue;
 exports.unicodeEscapeSequenceStart = unicodeEscapeSequenceStart;
+
+exports.dollar = dollar;
+exports.underscore = underscore;

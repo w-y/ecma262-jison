@@ -115,7 +115,7 @@ exports.parseOperator = function(operator, alias) {
   if (res) { return res; }
 }
 
-exports.parseIdentifier = function() {
+exports.parseIdentifier = function(ch) {
   switch(this.topState()) {
     case 'single_string_start':
       return 'SingleStringCharacter';
@@ -125,6 +125,7 @@ exports.parseIdentifier = function() {
       break;
   }
   this.begin('identifier_start');
+  return ch; 
 }
 
 exports.parseString = function(ch) {

@@ -60,6 +60,8 @@ const {
   unicodeIDStart,
   unicodeIDContinue,
   unicodeEscapeSequenceStart,
+  dollar,
+  underscore,
 } = require('./lex/identifier');
 
 const trans = (token) => {
@@ -210,7 +212,7 @@ exports.grammar = {
       /*[unicodeEscapeSequenceStart.conditions, unicodeEscapeSequenceStart.rule, unicodeEscapeSequenceStart.handler],
       [hexDigit.conditions, hexDigit.rule, hexDigit.handler],
       [unicodeIDContinue.conditions, unicodeIDContinue.rule, unicodeIDContinue.handler],
-      [unicodeIDStart.conditions, unicodeIDStart.rule, unicodeIDStart.handler],*/
+      [unicodeIDStart.conditions, unicodeIDStart.rule, unicodeIDStart.handler],
  
       /*[decimalPoint.conditions, decimalPoint.rule, decimalPoint.handler],
       [decimalDigit.conditions, decimalDigit.rule, decimalDigit.handler],
@@ -275,6 +277,9 @@ exports.grammar = {
       trans(leftBlock),
       trans(rightBlock),
 
+      trans(semicolon),
+      trans(dollar),
+      trans(underscore),
       trans(unicodeEscapeSequenceStart),
       trans(hexDigit),
       trans(unicodeIDContinue),
