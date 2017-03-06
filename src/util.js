@@ -1,5 +1,5 @@
 const { TAB, VT, FF, SP, NBSP, ZWNJ, ZWJ, ZWNBSP } = require('./constants').WHITESPACE;
-const SINGLE_ESCAPE_CHARACTERS = require('./constants').SINGLE_ESCAPE_CHARACTERS; 
+const SINGLE_ESCAPE_CHARACTERS = require('./constants').SINGLE_ESCAPE_CHARACTERS;
 
 const isWhiteSpace = function(ch) {
   return (
@@ -125,7 +125,7 @@ exports.parseIdentifier = function(ch) {
       break;
   }
   this.begin('identifier_start');
-  return ch; 
+  return ch;
 }
 
 exports.parseString = function(ch) {
@@ -142,13 +142,18 @@ exports.parseString = function(ch) {
       this.begin('double_escape_string');
     }
     return 'EscapeSequenceStart';
-  } else if (this.match === '\'') {
-    this.popState();
-    if (isSingleQuote) {
-      return 'SingleQuoteEnd';
+  } else if (this.match === '\'' || this.match === '"') {
+    if (this.match === '\'') {
+      if (this.topState() === 'single_string_start') {
+        this.popState();
+        return 'SingleQuoteEnd';
+      }
     }
-    if (isDoubleQuote) {
-       return 'DoubleQuoteEnd';
+    if (this.match === '"') {
+      if (this.topState() === 'double_string_start') {
+        this.popState();
+        return 'DoubleQuoteEnd';
+      }
     }
   }
   return ch;

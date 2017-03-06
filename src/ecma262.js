@@ -188,14 +188,14 @@ exports.grammar = {
       //[['*'], '_', `return require('./util').parseIdentifier.call(this, this.match)`],
 
       [['single_string_start'], '.', `return require('./util').parseString.call(this, 'SingleStringCharacter')`],
-      [['single_escape_string'], '[u|U]', `return require('./util').parseEscapeString.call(this, this.match)`],
+      [['single_escape_string'], '\\\\u|\\\\U', `return require('./util').parseEscapeString.call(this, this.match)`],
       [['single_escape_string'], '.', `return require('./util').parseEscapeStringCharacter.call(this, this.match)`],
-      [['*'], '\\\'', `this.begin('single_string_start'); return 'SingleQuoteStart'`],
+      [['INITIAL'], '\\\'', `this.begin('single_string_start'); return 'SingleQuoteStart'`],
 
       [['double_string_start'], '.', `return require('./util').parseString.call(this, 'DoubleStringCharacter')`],
-      [['double_escape_string'], '[u|U]', `return require('./util').parseEscapeString.call(this, this.match)`],
+      [['double_escape_string'], '\\\\u|\\\\U', `return require('./util').parseEscapeString.call(this, this.match)`],
       [['double_escape_string'], '.', `return require('./util').parseEscapeStringCharacter.call(this, this.match)`],
-      [['*'], '"', `this.begin('double_string_start'); return 'DoubleQuoteStart'`],
+      [['INITIAL'], '"', `this.begin('double_string_start'); return 'DoubleQuoteStart'`],
 
       // [['*'], '\\[', `return require('./util').parseOperator.call(this, this.match)`],
       // [['*'], '\\]', `return require('./util').parseOperator.call(this, this.match)`],
