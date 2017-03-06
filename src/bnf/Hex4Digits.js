@@ -1,13 +1,12 @@
 module.exports = {
   conditions: [''],
-  name: 'Identifier',
+  name: 'Hex4Digits',
   rules: [
-    `IdentifierName`,
+    `HexDigit HexDigit HexDigit HexDigit`,
   ],
   handlers: [
-    `$$ = $1;`,
+    `$$ = $1 + $2 +$3 + $4;`,
   ],
   subRules: [
-    require('./IdentifierName'),
   ],
 };

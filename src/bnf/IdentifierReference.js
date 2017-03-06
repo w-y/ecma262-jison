@@ -5,7 +5,7 @@ module.exports = {
     `Identifier`,
   ],
   handlers: [
-    `$0 = $1;`,
+    `$$ = $1;`,
   ],
   subRules: [
     require('./Identifier'),

@@ -6,8 +6,8 @@ module.exports = {
     `IdentifierName IdentifierPart`,
   ],
   handlers: [
-    `$0 = $1;`,
-    `$0 = $1 + $2;`,
+    `$$ = $1;`,
+    `$$ = $1 + $2;`,
   ],
   subRules: [
     require('./IdentifierStart'),

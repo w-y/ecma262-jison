@@ -5,7 +5,7 @@ module.exports = {
     `UnicodeIDContinue`,
   ],
   handlers: [
-    `$0 = $1;`,
+    `$$ = $1;`,
   ],
   subRules: [
   ],

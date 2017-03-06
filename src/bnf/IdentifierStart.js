@@ -3,10 +3,13 @@ module.exports = {
   name: 'IdentifierStart',
   rules: [
     `UnicodeIDStart`,
+    `UnicodeEscapeSequence`,
   ],
   handlers: [
-    `$0 = $1;`,
+    `$$ = $1;`,
+    `$$ = $1;`, // TODO: unicode with id start
   ],
   subRules: [
+    require('./UnicodeEscapeSequence'),
   ],
 };
