@@ -348,5 +348,5 @@ exports.main = function main (args) {
 };
 
 if (require.main === module) {
-    exports.main();
+  exports.main();
 }

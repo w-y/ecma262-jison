@@ -1,18 +1,9 @@
-/*module.exports = {
-  EmptyStatement: [
-    [
-      ';',
-      `
-        console.log('empty statement');
-      `
-    ],
-  ],
-}*/
-
 module.exports = {
   name: 'EmptyStatement',
   conditions: [''],
-  rules: [';'],
+  rules: [
+    `;`
+  ],
   handlers: [
     `
       console.log('empty statement');

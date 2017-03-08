@@ -108,9 +108,7 @@ exports.parseOperator = function(operator, alias) {
   // case : 后面的{ 应该是语句块而不是表达式的开头
   // } 后面的{是语句块开头？
   // ) 后面的{是语句块开头?
-  if (/^function/.test(input.substring(i))) {
-    this.begin('function_start');
-  } else if (this.match === ':') {
+  if (this.match === ':') {
     if (/^{/.test(input.substring(i))) {
       if (this.topState() === 'case_start') {
         this.popState();
@@ -124,10 +122,12 @@ exports.parseOperator = function(operator, alias) {
     ;
   } else if (this.match === ';') {
     ;
-  } else if (isLineTerminator(this.match)) {
+  } else if (isWhiteSpace(this.match) || isLineTerminator(this.match)) {
     ;
   } else if (/^{/.test(input.substring(i))) {
     this.begin('block_start');
+  } else if (/^function/.test(input.substring(i))) {
+    this.begin('function_start');
   }
   if (res) { return res; }
 }

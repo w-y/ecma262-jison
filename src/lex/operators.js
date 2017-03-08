@@ -172,7 +172,7 @@ exports.bitwiseANDAssignment = {
 
 exports.bitwiseXORAssignment = {
   conditions: ['*'],
-  rule: /[^][=]/,
+  rule: '\\^=',
   handler: `
     return require('./util').parseOperator.call(this, this.match);
   `,
@@ -180,7 +180,7 @@ exports.bitwiseXORAssignment = {
 
 exports.bitwiseORAssignment = {
   conditions: ['*'],
-  rule: /[|][=]/,
+  rule: '\\|=',
   handler: `
     return require('./util').parseOperator.call(this, this.match);
   `,
@@ -188,15 +188,7 @@ exports.bitwiseORAssignment = {
 
 exports.assignment = {
   conditions: ['*'],
-  rule: '=',
-  handler: `
-    return require('./util').parseOperator.call(this, this.match);
-  `,
-};
-
-exports.assignment = {
-  conditions: ['*'],
-  rule: '=',
+  rule: '\\=',
   handler: `
     return require('./util').parseOperator.call(this, this.match);
   `,
@@ -406,7 +398,11 @@ exports.rightBlock = {
   conditions: ['*'],
   rule: '\\}',
   handler: `
-    return require('./util').parseOperator.call(this, this.match);
+    this.__temp__ = require('./util').parseOperator.call(this, this.match);
+    if (this.topState() === 'block_start') {
+      this.popState();
+    }
+    return this.__temp__;
   `,
 };
 

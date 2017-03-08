@@ -8,6 +8,7 @@ module.exports = {
     `ArrayLiteral`,
     `ObjectLiteral`,
     `CoverParenthesizedExpressionAndArrowParameterList`,
+    `FunctionExpression`,
   ],
   handlers: [
     `console.log('primary expression ' + $1);`,
@@ -16,6 +17,7 @@ module.exports = {
     `console.log('primary expression (array literal):' + $1);`,
     `console.log('primary expression (object literal):' + $1);`,
     `console.log('primary expression (pe and ap):' + $1);`,
+    `console.log('primary expression (function exp):' + $1);`,
   ],
   subRules: [
     require('./IdentifierReference'),
@@ -23,5 +25,6 @@ module.exports = {
     require('./ArrayLiteral'),
     require('./ObjectLiteral'),
     require('./CoverParenthesizedExpressionAndArrowParameterList'),
+    require('./FunctionExpression'),
   ],
 };
