@@ -54,6 +54,7 @@ const {
   leftBlockExp,
   leftBlock,
   rightBlock,
+  spread,
 } = require('./lex/operators');
 
 const {
@@ -71,12 +72,13 @@ const trans = (token) => {
 const transBnf = (bnf) => {
   const table = {};
   _transBnf(bnf, table);
-  // console.log(table);
   return table;
 }
 
 
 const _transBnf = (bnf, table) => {
+  if (!bnf.name) { return; }
+
   table[bnf.name] = [];
 
   for (let i = 0; i < bnf.conditions.length; i++) {
@@ -154,7 +156,7 @@ exports.grammar = {
       [['*'], 'instanceof', `return require('./util').parseKeyword.call(this, this.match, 'RelationalOperator')`],
       [['*'], 'this', `return require('./util').parseKeyword.call(this, this.match, 'this')`],
 
-      [['*'], '\\.\\.\\.', `return require('./util').parseKeyword.call(this, this.match)`],
+      // [['*'], '\\.\\.\\.', `return require('./util').parseKeyword.call(this, this.match)`],
 
       [['*'], 'delete', `return require('./util').parseKeyword.call(this, this.match, 'UnaryOperator')`],
       [['*'], 'void', `return require('./util').parseKeyword.call(this, this.match, 'UnaryOperator')`],
@@ -213,7 +215,7 @@ exports.grammar = {
       [hexDigit.conditions, hexDigit.rule, hexDigit.handler],
       [unicodeIDContinue.conditions, unicodeIDContinue.rule, unicodeIDContinue.handler],
       [unicodeIDStart.conditions, unicodeIDStart.rule, unicodeIDStart.handler],
- 
+
       /*[decimalPoint.conditions, decimalPoint.rule, decimalPoint.handler],
       [decimalDigit.conditions, decimalDigit.rule, decimalDigit.handler],
       [decimalZero.conditions, decimalZero.rule, decimalZero.handler],
@@ -273,6 +275,7 @@ exports.grammar = {
       trans(rightBracket),
       trans(leftParenthesis),
       trans(rightParenthesis),
+
       trans(leftBlockExp),
       trans(leftBlock),
       trans(rightBlock),
@@ -280,6 +283,7 @@ exports.grammar = {
       trans(semicolon),
       trans(dollar),
       trans(underscore),
+      trans(spread),
 
       trans(decimalPoint),
       trans(decimalDigit),

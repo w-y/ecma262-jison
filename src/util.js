@@ -1,4 +1,4 @@
-const { TAB, VT, FF, SP, NBSP, ZWNJ, ZWJ, ZWNBSP } = require('./constants').WHITESPACE;
+const { TAB, VT, FF, SP, NBSP, ZWNJ, ZWJ, ZWNBSP, LF, CR, LS, PS } = require('./constants').WHITESPACE;
 const SINGLE_ESCAPE_CHARACTERS = require('./constants').SINGLE_ESCAPE_CHARACTERS;
 
 const isWhiteSpace = function(ch) {
@@ -18,8 +18,18 @@ const isDecimalDigit = function(ch) {
   return /[0-9]/.test(ch);
 }
 
+const isLineTerminator = function(ch) {
+  return (
+    ch === LF ||
+    ch === CR ||
+    ch === LS ||
+    ch === PS
+  );
+}
+
 exports.isWhiteSpace = isWhiteSpace;
 exports.isDecimalDigit = isDecimalDigit;
+exports.isLineTerminator = isLineTerminator;
 
 exports.parseKeyword = function(keyword, alias) {
   {
@@ -111,6 +121,10 @@ exports.parseOperator = function(operator, alias) {
   } else if (this.match === ')') {
     ;
   } else if (this.match === '}') {
+    ;
+  } else if (this.match === ';') {
+    ;
+  } else if (isLineTerminator(this.match)) {
     ;
   } else if (/^{/.test(input.substring(i))) {
     this.begin('block_start');

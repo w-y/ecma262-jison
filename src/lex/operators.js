@@ -409,3 +409,11 @@ exports.rightBlock = {
     return require('./util').parseOperator.call(this, this.match);
   `,
 };
+
+exports.spread = {
+  conditions: ['*'],
+  rule: '\\.\\.\\.',
+  handler: `
+    return require('./util').parseOperator.call(this, this.match);
+  `,
+};
