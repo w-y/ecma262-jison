@@ -146,9 +146,9 @@ exports.grammar = {
       [['*'], 'case', `this.begin('case_start');return require('./util').parseKeyword.call(this, this.match)`],
       [['*'], 'default', `this.begin('case_start');return require('./util').parseKeyword.call(this, this.match)`],
 
-      [['*'], 'new(?=\\s*[.]\\s*target)', `this.begin('new_start');return require('./util').parseKeyword.call(this, this.match)`],
-      //[['*'], '\\.', `return '.'`],
-      [['new_target'], 'target', `return '.'`],
+      [['*'], 'new(?=\\s*[.]\\s*target)', `this.begin('new_target');return require('./util').parseKeyword.call(this, this.match)`],
+      [['new_target'], '\\.', `return '.'`],
+      [['new_target'], 'target', `return 'target'`],
       [['*'], 'new', `return require('./util').parseKeyword.call(this, this.match)`],
 
       [['*'], 'var', `return require('./util').parseKeyword.call(this, this.match)`],

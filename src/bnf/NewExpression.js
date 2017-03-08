@@ -5,7 +5,7 @@ module.exports = {
     `MemberExpression`,
   ],
   handlers: [
-    `;`,
+    `console.log('member expression: ' + $1); $$ = $1;;`,
   ],
   subRules: [
     require('./MemberExpression'),
