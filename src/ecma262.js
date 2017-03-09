@@ -148,7 +148,7 @@ exports.grammar = {
 
       [['*'], 'new(?=\\s*[.]\\s*target)', `this.begin('new_target');return require('./util').parseKeyword.call(this, this.match)`],
       [['new_target'], '\\.', `return '.'`],
-      [['new_target'], 'target', `return 'target'`],
+      [['new_target'], 'target', `this.popState();return 'target'`],
       [['*'], 'new', `return require('./util').parseKeyword.call(this, this.match)`],
 
       [['*'], 'var', `return require('./util').parseKeyword.call(this, this.match)`],
