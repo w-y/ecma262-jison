@@ -7,6 +7,8 @@ module.exports = {
     `VariableStatement`,
     `BlockStatement`,
     `LabelledStatement`,
+    `IfStatement`,
+    `BreakableStatement`,
   ],
   handlers: [
     `$$ = $1;`,
@@ -14,6 +16,8 @@ module.exports = {
     `$$ = $1;`,
     `console.log('block statement: ' + $1);$$ = $1;`,
     `console.log('labelled statement: ' + $1);$$ = $1;`,
+    `console.log('if statement: ' + $1);$$ = $1;`,
+    `console.log('break statement: ' + $1);$$ = $1;`,
   ],
   subRules: [
     require('./EmptyStatement'),
@@ -21,5 +25,7 @@ module.exports = {
     require('./VariableStatement'),
     require('./BlockStatement'),
     require('./LabelledStatement'),
+    require('./IfStatement'),
+    require('./BreakableStatement'),
   ],
 };

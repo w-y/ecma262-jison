@@ -316,6 +316,7 @@ exports.grammar = {
 
   start: 'Script',
 
+  operators: [[ 'nonassoc', 'if'], ['nonassoc', 'else']],
   bnf: transBnf(Script),
   /*bnf: Object.assign({
       Script: [
