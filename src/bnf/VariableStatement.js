@@ -5,7 +5,7 @@ module.exports = {
     `var VariableDeclarationList_In ;`,
   ],
   handlers: [
-    `$$ = $1 + $2 + $3`,
+    `$$ = $1 + ' ' + $2 + $3`,
   ],
   subRules: [
     require('./VariableDeclarationList_In'),
