@@ -11,6 +11,10 @@ module.exports = {
     `BreakableStatement`,
     `ContinueStatement`,
     `BreakStatement`,
+    `WithStatement`,
+    `ThrowStatement`,
+    `DebuggerStatement`,
+    `TryStatement`,
   ],
   handlers: [
     `$$ = $1;`,
@@ -22,6 +26,10 @@ module.exports = {
     `console.log('break statement: ' + $1);$$ = $1;`,
     `console.log('continue statement: ' + $1);$$ = $1`,
     `console.log('break statement: ' + $1);$$ = $1`,
+    `console.log('with statement: ' + $1);$$ = $1`,
+    `console.log('throw statement: ' + $1);$$ = $1`,
+    `console.log('debugger statement: ' + $1);$$ = $1`,
+    `console.log('try statement: ' + $1);$$ = $1`,
   ],
   subRules: [
     require('./EmptyStatement'),
@@ -33,5 +41,9 @@ module.exports = {
     require('./BreakableStatement'),
     require('./ContinueStatement'),
     require('./BreakStatement'),
+    require('./WithStatement'),
+    require('./ThrowStatement'),
+    require('./DebuggerStatement'),
+    require('./TryStatement'),
   ],
 };
