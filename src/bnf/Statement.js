@@ -9,6 +9,8 @@ module.exports = {
     `LabelledStatement`,
     `IfStatement`,
     `BreakableStatement`,
+    `ContinueStatement`,
+    `BreakStatement`,
   ],
   handlers: [
     `$$ = $1;`,
@@ -18,6 +20,8 @@ module.exports = {
     `console.log('labelled statement: ' + $1);$$ = $1;`,
     `console.log('if statement: ' + $1);$$ = $1;`,
     `console.log('break statement: ' + $1);$$ = $1;`,
+    `console.log('continue statement: ' + $1);$$ = $1`,
+    `console.log('break statement: ' + $1);$$ = $1`,
   ],
   subRules: [
     require('./EmptyStatement'),
@@ -27,5 +31,7 @@ module.exports = {
     require('./LabelledStatement'),
     require('./IfStatement'),
     require('./BreakableStatement'),
+    require('./ContinueStatement'),
+    require('./BreakStatement'),
   ],
 };
