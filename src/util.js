@@ -109,10 +109,10 @@ exports.parseOperator = function(operator, alias) {
   // } 后面的{是语句块开头？
   // ) 后面的{是语句块开头?
   if (this.match === ':') {
-    if (/^{/.test(input.substring(i))) {
-      if (this.topState() === 'case_start') {
-        this.popState();
-      } else {
+    if (this.topState() === 'case_start') {
+      this.popState();
+    } else {
+      if (/^{/.test(input.substring(i))) {
         this.begin('block_start');
       }
     }
