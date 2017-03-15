@@ -1,17 +1,15 @@
-const LogicalANDExpression_In = require('./LogicalANDExpression_In');
-
-const LogicalORExpression_In = {
+module.exports = {
   conditions: [''],
   name: 'LogicalORExpression_In',
   rules: [
     `LogicalANDExpression_In`,
+    `LogicalORExpression_In || LogicalANDExpression_In`,
   ],
   handlers: [
-    `;`,
+    `$$ = $1`,
+    `$$ = $1 + $2 + $3`,
   ],
   subRules: [
-    LogicalANDExpression_In, 
+    require('./LogicalANDExpression_In'), 
   ],
-}
-
-module.exports = LogicalORExpression_In;
+};

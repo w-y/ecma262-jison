@@ -1,17 +1,15 @@
-const BitwiseANDExpression_In = require('./BitwiseANDExpression_In');
-
-const BitwiseXORExpression_In = {
+module.exports = {
   conditions: [''],
   name: 'BitwiseXORExpression_In',
   rules: [
     `BitwiseANDExpression_In`,
+    `BitwiseXORExpression_In ^ BitwiseANDExpression_In`,
   ],
   handlers: [
-    `;`,
+    `$$ = $1;`,
+    `$$ = $1 + $2 + $3;`,
   ],
   subRules: [
-    BitwiseANDExpression_In, 
+    require('./BitwiseANDExpression_In'),
   ],
-}
-
-module.exports = BitwiseXORExpression_In;
+};
