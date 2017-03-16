@@ -164,7 +164,7 @@ exports.unsignedRightShiftAssignment = {
 
 exports.bitwiseANDAssignment = {
   conditions: ['*'],
-  rule: /[&][=]/,
+  rule: '&=',
   handler: `
     return require('./util').parseOperator.call(this, this.match);
   `,
@@ -188,7 +188,7 @@ exports.bitwiseORAssignment = {
 
 exports.assignment = {
   conditions: ['*'],
-  rule: '\\=',
+  rule: '=',
   handler: `
     return require('./util').parseOperator.call(this, this.match);
   `,
@@ -198,7 +198,7 @@ exports.plus = {
   conditions: ['*'],
   rule: '\\+',
   handler: `
-    return require('./util').parseOperator.call(this, this.match);
+    return require('./util').parseOperator.call(this, this.match, 'AdditiveOperator');
   `,
 };
 
@@ -206,13 +206,13 @@ exports.minus = {
   conditions: ['*'],
   rule: '-',
   handler: `
-    return require('./util').parseOperator.call(this, this.match);
+    return require('./util').parseOperator.call(this, this.match, 'AdditiveOperator');
   `,
 };
 
 exports.not = {
   conditions: ['*'],
-  rule: /[!]/,
+  rule: '!',
   handler: `
     return require('./util').parseOperator.call(this, this.match);
   `,
@@ -220,7 +220,7 @@ exports.not = {
 
 exports.bitwiseNOT = {
   conditions: ['*'],
-  rule: '~',
+  rule: '\\~',
   handler: `
     return require('./util').parseOperator.call(this, this.match);
   `,
@@ -238,7 +238,15 @@ exports.multiplication = {
   conditions: ['*'],
   rule: '\\*',
   handler: `
-    return require('./util').parseOperator.call(this, this.match);
+    return require('./util').parseOperator.call(this, this.match, 'MultiplicativeOperator');
+  `,
+};
+
+exports.division = {
+  conditions: ['*'],
+  rule: '/',
+  handler: `
+    return require('./util').parseOperator.call(this, this.match, 'MultiplicativeOperator');
   `,
 };
 
@@ -252,7 +260,7 @@ exports.remainder = {
 
 exports.bitwiseOR = {
   conditions: ['*'],
-  rule: /[|]/,
+  rule: '\\|',
   handler: `
     return require('./util').parseOperator.call(this, this.match);
   `,
@@ -260,7 +268,7 @@ exports.bitwiseOR = {
 
 exports.bitwiseAND = {
   conditions: ['*'],
-  rule: /[&]/,
+  rule: '&',
   handler: `
     return require('./util').parseOperator.call(this, this.match);
   `,
@@ -300,7 +308,7 @@ exports.leftShift = {
 
 exports.and = {
   conditions: ['*'],
-  rule: /[&][&]/,
+  rule: '&&',
   handler: `
     return require('./util').parseOperator.call(this, this.match);
   `,
@@ -308,7 +316,7 @@ exports.and = {
 
 exports.or = {
   conditions: ['*'],
-  rule: /[|][|]/,
+  rule: '\\|\\|',
   handler: `
     return require('./util').parseOperator.call(this, this.match);
   `,

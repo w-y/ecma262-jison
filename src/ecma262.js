@@ -5,56 +5,69 @@ const { decimalPoint, decimalNonZero, decimalZero, decimalDigit } = require('./l
 const { hexDigit } = require('./lex/hex');
 
 const {
-  identity,
-  inequality,
-  equality,
-  nonIdentity,
-  greaterThanOrEqual,
-  lessThanOrEqual,
-  greaterThan,
-  lessThan,
-  increment,
-  decrement,
-  additionAssignment,
-  subtractionAssignment,
-  multiplicationAssignment,
-  divisionAssignment,
-  remainderAssignment,
-  exponentiationAssignment,
-  leftShiftAssignment,
-  rightShiftAssignment,
-  unsignedRightShiftAssignment,
-  bitwiseANDAssignment,
-  bitwiseXORAssignment,
-  bitwiseORAssignment,
-  assignment,
-  plus,
-  minus,
-  not,
-  exponentiation,
-  multiplication,
-  remainder,
-  bitwiseOR,
-  bitwiseXOR,
-  bitwiseAND,
-  bitwiseNOT,
-  unsignedRightShift,
-  rightShift,
-  leftShift,
-  and,
-  or,
-  condition,
-  colon,
-  semicolon,
-  comma,
-  leftBracket,
-  rightBracket,
-  leftParenthesis,
-  rightParenthesis,
-  leftBlockExp,
-  leftBlock,
-  rightBlock,
-  spread,
+
+  unsignedRightShiftAssignment, // >>>=
+
+  identity,                 // ===
+  nonIdentity,              // !==
+  exponentiationAssignment, // **=
+  leftShiftAssignment,      // <<=
+  rightShiftAssignment,     // >>=
+  unsignedRightShift,       // >>>
+
+  inequality,               // !=
+  equality,                 // ==
+  increment,                // ++
+  decrement,                // --
+  additionAssignment,       // +=
+  subtractionAssignment,    // -=
+  multiplicationAssignment, // *=
+  divisionAssignment,       // /=
+  remainderAssignment,      // %=
+  bitwiseANDAssignment,     // &=
+  bitwiseXORAssignment,     // ^=
+  bitwiseORAssignment,      // |=
+  greaterThanOrEqual,       // >=
+  lessThanOrEqual,          // <=
+  exponentiation,           // **
+
+  and,                      // &&
+  or,                       // ||
+
+  rightShift,               // >>
+  leftShift,                // <<
+
+  condition,                // ?
+
+  bitwiseAND,               // &
+  bitwiseOR,                // |
+
+  greaterThan,              // >
+  lessThan,                 // <
+
+  bitwiseXOR,               // ^
+  bitwiseNOT,               // ~
+
+  assignment,               // =
+
+  multiplication,           // *
+  remainder,                // %
+  plus,                     // +
+  minus,                    // -
+  not,                      // !
+  division,                 // /
+
+  colon,                    // :
+  semicolon,                // ;
+  comma,                    // ,
+  leftBracket,              // [
+  rightBracket,             // ]
+  leftParenthesis,          // (
+  rightParenthesis,         // )
+  leftBlockExp,             // {
+  leftBlock,                // }
+  rightBlock,               // }
+  spread,                   // ...
 } = require('./lex/operators');
 
 const {
@@ -220,80 +233,79 @@ exports.grammar = {
       [decimalDigit.conditions, decimalDigit.rule, decimalDigit.handler],
       [decimalZero.conditions, decimalZero.rule, decimalZero.handler],
       [decimalNonZero.conditions, decimalNonZero.rule, decimalNonZero.handler],*/
+    ].concat([
 
-      trans(condition),
-      trans(colon),
-      trans(semicolon),
-      trans(comma),
+      unsignedRightShiftAssignment,
 
-      trans(identity),
-      trans(nonIdentity),
-      trans(equality),
-      trans(inequality),
+      identity,
+      nonIdentity,
+      exponentiationAssignment,
+      leftShiftAssignment,
+      rightShiftAssignment,
+      unsignedRightShift,
 
-      trans(greaterThanOrEqual),
-      trans(lessThanOrEqual),
-      trans(greaterThan),
-      trans(lessThan),
+      inequality,
+      equality,
+      increment,
+      decrement,
+      additionAssignment,
+      subtractionAssignment,
+      multiplicationAssignment,
+      divisionAssignment,
+      remainderAssignment,
+      bitwiseANDAssignment,
+      bitwiseXORAssignment,
+      bitwiseORAssignment,
+      greaterThanOrEqual,
+      lessThanOrEqual,
+      exponentiation,
+      and,
+      or,
+      rightShift,
+      leftShift,
 
-      trans(increment),
-      trans(decrement),
+      condition,
+      bitwiseAND,
+      bitwiseOR,
+      bitwiseXOR,
+      bitwiseNOT,
+      greaterThan,
+      lessThan,
+      plus,
+      minus,
+      not,
+      multiplication,
+      division,
+      remainder,
+      assignment,
 
-      trans(additionAssignment),
-      trans(subtractionAssignment),
-      trans(multiplicationAssignment),
-      trans(divisionAssignment),
-      trans(remainderAssignment),
-      trans(exponentiationAssignment),
-      trans(leftShiftAssignment),
-      trans(rightShiftAssignment),
-      trans(unsignedRightShiftAssignment),
-      trans(bitwiseANDAssignment),
-      trans(bitwiseXORAssignment),
-      trans(bitwiseORAssignment),
-      trans(assignment),
+      colon,
+      semicolon,
+      comma,
+      leftBracket,
+      rightBracket,
+      leftParenthesis,
+      rightParenthesis,
 
-      trans(not),
-      trans(and),
-      trans(or),
+      leftBlockExp,
+      leftBlock,
+      rightBlock,
 
-      trans(plus),
-      trans(minus),
-      trans(exponentiation),
-      trans(multiplication),
-      trans(remainder),
-      trans(bitwiseNOT),
-      trans(bitwiseOR),
-      trans(bitwiseXOR),
-      trans(bitwiseAND),
+      semicolon,
+      dollar,
+      underscore,
+      spread,
 
-      trans(unsignedRightShift),
-      trans(rightShift),
-      trans(leftShift),
+      decimalPoint,
+      decimalDigit,
+      decimalZero,
+      decimalNonZero,
 
-      trans(leftBracket),
-      trans(rightBracket),
-      trans(leftParenthesis),
-      trans(rightParenthesis),
-
-      trans(leftBlockExp),
-      trans(leftBlock),
-      trans(rightBlock),
-
-      trans(semicolon),
-      trans(dollar),
-      trans(underscore),
-      trans(spread),
-
-      trans(decimalPoint),
-      trans(decimalDigit),
-      trans(decimalZero),
-      trans(decimalNonZero),
-
-      trans(unicodeEscapeSequenceStart),
-      trans(hexDigit),
-      trans(unicodeIDContinue),
-      trans(unicodeIDStart),
+      unicodeEscapeSequenceStart,
+      hexDigit,
+      unicodeIDContinue,
+      unicodeIDStart,
+    ].map(trans))
 
       // [['*'], ',', `return require('./util').parseOperator.call(this, this.match)`],
       // [['*'], ';', `console.log('=============');return ';'`],
@@ -311,7 +323,6 @@ exports.grammar = {
       [['*'], '\\u000D', `return 'CR'`],
       [['*'], '\\u2028', `return 'LS'`],
       [['*'], '\\u2029', `return 'PS'`],*/
-    ],
   },
 
   start: 'Script',
