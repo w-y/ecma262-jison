@@ -3,6 +3,8 @@ const Script = require('./bnf/script');
 const Statement = require('./bnf/statement');
 const { decimalPoint, decimalNonZero, decimalZero, decimalDigit } = require('./lex/decimal');
 const { hexDigit } = require('./lex/hex');
+const { singleString, doubleString } = require('./lex/string');
+const { keywords } = require('./lex/keywords');
 
 const {
 
@@ -68,6 +70,14 @@ const {
   leftBlock,                // }
   rightBlock,               // }
   spread,                   // ...
+
+  Instanceof,
+  Delete,
+  Typeof,
+  Void,
+  New,
+  In,
+  Of,
 } = require('./lex/operators');
 
 const {
@@ -144,7 +154,7 @@ exports.grammar = {
       [['*'], '\\u2028', `return 'LS'`],
       [['*'], '\\u2029', `return 'PS'`],
 
-      [['*'], 'true', `return require('./util').parseKeyword.call(this, this.match, 'BooleanLiteral')`],
+      /*[['*'], 'true', `return require('./util').parseKeyword.call(this, this.match, 'BooleanLiteral')`],
       [['*'], 'false', `return require('./util').parseKeyword.call(this, this.match, 'BooleanLiteral')`],
       [['*'], 'null', `return require('./util').parseKeyword.call(this, this.match, 'NullLiteral')`],
       [['*'], 'let', `return require('./util').parseKeyword.call(this, this.match, 'LetOrConst')`],
@@ -168,8 +178,6 @@ exports.grammar = {
       [['*'], 'in', `return require('./util').parseKeyword.call(this, this.match)`],
       [['*'], 'instanceof', `return require('./util').parseKeyword.call(this, this.match, 'RelationalOperator')`],
       [['*'], 'this', `return require('./util').parseKeyword.call(this, this.match, 'this')`],
-
-      // [['*'], '\\.\\.\\.', `return require('./util').parseKeyword.call(this, this.match)`],
 
       [['*'], 'delete', `return require('./util').parseKeyword.call(this, this.match, 'UnaryOperator')`],
       [['*'], 'void', `return require('./util').parseKeyword.call(this, this.match, 'UnaryOperator')`],
@@ -197,12 +205,12 @@ exports.grammar = {
       [['*'], 'debugger', `return require('./util').parseKeyword.call(this, this.match)`],
       [['*'], 'try', `return require('./util').parseKeyword.call(this, this.match)`],
       [['*'], 'catch', `return require('./util').parseKeyword.call(this, this.match)`],
-      [['*'], 'finally', `return require('./util').parseKeyword.call(this, this.match)`],
-
-      //[['*'], '$', `return require('./util').parseIdentifier.call(this, this.match)`],
-      //[['*'], '_', `return require('./util').parseIdentifier.call(this, this.match)`],
-
-      [['single_string_start'], '.', `return require('./util').parseString.call(this, 'SingleStringCharacter')`],
+      [['*'], 'finally', `return require('./util').parseKeyword.call(this, this.match)`],*/
+    ]
+    .concat(keywords.map(trans))
+    .concat(singleString.map(trans))
+    .concat(doubleString.map(trans))
+      /*[['single_string_start'], '.', `return require('./util').parseString.call(this, 'SingleStringCharacter')`],
       [['single_escape_string'], '\\\\u|\\\\U', `return require('./util').parseEscapeString.call(this, this.match)`],
       [['single_escape_string'], '.', `return require('./util').parseEscapeStringCharacter.call(this, this.match)`],
       [['INITIAL'], '\\\'', `this.begin('single_string_start'); return 'SingleQuoteStart'`],
@@ -210,30 +218,9 @@ exports.grammar = {
       [['double_string_start'], '.', `return require('./util').parseString.call(this, 'DoubleStringCharacter')`],
       [['double_escape_string'], '\\\\u|\\\\U', `return require('./util').parseEscapeString.call(this, this.match)`],
       [['double_escape_string'], '.', `return require('./util').parseEscapeStringCharacter.call(this, this.match)`],
-      [['INITIAL'], '"', `this.begin('double_string_start'); return 'DoubleQuoteStart'`],
+      [['INITIAL'], '"', `this.begin('double_string_start'); return 'DoubleQuoteStart'`],*/
 
-      // [['*'], '\\[', `return require('./util').parseOperator.call(this, this.match)`],
-      // [['*'], '\\]', `return require('./util').parseOperator.call(this, this.match)`],
-
-      // [['block_start'], '{', `return require('./util').parseOperator.call(this, this.match, 'BLOCK_STRAT')`],
-      // [['*'], '{', `return require('./util').parseOperator.call(this, this.match)`],
-      // [['*'], '}', `return require('./util').parseOperator.call(this, this.match)`],
-      // [['*'], ':', `return require('./util').parseOperator.call(this, this.match)`],
-
-      /*[['identifier_start', 'identifier_start_unicode', 'decimal_digit_start'], '[\\u0009|\\u0020|\\u000A]', `this.popState();`],*/
-      //[['identifier_start'], idContinue, `return 'UnicodeIDContinue';`],
-      //[idStart, `this.begin('identifier_start');return 'UnicodeIDStart';`],
-
-      /*[unicodeEscapeSequenceStart.conditions, unicodeEscapeSequenceStart.rule, unicodeEscapeSequenceStart.handler],
-      [hexDigit.conditions, hexDigit.rule, hexDigit.handler],
-      [unicodeIDContinue.conditions, unicodeIDContinue.rule, unicodeIDContinue.handler],
-      [unicodeIDStart.conditions, unicodeIDStart.rule, unicodeIDStart.handler],
-
-      /*[decimalPoint.conditions, decimalPoint.rule, decimalPoint.handler],
-      [decimalDigit.conditions, decimalDigit.rule, decimalDigit.handler],
-      [decimalZero.conditions, decimalZero.rule, decimalZero.handler],
-      [decimalNonZero.conditions, decimalNonZero.rule, decimalNonZero.handler],*/
-    ].concat([
+    .concat([
 
       unsignedRightShiftAssignment,
 
@@ -295,7 +282,17 @@ exports.grammar = {
       dollar,
       underscore,
       spread,
-
+    ].map(trans))
+    .concat([
+      Instanceof,
+      Delete,
+      Typeof,
+      Void,
+      In,
+      Of,
+    ].map(trans))
+    .concat(New.map(trans))
+    .concat([
       decimalPoint,
       decimalDigit,
       decimalZero,

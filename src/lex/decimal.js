@@ -68,3 +68,5 @@ exports.decimalPoint = decimalPoint;
 exports.decimalDigit = decimalDigit;
 exports.decimalZero = decimalZero;
 exports.decimalNonZero = decimalNonZero;
+
+exports.decimal = [decimalPoint, decimalDigit, decimalZero, decimalNonZero];
