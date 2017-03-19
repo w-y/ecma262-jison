@@ -2,10 +2,10 @@ module.exports = {
   conditions: [''],
   name: 'DebuggerStatement',
   rules: [
-    `debugger ;`,
+    'debugger ;',
   ],
   handlers: [
-    `$$ = $1 + $2`,
+    '$$ = $1 + $2',
   ],
   subRules: [
   ],

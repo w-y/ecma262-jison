@@ -2,10 +2,10 @@ module.exports = {
   conditions: [''],
   name: 'HoistableDeclaration',
   rules: [
-    `FunctionDeclaration`,
+    'FunctionDeclaration',
   ],
   handlers: [
-    `$$ = $1`,
+    '$$ = $1',
   ],
   subRules: [
     require('./FunctionDeclaration'),

@@ -2,12 +2,12 @@ module.exports = {
   conditions: [''],
   name: 'Declaration',
   rules: [
-    `HoistableDeclaration`,
-    `LexicalDeclaration_In`,
+    'HoistableDeclaration',
+    'LexicalDeclaration_In',
   ],
   handlers: [
-    `$$ = $1;`,
-    `$$ = $1;`,
+    '$$ = $1;',
+    '$$ = $1;',
   ],
   subRules: [
     require('./HoistableDeclaration'),

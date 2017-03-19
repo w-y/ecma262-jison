@@ -2,12 +2,12 @@ module.exports = {
   conditions: [''],
   name: 'Elision',
   rules: [
-    `,`,
-    `Elision ,`,
+    ',',
+    'Elision ,',
   ],
   handlers: [
-    `$$ = $1`,
-    `$$ = $1 + $2`,
+    '$$ = $1',
+    '$$ = $1 + $2',
   ],
   subRules: [
   ],

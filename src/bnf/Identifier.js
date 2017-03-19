@@ -2,10 +2,10 @@ module.exports = {
   conditions: [''],
   name: 'Identifier',
   rules: [
-    `IdentifierName`,
+    'IdentifierName',
   ],
   handlers: [
-    `$$ = $1;`,
+    '$$ = $1;',
   ],
   subRules: [
     require('./IdentifierName'),

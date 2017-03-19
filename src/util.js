@@ -1,40 +1,36 @@
 const { TAB, VT, FF, SP, NBSP, ZWNJ, ZWJ, ZWNBSP, LF, CR, LS, PS } = require('./constants').WHITESPACE;
 const SINGLE_ESCAPE_CHARACTERS = require('./constants').SINGLE_ESCAPE_CHARACTERS;
 
-const isWhiteSpace = function(ch) {
-  return (
-    ch === TAB ||
-    ch === VT ||
-    ch === FF ||
-    ch === SP ||
-    ch === NBSP ||
-    ch === ZWNJ ||
-    ch === ZWJ ||
-    ch === ZWNBSP
-  );
-}
+const isWhiteSpace = ch => (
+  ch === TAB ||
+  ch === VT ||
+  ch === FF ||
+  ch === SP ||
+  ch === NBSP ||
+  ch === ZWNJ ||
+  ch === ZWJ ||
+  ch === ZWNBSP
+);
 
-const isDecimalDigit = function(ch) {
-  return /[0-9]/.test(ch);
-}
+const isDecimalDigit = ch => (
+  /[0-9]/.test(ch)
+);
 
-const isLineTerminator = function(ch) {
-  return (
-    ch === LF ||
-    ch === CR ||
-    ch === LS ||
-    ch === PS
-  );
-}
+const isLineTerminator = ch => (
+  ch === LF ||
+  ch === CR ||
+  ch === LS ||
+  ch === PS
+);
 
 exports.isWhiteSpace = isWhiteSpace;
 exports.isDecimalDigit = isDecimalDigit;
 exports.isLineTerminator = isLineTerminator;
 
-exports.parseKeyword = function(keyword, alias) {
+function parseKeyword(keyword, alias) {
   {
     let res = '';
-    switch(this.topState()) {
+    switch (this.topState()) {
       case 'single_string_start':
         res = 'SingleStringCharacter';
         break;
@@ -47,14 +43,14 @@ exports.parseKeyword = function(keyword, alias) {
       default:
         res = alias || keyword;
         break;
-    };
+    }
 
     // look behind { 和 function
     let i = this.matches.index + this.match.length;
     const input = this.matches.input;
 
     // 跳过空白字符
-    while(i < input.length && isWhiteSpace(input[i])) { i++; }
+    while (i < input.length && isWhiteSpace(input[i])) { i++; }
 
     // throw 后面的{ 应该是表达式
     // throw 后面的function应该是表达式
@@ -71,15 +67,16 @@ exports.parseKeyword = function(keyword, alias) {
     return res;
   }
 }
+exports.parseKeyword = parseKeyword;
 
-exports.parseOperator = function(operator, alias) {
+function parseOperator(operator, alias) {
   let i = this.matches.index + this.match.length;
   const input = this.matches.input;
 
-  while(i < input.length && isWhiteSpace(input[i])) { i++; }
+  while (i < input.length && isWhiteSpace(input[i])) { i++; }
   let res = '';
 
-  switch(this.topState()) {
+  switch (this.topState()) {
     case 'single_string_start':
       res = 'SingleStringCharacter';
       break;
@@ -102,7 +99,7 @@ exports.parseOperator = function(operator, alias) {
     default:
       res = alias || operator;
       break;
-  };
+  }
 
   // TODO: 具体情况具体分析
   // case : 后面的{ 应该是语句块而不是表达式的开头
@@ -111,29 +108,32 @@ exports.parseOperator = function(operator, alias) {
   if (this.match === ':') {
     if (this.topState() === 'case_start') {
       this.popState();
-    } else {
-      if (/^{/.test(input.substring(i))) {
-        this.begin('block_start');
-      }
+    } else if (/^{/.test(input.substring(i))) {
+      this.begin('block_start');
     }
   } else if (this.match === ')') {
-    ;
+
   } else if (this.match === '}') {
-    ;
+
   } else if (this.match === ';') {
-    ;
+
   } else if (isWhiteSpace(this.match) || isLineTerminator(this.match)) {
-    ;
+
   } else if (/^{/.test(input.substring(i))) {
     this.begin('block_start');
   } else if (/^function/.test(input.substring(i))) {
     this.begin('function_start');
   }
+
   if (res) { return res; }
+
+  return undefined;
 }
 
-exports.parseIdentifier = function(ch) {
-  switch(this.topState()) {
+exports.parseOperator = parseOperator;
+
+function parseIdentifier(ch) {
+  switch (this.topState()) {
     case 'single_string_start':
       return 'SingleStringCharacter';
     case 'double_string_start':
@@ -145,7 +145,9 @@ exports.parseIdentifier = function(ch) {
   return ch;
 }
 
-exports.parseString = function(ch) {
+exports.parseIdentifier = parseIdentifier;
+
+function parseString(ch) {
   const isSingleQuote = ch === 'SingleStringCharacter';
   const isDoubleQuote = ch === 'DoubleStringCharacter';
 
@@ -176,17 +178,45 @@ exports.parseString = function(ch) {
   return ch;
 }
 
-exports.parseEscapeString = function() {
+exports.parseString = parseString;
+
+function parseEscapeString() {
   this.begin('identifier_start_unicode');
   return 'UnicodeEscapeSequenceStart';
 }
 
-exports.parseEscapeStringCharacter = function() {
+exports.parseEscapeString = parseEscapeString;
+
+function parseEscapeStringCharacter() {
   if (SINGLE_ESCAPE_CHARACTERS.indexOf(this.match) !== -1) {
     this.popState();
     return 'SingleEscapeCharacter';
-  } else {
-    this.popState();
-    return 'NonEscapeCharacter';
+  }
+  this.popState();
+  return 'NonEscapeCharacter';
+}
+
+exports.parseEscapeStringCharacter = parseEscapeStringCharacter;
+
+function parseToken(token, alias) {
+  switch (this.topState()) {
+    case 'single_string_start':
+      return 'SingleStringCharacter';
+    case 'double_string_start':
+      return 'DoubleStringCharacter';
+    case 'identifier_start':
+      this.popState();
+      return alias || token;
+    case 'decimal_digit_start':
+      this.popState();
+      return alias || token;
+    case 'decimal_digit_dot_start':
+      this.popState();
+      this.popState();
+      return alias || token;
+    default:
+      return alias || token;
   }
 }
+
+exports.parseToken = parseToken;

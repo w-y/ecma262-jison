@@ -2,12 +2,12 @@ module.exports = {
   conditions: [''],
   name: 'LeftHandSideExpression',
   rules: [
-    `NewExpression`,
-    `CallExpression`,
+    'NewExpression',
+    'CallExpression',
   ],
   handlers: [
-    `$$ = $1;`,
-    `$$ = $1;console.log('call expression: ' + $1)`,
+    '$$ = $1;',
+    '$$ = $1;console.log(\'call expression: \' + $1)',
   ],
   subRules: [
     require('./NewExpression'),

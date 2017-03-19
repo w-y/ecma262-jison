@@ -2,14 +2,14 @@ module.exports = {
   conditions: [''],
   name: 'PropertyDefinition',
   rules: [
-    `IdentifierReference`,
-    `CoverInitializedName`,
-    `PropertyName : AssignmentExpression_In`,
+    'IdentifierReference',
+    'CoverInitializedName',
+    'PropertyName : AssignmentExpression_In',
   ],
   handlers: [
-    `$$ = $1`,
-    `$$ = $1`,
-    `$$ = $1 + $2 + $3`,
+    '$$ = $1',
+    '$$ = $1',
+    '$$ = $1 + $2 + $3',
   ],
   subRules: [
     require('./IdentifierReference'),

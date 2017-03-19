@@ -2,10 +2,10 @@ module.exports = {
   conditions: [''],
   name: 'FunctionBody',
   rules: [
-    `FunctionStatementList`,
+    'FunctionStatementList',
   ],
   handlers: [
-    `$$ = $1`,
+    '$$ = $1',
   ],
   subRules: [
     require('./FunctionStatementList'),

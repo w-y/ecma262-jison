@@ -60,4 +60,10 @@ exports.unicodeEscapeSequenceStart = unicodeEscapeSequenceStart;
 exports.dollar = dollar;
 exports.underscore = underscore;
 
-exports.identifier = [unicodeIDStart, unicodeIDContinue, unicodeEscapeSequenceStart, dollar, underscore];
+exports.identifier = [
+  dollar,
+  underscore,
+  unicodeEscapeSequenceStart,
+  unicodeIDContinue,
+  unicodeIDStart,
+];

@@ -2,10 +2,10 @@ module.exports = {
   conditions: [''],
   name: 'FormalParameter',
   rules: [
-    `BindingElement`,
+    'BindingElement',
   ],
   handlers: [
-    `$$ = $1;`,
+    '$$ = $1;',
   ],
   subRules: [
     require('./BindingElement'),

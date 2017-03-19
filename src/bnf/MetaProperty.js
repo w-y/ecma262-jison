@@ -2,10 +2,10 @@ module.exports = {
   conditions: [''],
   name: 'MetaProperty',
   rules: [
-    `new . target`,
+    'new . target',
   ],
   handlers: [
-    `$$ = $1 + $2 + $3`,
+    '$$ = $1 + $2 + $3',
   ],
   subRules: [
   ],

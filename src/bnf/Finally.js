@@ -2,10 +2,10 @@ module.exports = {
   conditions: [''],
   name: 'Finally',
   rules: [
-    `finally Block`,
+    'finally Block',
   ],
   handlers: [
-    `$$ = $1 + $2`,
+    '$$ = $1 + $2',
   ],
   subRules: [
     require('./Block'),

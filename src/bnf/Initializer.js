@@ -2,10 +2,10 @@ module.exports = {
   conditions: [''],
   name: 'Initializer',
   rules: [
-    `= AssignmentExpression`,
+    '= AssignmentExpression',
   ],
   handlers: [
-    `$$ = $1 + $2`,
+    '$$ = $1 + $2',
   ],
   subRules: [
     require('./AssignmentExpression'),

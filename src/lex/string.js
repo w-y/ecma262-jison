@@ -64,6 +64,16 @@ const DoubleQuoteStart = {
   `,
 };
 
-exports.singleString = [SingleStringCharacter, SingleStringEscapeStart, SingleStringEscape, SingleQuoteStart];
+exports.singleString = [
+  SingleStringCharacter,
+  SingleStringEscapeStart,
+  SingleStringEscape,
+  SingleQuoteStart,
+];
 
-exports.doubleString = [DoubleStringCharacter, DoubleStringEscapeStart, DoubleStringEscape, DoubleQuoteStart];
+exports.doubleString = [
+  DoubleStringCharacter,
+  DoubleStringEscapeStart,
+  DoubleStringEscape,
+  DoubleQuoteStart,
+];

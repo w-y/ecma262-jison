@@ -2,10 +2,10 @@ module.exports = {
   conditions: [''],
   name: 'FunctionRestParameter',
   rules: [
-    `BindingRestElement`,
+    'BindingRestElement',
   ],
   handlers: [
-    `$$ = $1;`,
+    '$$ = $1;',
   ],
   subRules: [
     require('./BindingRestElement'),

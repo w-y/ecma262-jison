@@ -2,12 +2,12 @@ module.exports = {
   conditions: [''],
   name: 'CharacterEscapeSequence',
   rules: [
-    `SingleEscapeCharacter`,
-    `NonEscapeCharacter`,
+    'SingleEscapeCharacter',
+    'NonEscapeCharacter',
   ],
   handlers: [
-    `$$ = $1;`,
-    `$$ = $1;`,
+    '$$ = $1;',
+    '$$ = $1;',
   ],
   subRules: [
   ],

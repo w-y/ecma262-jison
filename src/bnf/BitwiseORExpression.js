@@ -2,14 +2,14 @@ module.exports = {
   conditions: [''],
   name: 'BitwiseORExpression',
   rules: [
-    `BitwiseXORExpression`,
-    `BitwiseORExpression | BitwiseXORExpression`,
+    'BitwiseXORExpression',
+    'BitwiseORExpression | BitwiseXORExpression',
   ],
   handlers: [
-    `$$ = $1;`,
-    `$$ = $1 + $2 + $3;`,
+    '$$ = $1;',
+    '$$ = $1 + $2 + $3;',
   ],
   subRules: [
-    require('./BitwiseXORExpression'), 
+    require('./BitwiseXORExpression'),
   ],
 };

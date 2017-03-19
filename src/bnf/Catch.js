@@ -2,10 +2,10 @@ module.exports = {
   conditions: [''],
   name: 'Catch',
   rules: [
-    `catch ( CatchParameter ) Block`,
+    'catch ( CatchParameter ) Block',
   ],
   handlers: [
-    `$$ = $1 + $2 + $3 + $4 + $5`,
+    '$$ = $1 + $2 + $3 + $4 + $5',
   ],
   subRules: [
     require('./Block'),

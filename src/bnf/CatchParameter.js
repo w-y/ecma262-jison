@@ -2,12 +2,12 @@ module.exports = {
   conditions: [''],
   name: 'CatchParameter',
   rules: [
-    `BindingIdentifier`,
-    `BindingPattern`,
+    'BindingIdentifier',
+    'BindingPattern',
   ],
   handlers: [
-    `$$ = $1`,
-    `$$ = $1`,
+    '$$ = $1',
+    '$$ = $1',
   ],
   subRules: [
     require('./BindingPattern'),

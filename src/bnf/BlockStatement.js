@@ -2,10 +2,10 @@ module.exports = {
   conditions: [''],
   name: 'BlockStatement',
   rules: [
-    `Block`,
+    'Block',
   ],
   handlers: [
-    `$$ = $1;`,
+    '$$ = $1;',
   ],
   subRules: [
     require('./Block'),

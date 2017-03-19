@@ -35,8 +35,8 @@ const decimalPoint = {
           return '.';
       }
     }
-  `
-}
+  `,
+};
 
 const decimalDigit = {
   conditions: ['decimal_digit_start', 'decimal_digit_dot_start'],
@@ -44,7 +44,7 @@ const decimalDigit = {
   handler: `
     return 'DecimalDigit';
   `,
-}
+};
 
 const decimalZero = {
   conditions: ['INITIAL'],
@@ -53,7 +53,7 @@ const decimalZero = {
     this.begin('decimal_digit_start');
     return '0';
   `,
-}
+};
 
 const decimalNonZero = {
   conditions: ['INITIAL'],
@@ -62,7 +62,7 @@ const decimalNonZero = {
     this.begin('decimal_digit_start');
     return 'NonZeroDigit';
   `,
-}
+};
 
 exports.decimalPoint = decimalPoint;
 exports.decimalDigit = decimalDigit;

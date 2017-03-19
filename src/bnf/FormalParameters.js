@@ -2,10 +2,10 @@ module.exports = {
   conditions: [''],
   name: 'FormalParameters',
   rules: [
-    `FormalParameterList`,
+    'FormalParameterList',
   ],
   handlers: [
-    `$$ = $1;`,
+    '$$ = $1;',
   ],
   subRules: [
     require('./FormalParameterList'),

@@ -2,10 +2,10 @@ module.exports = {
   conditions: [''],
   name: 'PropertyName',
   rules: [
-    `LiteralPropertyName`,
+    'LiteralPropertyName',
   ],
   handlers: [
-    `$$ = $1`,
+    '$$ = $1',
   ],
   subRules: [
     require('./LiteralPropertyName'),

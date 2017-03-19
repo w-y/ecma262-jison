@@ -2,12 +2,12 @@ module.exports = {
   conditions: [''],
   name: 'LiteralPropertyName',
   rules: [
-    `IdentifierName`,
-    `StringLiteral`,
+    'IdentifierName',
+    'StringLiteral',
   ],
   handlers: [
-    `$$ = $1`,
-    `$$ = $1`,
+    '$$ = $1',
+    '$$ = $1',
   ],
   subRules: [
     require('./IdentifierName'),

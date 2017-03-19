@@ -2,10 +2,10 @@ module.exports = {
   conditions: [''],
   name: 'ForDeclaration',
   rules: [
-    `LetOrConst ForBinding`,
+    'LetOrConst ForBinding',
   ],
   handlers: [
-    `$$ = $1 + ' ' + $2`,
+    '$$ = $1 + \' \' + $2',
   ],
   subRules: [
     require('./ForBinding'),

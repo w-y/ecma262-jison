@@ -2,12 +2,12 @@ module.exports = {
   conditions: [''],
   name: 'DecimalDigits',
   rules: [
-    `DecimalDigit`,
-    `DecimalDigits DecimalDigit`,
+    'DecimalDigit',
+    'DecimalDigits DecimalDigit',
   ],
   handlers: [
-    `$$ = $1;`,
-    `$$ = $1 + $2;`,
+    '$$ = $1;',
+    '$$ = $1 + $2;',
   ],
   subRules: [
   ],

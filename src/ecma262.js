@@ -1,13 +1,13 @@
-const Generator = require("jison/lib/jison").Generator;
-const Script = require('./bnf/script');
-const Statement = require('./bnf/statement');
-const { decimalPoint, decimalNonZero, decimalZero, decimalDigit } = require('./lex/decimal');
+const Generator = require('jison/lib/jison').Generator;
+const { transLex, transBnf } = require('./transform');
+
+const { decimal } = require('./lex/decimal');
 const { hexDigit } = require('./lex/hex');
 const { singleString, doubleString } = require('./lex/string');
 const { keywords } = require('./lex/keywords');
-
+const { tokens } = require('./lex/tokens');
+const { identifier } = require('./lex/identifier');
 const {
-
   unsignedRightShiftAssignment, // >>>=
 
   identity,                 // ===
@@ -70,7 +70,10 @@ const {
   leftBlock,                // }
   rightBlock,               // }
   spread,                   // ...
+} = require('./lex/operators');
 
+// keyword operators
+const {
   Instanceof,
   Delete,
   Typeof,
@@ -78,47 +81,9 @@ const {
   New,
   In,
   Of,
-} = require('./lex/operators');
+} = require('./lex/keywords');
 
-const {
-  unicodeIDStart,
-  unicodeIDContinue,
-  unicodeEscapeSequenceStart,
-  dollar,
-  underscore,
-} = require('./lex/identifier');
-
-const trans = (token) => {
-  return [token.conditions, token.rule, token.handler];
-};
-
-const transBnf = (bnf) => {
-  const table = {};
-  _transBnf(bnf, table);
-  return table;
-}
-
-
-const _transBnf = (bnf, table) => {
-  if (!bnf.name) { return; }
-
-  table[bnf.name] = [];
-
-  for (let i = 0; i < bnf.conditions.length; i++) {
-    const condition = bnf.conditions[i] || 'INITIAL';
-    const rules = bnf.rules[condition] || bnf.rules;
-    const subRules = bnf.subRules[condition] || bnf.subRules;
-    const handlers = bnf.handlers[condition] || bnf.handlers;
-
-    for (let ii = 0; ii < rules.length; ii++) {
-      table[bnf.name].push([rules[ii], handlers[ii]]);
-    }
-
-    for (let i = 0; i < subRules.length; i++) {
-      _transBnf(subRules[i], table);
-    }
-  }
-};
+const Script = require('./bnf/Script');
 
 exports.grammar = {
   comment: 'ECMA-262 7th Edition, 17.02.23 The es Grammar. Parses strings into ast.',
@@ -139,88 +104,11 @@ exports.grammar = {
       block_start: 'block_start',
       case_start: 'case_start',
     },
-    rules: [
-      [['*'], '\\u000A', `require('./util').parseOperator.call(this, this.match);return '';`],
-      [['*'], '\\u000B', `return 'VT'`],
-      // [['*'], '\\u0020', `console.log('space');return 'FF'`],
-      [['*'], '\\u0020', `require('./util').parseOperator.call(this, this.match);return '';`],
-      [['*'], '\\u00A0', `return 'NBSP'`],
-
-      [['*'], '\\u200C', `return 'ZWNJ'`],
-      [['*'], '\\u200D', `return 'ZWJ'`],
-      [['*'], '\\uFEFF', `return 'ZWNBSP'`],
-
-      [['*'], '\\u000D', `return 'CR'`],
-      [['*'], '\\u2028', `return 'LS'`],
-      [['*'], '\\u2029', `return 'PS'`],
-
-      /*[['*'], 'true', `return require('./util').parseKeyword.call(this, this.match, 'BooleanLiteral')`],
-      [['*'], 'false', `return require('./util').parseKeyword.call(this, this.match, 'BooleanLiteral')`],
-      [['*'], 'null', `return require('./util').parseKeyword.call(this, this.match, 'NullLiteral')`],
-      [['*'], 'let', `return require('./util').parseKeyword.call(this, this.match, 'LetOrConst')`],
-      [['*'], 'const', `return require('./util').parseKeyword.call(this, this.match, 'LetOrConst')`],
-      [['*'], 'for', `return require('./util').parseKeyword.call(this, this.match)`],
-      [['*'], 'of', `return require('./util').parseKeyword.call(this, this.match)`],
-
-      [['function_start'], 'function', `this.popState();return require('./util').parseKeyword.call(this, this.match)`],
-      [['*'], 'function', `return require('./util').parseKeyword.call(this, this.match, 'FUNCTION')`],
-      [['*'], 'super', `return require('./util').parseKeyword.call(this, this.match)`],
-      [['*'], 'switch', `return require('./util').parseKeyword.call(this, this.match)`],
-      [['*'], 'case', `this.begin('case_start');return require('./util').parseKeyword.call(this, this.match)`],
-      [['*'], 'default', `this.begin('case_start');return require('./util').parseKeyword.call(this, this.match)`],
-
-      [['*'], 'new(?=\\s*[.]\\s*target)', `this.begin('new_target');return require('./util').parseKeyword.call(this, this.match)`],
-      [['new_target'], '\\.', `return '.'`],
-      [['new_target'], 'target', `this.popState();return 'target'`],
-      [['*'], 'new', `return require('./util').parseKeyword.call(this, this.match)`],
-
-      [['*'], 'var', `return require('./util').parseKeyword.call(this, this.match)`],
-      [['*'], 'in', `return require('./util').parseKeyword.call(this, this.match)`],
-      [['*'], 'instanceof', `return require('./util').parseKeyword.call(this, this.match, 'RelationalOperator')`],
-      [['*'], 'this', `return require('./util').parseKeyword.call(this, this.match, 'this')`],
-
-      [['*'], 'delete', `return require('./util').parseKeyword.call(this, this.match, 'UnaryOperator')`],
-      [['*'], 'void', `return require('./util').parseKeyword.call(this, this.match, 'UnaryOperator')`],
-      [['*'], 'typeof', `return require('./util').parseKeyword.call(this, this.match, 'UnaryOperator')`],
-
-
-      [['*'], 'if', `return require('./util').parseKeyword.call(this, this.match)`],
-      [['*'], 'else', `return require('./util').parseKeyword.call(this, this.match)`],
-      [['*'], 'do', `return require('./util').parseKeyword.call(this, this.match)`],
-      [['*'], 'while', `return require('./util').parseKeyword.call(this, this.match)`],
-
-
-      [['*'], 'continue[\\u0009|\\u0020]*[\\u000A]', `return require('./util').parseKeyword.call(this, this.match, 'CONTINUE_LF')`],
-      [['*'], 'continue', `return require('./util').parseKeyword.call(this, this.match)`],
-
-      [['*'], 'break[\\u0009|\\u0020]*[\\u000A]', `return require('./util').parseKeyword.call(this, this.match, 'BREAK_LF')`],
-      [['*'], 'break', `return require('./util').parseKeyword.call(this, this.match)`],
-
-      [['*'], 'throw[\\u0009|\\u0020]*[\\u000A]', `return require('./util').parseKeyword.call(this, this.match, 'THROW_LF')`],
-      [['*'], 'throw', `return require('./util').parseKeyword.call(this, this.match)`],
-
-
-      [['*'], 'with', `return require('./util').parseKeyword.call(this, this.match)`],
-      [['*'], 'return', `return require('./util').parseKeyword.call(this, this.match)`],
-      [['*'], 'debugger', `return require('./util').parseKeyword.call(this, this.match)`],
-      [['*'], 'try', `return require('./util').parseKeyword.call(this, this.match)`],
-      [['*'], 'catch', `return require('./util').parseKeyword.call(this, this.match)`],
-      [['*'], 'finally', `return require('./util').parseKeyword.call(this, this.match)`],*/
-    ]
-    .concat(keywords.map(trans))
-    .concat(singleString.map(trans))
-    .concat(doubleString.map(trans))
-      /*[['single_string_start'], '.', `return require('./util').parseString.call(this, 'SingleStringCharacter')`],
-      [['single_escape_string'], '\\\\u|\\\\U', `return require('./util').parseEscapeString.call(this, this.match)`],
-      [['single_escape_string'], '.', `return require('./util').parseEscapeStringCharacter.call(this, this.match)`],
-      [['INITIAL'], '\\\'', `this.begin('single_string_start'); return 'SingleQuoteStart'`],
-
-      [['double_string_start'], '.', `return require('./util').parseString.call(this, 'DoubleStringCharacter')`],
-      [['double_escape_string'], '\\\\u|\\\\U', `return require('./util').parseEscapeString.call(this, this.match)`],
-      [['double_escape_string'], '.', `return require('./util').parseEscapeStringCharacter.call(this, this.match)`],
-      [['INITIAL'], '"', `this.begin('double_string_start'); return 'DoubleQuoteStart'`],*/
-
-    .concat([
+    rules: transLex([
+      tokens,
+      keywords,
+      singleString,
+      doubleString,
 
       unsignedRightShiftAssignment,
 
@@ -279,81 +167,35 @@ exports.grammar = {
       rightBlock,
 
       semicolon,
-      dollar,
-      underscore,
       spread,
-    ].map(trans))
-    .concat([
+
       Instanceof,
       Delete,
       Typeof,
       Void,
       In,
       Of,
-    ].map(trans))
-    .concat(New.map(trans))
-    .concat([
-      decimalPoint,
-      decimalDigit,
-      decimalZero,
-      decimalNonZero,
+      New,
 
-      unicodeEscapeSequenceStart,
+      decimal,
       hexDigit,
-      unicodeIDContinue,
-      unicodeIDStart,
-    ].map(trans))
-
-      // [['*'], ',', `return require('./util').parseOperator.call(this, this.match)`],
-      // [['*'], ';', `console.log('=============');return ';'`],
-
-      /*[['*'], '\\u000A', `require('./util').parseOperator.call(this, this.match);return '';`],
-      [['*'], '\\u000B', `return 'VT'`],
-      // [['*'], '\\u0020', `console.log('space');return 'FF'`],
-      [['*'], '\\u0020', `require('./util').parseOperator.call(this, this.match);return '';`],
-      [['*'], '\\u00A0', `return 'NBSP'`],
-
-      [['*'], '\\u200C', `return 'ZWNJ'`],
-      [['*'], '\\u200D', `return 'ZWJ'`],
-      [['*'], '\\uFEFF', `return 'ZWNBSP'`],
-
-      [['*'], '\\u000D', `return 'CR'`],
-      [['*'], '\\u2028', `return 'LS'`],
-      [['*'], '\\u2029', `return 'PS'`],*/
+      identifier,
+    ]),
   },
 
   start: 'Script',
 
-  operators: [[ 'nonassoc', 'if'], ['nonassoc', 'else']],
+  operators: [['nonassoc', 'if'], ['nonassoc', 'else']],
   bnf: transBnf(Script),
-  /*bnf: Object.assign({
-      Script: [
-        ['ScriptBody', ''],
-      ],
-      ScriptBody: [
-        ['StatementList', ''],
-      ],
-      StatementList: [
-        ['StatementListItem', ''],
-        ['StatementList StatementListItem', ''],
-      ],
-      StatementListItem: [
-         ['Statement', ''],
-         ['Test', ''],
-      ],
-      Test: [
-        ['UnicodeIDStart', ''],
-      ],
-  }, transBnf(Statement)),*/
 };
 
-const options = { type: "lr", moduleType: "commonjs", moduleName: "esparse" };
+const options = { type: 'lr', moduleType: 'commonjs', moduleName: 'esparse' };
 
-exports.main = function main (args) {
-    var code = new Generator(exports.grammar, options).generate();
-    console.log(`
-      ${code}
-    `);
+exports.main = function main() {
+  const code = new Generator(exports.grammar, options).generate();
+  console.log(`
+    ${code}
+  `);
 };
 
 if (require.main === module) {

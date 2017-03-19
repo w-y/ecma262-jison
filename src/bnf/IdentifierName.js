@@ -2,12 +2,12 @@ module.exports = {
   conditions: [''],
   name: 'IdentifierName',
   rules: [
-    `IdentifierStart`,
-    `IdentifierName IdentifierPart`,
+    'IdentifierStart',
+    'IdentifierName IdentifierPart',
   ],
   handlers: [
-    `$$ = $1;`,
-    `$$ = $1 + $2;`,
+    '$$ = $1;',
+    '$$ = $1 + $2;',
   ],
   subRules: [
     require('./IdentifierStart'),

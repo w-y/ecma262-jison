@@ -12,7 +12,7 @@ const hexDigit = {
       }
     }
     return 'HexDigit';
-  `
+  `,
 };
 
 exports.hexDigit = hexDigit;

@@ -2,12 +2,12 @@ module.exports = {
   conditions: [''],
   name: 'LabelledItem',
   rules: [
-    `Statement`,
-    `FunctionDeclaration`,
+    'Statement',
+    'FunctionDeclaration',
   ],
   handlers: [
-    `$$ = $1;`,
-    `$$ = $1;`,
+    '$$ = $1;',
+    '$$ = $1;',
   ],
   subRules: [
     require('./Statement'),

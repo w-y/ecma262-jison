@@ -2,10 +2,10 @@ module.exports = {
   conditions: [''],
   name: 'CoverInitializedName',
   rules: [
-    `IdentifierReference Initializer_In`,
+    'IdentifierReference Initializer_In',
   ],
   handlers: [
-    `$$ = $1 + $2`,
+    '$$ = $1 + $2',
   ],
   subRules: [
     require('./IdentifierReference'),

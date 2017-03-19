@@ -2,7 +2,7 @@ module.exports = {
   name: 'EmptyStatement',
   conditions: [''],
   rules: [
-    `;`
+    ';',
   ],
   handlers: [
     `
