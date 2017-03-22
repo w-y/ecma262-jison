@@ -206,17 +206,23 @@ function parseToken(token, alias) {
       return 'DoubleStringCharacter';
     case 'identifier_start':
       this.popState();
-      return alias || token;
+      break;
     case 'decimal_digit_start':
       this.popState();
-      return alias || token;
+      break;
     case 'decimal_digit_dot_start':
       this.popState();
       this.popState();
-      return alias || token;
+      break;
+    case 'single_line_comment_start':
+      if (isLineTerminator(token)) {
+        this.popState();
+      }
+      break;
     default:
-      return alias || token;
+      break;
   }
+  return alias || '';
 }
 
 exports.parseToken = parseToken;

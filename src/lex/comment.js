@@ -10,7 +10,14 @@ const SingleLineCommentCharsStart = {
 const SingleLineCommentChar = {
   conditions: ['single_line_comment_start'],
   rule: '.',
-  handler: `return 'SingleLineCommentChar';`,
+  handler: `
+    //SourceCharacterbut not LineTerminator
+    if (require('./util').isLineTerminator(this.match)) {
+      this.popState();
+      return '';
+    }
+    return 'SingleLineCommentChar';
+  `,
 };
 
 exports.singleLineComment = [
