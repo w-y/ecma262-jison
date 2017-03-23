@@ -3,7 +3,14 @@ const SingleLineCommentCharsStart = {
   rule: '//',
   handler: `
     this.begin('single_line_comment_start');
-    return '//';
+    this.comment = {
+      range: [
+        [yylloc.first_line, yylloc.first_column],
+      ],
+      type: 'SingleLine',
+      value: [],
+    };
+    return '';
   `,
 };
 
@@ -12,11 +19,10 @@ const SingleLineCommentChar = {
   rule: '.',
   handler: `
     //SourceCharacterbut not LineTerminator
-    if (require('./util').isLineTerminator(this.match)) {
-      this.popState();
-      return '';
+    if (this.comment) {
+      this.comment.value.push(this.match);
     }
-    return 'SingleLineCommentChar';
+    return '';
   `,
 };
 

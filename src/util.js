@@ -216,6 +216,7 @@ function parseToken(token, alias) {
       break;
     case 'single_line_comment_start':
       if (isLineTerminator(token)) {
+        this.comment.range.push([this.yylloc.last_line, this.yylloc.last_column]);
         this.popState();
       }
       break;
