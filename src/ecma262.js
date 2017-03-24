@@ -1,7 +1,11 @@
 const Generator = require('jison/lib/jison').Generator;
 const { transLex, transBnf } = require('./transform');
 
-const { singleLineComment } = require('./lex/comment');
+const {
+  singleLineComment,
+  multiLineComment,
+} = require('./lex/comment');
+
 const { decimal } = require('./lex/decimal');
 const { hexDigit } = require('./lex/hex');
 const { singleString, doubleString } = require('./lex/string');
@@ -105,8 +109,11 @@ exports.grammar = {
       block_start: 'block_start',
       case_start: 'case_start',
       single_line_comment_start: 'single_line_comment_start',
+      multi_line_comment_start: 'multi_line_comment_start',
+      multi_line_comment_post_asterisk_start: 'multi_line_comment_post_asterisk_start',
     },
     rules: transLex([
+      multiLineComment,
       singleLineComment,
       tokens,
       keywords,

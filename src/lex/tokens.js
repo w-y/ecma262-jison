@@ -1,5 +1,7 @@
+const rules = ['*'];
+
 const LF = {
-  conditions: ['*'],
+  conditions: rules,
   rule: '\\u000A',
   handler: `
     return require('./util').parseToken.call(this, this.match);
@@ -7,7 +9,7 @@ const LF = {
 };
 
 const CR = {
-  conditions: ['*'],
+  conditions: rules,
   rule: '\\u000D',
   handler: `
     return require('./util').parseToken.call(this, this.match);
@@ -15,7 +17,7 @@ const CR = {
 };
 
 const LS = {
-  conditions: ['*'],
+  conditions: rules,
   rule: '\\u2028',
   handler: `
     return require('./util').parseToken.call(this, this.match);
@@ -23,7 +25,7 @@ const LS = {
 };
 
 const PS = {
-  conditions: ['*'],
+  conditions: rules,
   rule: '\\u2029',
   handler: `
     return require('./util').parseToken.call(this, this.match);
@@ -31,7 +33,7 @@ const PS = {
 };
 
 const VT = {
-  conditions: ['*'],
+  conditions: rules,
   rule: '\\u000B',
   handler: `
     return require('./util').parseToken.call(this, this.match);
@@ -39,7 +41,7 @@ const VT = {
 };
 
 const FF = {
-  conditions: ['*'],
+  conditions: rules,
   rule: '\\u0020',
   handler: `
     return require('./util').parseToken.call(this, this.match);
@@ -47,7 +49,7 @@ const FF = {
 };
 
 const NBSP = {
-  conditions: ['*'],
+  conditions: rules,
   rule: '\\u00A0',
   handler: `
     return require('./util').parseToken.call(this, this.match);
@@ -55,7 +57,7 @@ const NBSP = {
 };
 
 const ZWNJ = {
-  conditions: ['*'],
+  conditions: rules,
   rule: '\\u200C',
   handler: `
     return require('./util').parseToken.call(this, this.match, 'ZWNJ');
@@ -63,7 +65,7 @@ const ZWNJ = {
 };
 
 const ZWJ = {
-  conditions: ['*'],
+  conditions: rules,
   rule: '\\u200D',
   handler: `
     return require('./util').parseToken.call(this, this.match, 'ZWJ');
@@ -71,7 +73,7 @@ const ZWJ = {
 };
 
 const ZWNBSP = {
-  conditions: ['*'],
+  conditions: rules,
   rule: '\\uFEFF',
   handler: `
     return require('./util').parseToken.call(this, this.match);
