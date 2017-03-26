@@ -1,17 +1,40 @@
 const WHITESPACES = '\\u000A|\\u000D|\\u2028\\|\\u2029';
 
+exports.onCommentStart = (lexerRef, type, line, column) => {
+  const lexer = lexerRef;
+  if (!lexer.comments) {
+    lexer.comments = [];
+  }
+  // range: [[first_line, first_column], [end_line, end_column]]
+  lexer.comment = {
+    range: [
+      [line, column],
+    ],
+    type,
+    buffer: [],
+  };
+};
+
+exports.onCommentEnd = (lexerRef, type, line, column) => {
+  const lexer = lexerRef;
+  if (!lexer.comments) {
+    lexer.comments = [];
+  }
+  lexer.comment.range.push([line, column]);
+  lexer.comments.push(lexer.comment);
+};
+
+exports.onComment = (lexerRef, value) => {
+  const lexer = lexerRef;
+  lexer.comment.buffer.push(value);
+};
+
 const MultiLineCommentCharsStart = {
   conditions: ['INITIAL'],
   rule: '/\\*',
   handler: `
     this.begin('multi_line_comment_start');
-    this.comment = {
-      range: [
-        [yylloc.first_line, yylloc.first_column],
-      ],
-      type: 'MuliLine',
-      value: [],
-    };
+    require('./lex/comment').onCommentStart(this, 'MultiLine', yylloc.first_line, yylloc.first_column);
     return '';
   `,
 };
@@ -21,6 +44,7 @@ const MultiLineCommentCharsEnd = {
   rule: '\\*/',
   handler: `
     this.popState();
+    require('./lex/comment').onCommentEnd(this, 'MultiLine', yylloc.last_line, yylloc.last_column);
     return '';
   `,
 };
@@ -29,6 +53,7 @@ const MultiLineNotAsteriskChar = {
   conditions: ['multi_line_comment_start'],
   rule: '[^*]',
   handler: `
+    require('./lex/comment').onComment(this, this.match);
     return '';
   `,
 };
@@ -38,6 +63,7 @@ const PostAsteriskCommentCharsStart = {
   rule: '[*]',
   handler: `
     this.begin('multi_line_comment_post_asterisk_start');
+    require('./lex/comment').onComment(this, this.match);
     return '';
   `,
 };
@@ -47,6 +73,7 @@ const PostAsteriskCommentChars = {
   rule: `.|${WHITESPACES}`,
   handler: `
     this.popState();
+    require('./lex/comment').onComment(this, this.match);
     if (this.match === '*') {
       //  asterist again
       this.begin('multi_line_comment_post_asterisk_start');
@@ -66,13 +93,7 @@ const SingleLineCommentCharsStart = {
   rule: '//',
   handler: `
     this.begin('single_line_comment_start');
-    this.comment = {
-      range: [
-        [yylloc.first_line, yylloc.first_column],
-      ],
-      type: 'SingleLine',
-      value: [],
-    };
+    require('./lex/comment').onCommentStart(this, 'SingleLine', yylloc.first_line, yylloc.first_column);
     return '';
   `,
 };
@@ -82,8 +103,9 @@ const SingleLineCommentCharEnd = {
   rule: WHITESPACES,
   handler: `
     //SourceCharacterbut not LineTerminator
-    this.comment.range.push([yylloc.last_line, yylloc.last_column]);
     this.popState();
+    require('./lex/comment').onCommentEnd(this, 'SingleLine', yylloc.last_line, yylloc.last_column);
+
     return '';
   `,
 };
@@ -92,9 +114,7 @@ const SingleLineCommentChar = {
   conditions: ['single_line_comment_start'],
   rule: '.',
   handler: `
-    if (this.comment) {
-      this.comment.value.push(this.match);
-    }
+    require('./lex/comment').onComment(this, this.match);
     return '';
   `,
 };
