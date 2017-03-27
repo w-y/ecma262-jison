@@ -94,7 +94,7 @@ exports.additionAssignment = {
   conditions: ['*'],
   rule: '\\+=',
   handler: `
-    return require('./util').parseOperator.call(this, this.match);
+    return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
   `,
 };
 
@@ -102,7 +102,7 @@ exports.subtractionAssignment = {
   conditions: ['*'],
   rule: '-=',
   handler: `
-    return require('./util').parseOperator.call(this, this.match);
+    return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
   `,
 };
 
@@ -110,7 +110,7 @@ exports.multiplicationAssignment = {
   conditions: ['*'],
   rule: '\\*=',
   handler: `
-    return require('./util').parseOperator.call(this, this.match);
+    return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
   `,
 };
 
@@ -118,7 +118,7 @@ exports.divisionAssignment = {
   conditions: ['*'],
   rule: '/=',
   handler: `
-    return require('./util').parseOperator.call(this, this.match);
+    return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
   `,
 };
 
@@ -126,7 +126,7 @@ exports.remainderAssignment = {
   conditions: ['*'],
   rule: '%=',
   handler: `
-    return require('./util').parseOperator.call(this, this.match);
+    return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
   `,
 };
 
@@ -134,7 +134,7 @@ exports.exponentiationAssignment = {
   conditions: ['*'],
   rule: '\\*\\*=',
   handler: `
-    return require('./util').parseOperator.call(this, this.match);
+    return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
   `,
 };
 
@@ -142,7 +142,7 @@ exports.leftShiftAssignment = {
   conditions: ['*'],
   rule: '<<=',
   handler: `
-    return require('./util').parseOperator.call(this, this.match);
+    return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
   `,
 };
 
@@ -150,7 +150,7 @@ exports.rightShiftAssignment = {
   conditions: ['*'],
   rule: '>>=',
   handler: `
-    return require('./util').parseOperator.call(this, this.match);
+    return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
   `,
 };
 
@@ -158,7 +158,7 @@ exports.unsignedRightShiftAssignment = {
   conditions: ['*'],
   rule: '>>>=',
   handler: `
-    return require('./util').parseOperator.call(this, this.match);
+    return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
   `,
 };
 
@@ -166,7 +166,7 @@ exports.bitwiseANDAssignment = {
   conditions: ['*'],
   rule: '&=',
   handler: `
-    return require('./util').parseOperator.call(this, this.match);
+    return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
   `,
 };
 
@@ -174,7 +174,7 @@ exports.bitwiseXORAssignment = {
   conditions: ['*'],
   rule: '\\^=',
   handler: `
-    return require('./util').parseOperator.call(this, this.match);
+    return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
   `,
 };
 
@@ -182,7 +182,7 @@ exports.bitwiseORAssignment = {
   conditions: ['*'],
   rule: '\\|=',
   handler: `
-    return require('./util').parseOperator.call(this, this.match);
+    return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
   `,
 };
 
@@ -190,7 +190,7 @@ exports.assignment = {
   conditions: ['*'],
   rule: '=',
   handler: `
-    return require('./util').parseOperator.call(this, this.match);
+    return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
   `,
 };
 
