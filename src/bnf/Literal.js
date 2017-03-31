@@ -8,10 +8,10 @@ module.exports = {
     'DecimalLiteral',
   ],
   handlers: [
-    '$$ = $1;',
-    '$$ = $1;',
-    '$$ = $1;',
-    '$$ = $1;',
+    '$$ = new (require(\'./ast/Literal\').NullLiteralNode)($1)',
+    '$$ = new (require(\'./ast/Literal\').BooleanLiteralNode)($1);',
+    '$$ = new (require(\'./ast/Literal\').StringLiteralNode)($1);',
+    '$$ = new (require(\'./ast/Literal\').DecimalLiteralNode)($1);',
   ],
   subRules: [
     require('./StringLiteral'),

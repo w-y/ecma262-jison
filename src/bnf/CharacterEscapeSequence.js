@@ -6,7 +6,7 @@ module.exports = {
     'NonEscapeCharacter',
   ],
   handlers: [
-    '$$ = $1;',
+    '$$ = require(\'./constants\').STRING_SINGLE_CHARACTER_ESCAPE_SEQUENCES($1);',
     '$$ = $1;',
   ],
   subRules: [

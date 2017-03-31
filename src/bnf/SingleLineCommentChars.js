@@ -2,7 +2,7 @@ module.exports = {
   conditions: [''],
   name: 'SingleLineCommentChars',
   rules: [
-    'SingleLineCommentChars SingleLineCommentChar',
+    'SingleLineCommentChar SingleLineCommentChars',
     'SingleLineCommentChar',
   ],
   handlers: [

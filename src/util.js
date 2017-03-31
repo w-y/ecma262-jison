@@ -221,3 +221,33 @@ function parseToken(token, alias) {
 }
 
 exports.parseToken = parseToken;
+
+// mathematical value
+function getMVHexDigit(v1) {
+  switch (v1) {
+    case 'a':
+      return 10;
+    case 'b':
+      return 11;
+    case 'c':
+      return 12;
+    case 'd':
+      return 13;
+    case 'e':
+      return 14;
+    case 'f':
+      return 15;
+    default:
+      break;
+  }
+  return parseInt(v1, 10);
+}
+
+function getMVHexDigits(v1, v2, v3, v4) {
+  return (4096 * getMVHexDigit(v1)) +
+    (256 * getMVHexDigit(v2)) +
+    (16 * getMVHexDigit(v3)) +
+    getMVHexDigit(v4);
+}
+
+exports.getMVHexDigits = getMVHexDigits;

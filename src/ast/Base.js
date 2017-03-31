@@ -1,4 +1,4 @@
-function BaseNode(
+function BaseNode({
   type,
   raw,
   firstRange, lastRange,
@@ -6,7 +6,7 @@ function BaseNode(
   lastLine, lastColumn,
   leadingComments = [],
   trailingComments = [],
-) {
+}) {
   this.type = type;
   this.raw = raw;
   this.firstRange = firstRange;
