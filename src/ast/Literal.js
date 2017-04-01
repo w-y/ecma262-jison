@@ -1,10 +1,8 @@
 const BaseNode = require('./Base');
 
 function parseStringLiteral(raw) {
-  const string = raw.substring(1, raw.length - 1);
-  console.log(string);
-  console.log(decodeURIComponent(string.replace(/\+/g, ' ')));
-  return string;
+  console.log(raw);
+  return raw.substring(1, raw.length - 1);
 }
 
 function LiteralNode(value, ...args) {

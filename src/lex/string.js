@@ -8,7 +8,7 @@ const SingleStringCharacter = {
 
 const SingleStringEscapeStart = {
   conditions: ['single_escape_string'],
-  rule: '\\\\u|\\\\U',
+  rule: '\\u|\\U',
   handler: `
    return require('./util').parseEscapeString.call(this, this.match);
   `,
@@ -41,7 +41,7 @@ const DoubleStringCharacter = {
 
 const DoubleStringEscapeStart = {
   conditions: ['double_escape_string'],
-  rule: '\\\\u|\\\\U',
+  rule: '\\u|\\U',
   handler: `
    return require('./util').parseEscapeString.call(this, this.match);
   `,

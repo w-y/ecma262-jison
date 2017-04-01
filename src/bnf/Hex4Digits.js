@@ -5,7 +5,7 @@ module.exports = {
     'HexDigit HexDigit HexDigit HexDigit',
   ],
   handlers: [
-    '$$ = require(\'./utils\').getMVHexDigits($1, $2, $3, $4);',
+    '$$ = require(\'./util\').getMVHexDigits($1, $2, $3, $4);',
   ],
   subRules: [
   ],
