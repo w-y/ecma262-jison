@@ -151,8 +151,8 @@ function parseString(ch) {
   const isSingleQuote = ch === 'SingleStringCharacter';
   const isDoubleQuote = ch === 'DoubleStringCharacter';
 
-  if (this.match === '\u0009' || this.match === '\u000A') {
-    throw new Error('Syntax error');
+  if (this.match === '\u000A' || this.match === '\u000D') {
+    throw new Error('SyntaxError: Invalid or unexpected token');
   } else if (this.match === '\\') {
     if (isSingleQuote) {
       this.begin('single_escape_string');

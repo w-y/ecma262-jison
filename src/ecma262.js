@@ -115,10 +115,10 @@ exports.grammar = {
     rules: transLex([
       multiLineComment,
       singleLineComment,
-      tokens,
-      keywords,
       singleString,
       doubleString,
+      tokens,
+      keywords,
 
       unsignedRightShiftAssignment,
 

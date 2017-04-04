@@ -13,7 +13,7 @@ const PS = '\u2029';
 
 module.exports = {
   WHITESPACE: { TAB, VT, FF, SP, NBSP, ZWNJ, ZWJ, ZWNBSP, LF, CR, LS, PS },
-  SINGLE_ESCAPE_CHARACTERS: ['\'', '"', '\\', 'b', 'f', 'r', 't', 'v'],
+  SINGLE_ESCAPE_CHARACTERS: ['\'', '"', '\\', 'b', 't', 'n', 'v', 'f', 'r'],
   STRING_SINGLE_CHARACTER_ESCAPE_SEQUENCES: {
     b: 0x0008,
     t: 0x0009,
