@@ -6,8 +6,8 @@ module.exports = {
     'Elision ,',
   ],
   handlers: [
-    '$$ = $1',
-    '$$ = $1 + $2',
+    '$$ = [,]',
+    '$$ = $1.concat([null])',
   ],
   subRules: [
   ],

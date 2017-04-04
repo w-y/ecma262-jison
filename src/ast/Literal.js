@@ -1,8 +1,11 @@
 const BaseNode = require('./Base');
 
-function parseStringLiteral(raw) {
-  console.log(raw);
+function getStringLiteralValue(raw) {
   return raw.substring(1, raw.length - 1);
+}
+
+function getDecimalLiteralValue(raw) {
+  return parseFloat(raw);
 }
 
 function LiteralNode(value, ...args) {
@@ -23,9 +26,23 @@ function BooleanLiteralNode(value, ...args) {
 }
 
 function StringLiteralNode(value, ...args) {
-  LiteralNode.call(this, parseStringLiteral(value), ...args);
+  LiteralNode.call(this, getStringLiteralValue(value), ...args);
+}
+
+function DecimalLiteralNode(value, ...args) {
+  LiteralNode.call(this, getDecimalLiteralValue(value), ...args);
+}
+
+function ArrayLiteralNode(elements, ...args) {
+  BaseNode.call(
+    this,
+    Object.assign({}, { type: 'ArrayLiteral', elements }, ...args),
+  );
+  this.elements = elements;
 }
 
 exports.NullLiteralNode = NullLiteralNode;
 exports.BooleanLiteralNode = BooleanLiteralNode;
 exports.StringLiteralNode = StringLiteralNode;
+exports.DecimalLiteralNode = DecimalLiteralNode;
+exports.ArrayLiteralNode = ArrayLiteralNode;

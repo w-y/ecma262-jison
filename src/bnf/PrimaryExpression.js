@@ -5,7 +5,7 @@ module.exports = {
     'this',
     // 'IdentifierReference',
     'Literal',
-    //'ArrayLiteral',
+    'ArrayLiteral',
     //'ObjectLiteral',
     //'CoverParenthesizedExpressionAndArrowParameterList',
     //'FunctionExpression',
