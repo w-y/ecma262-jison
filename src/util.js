@@ -96,6 +96,10 @@ function parseOperator(operator, alias) {
       this.popState();
       res = alias || operator;
       break;
+    case 'block_start':
+      this.popState();
+      res = alias || operator;
+      break;
     default:
       res = alias || operator;
       break;

@@ -3,10 +3,10 @@ module.exports = {
   name: 'PrimaryExpression',
   rules: [
     'this',
-    // 'IdentifierReference',
+    'IdentifierReference',
     'Literal',
-    'ArrayLiteral',
-    //'ObjectLiteral',
+    // 'ArrayLiteral',
+    'ObjectLiteral',
     //'CoverParenthesizedExpressionAndArrowParameterList',
     //'FunctionExpression',
   ],

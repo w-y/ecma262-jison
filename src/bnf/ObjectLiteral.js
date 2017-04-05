@@ -7,9 +7,9 @@ module.exports = {
     'BLOCK_START PropertyDefinitionList , }',
   ],
   handlers: [
-    '$$ = $1 + $2',
-    '$$ = $1 + $2 + $3',
-    '$$ = $1 + $2 + $3 + $4',
+    '$$ = new (require(\'./ast/Literal\').ObjectLiteralNode)([])',
+    '$$ = new (require(\'./ast/Literal\').ObjectLiteralNode)($2)',
+    '$$ = new (require(\'./ast/Literal\').ObjectLiteralNode)($2)',
   ],
   subRules: [
     require('./PropertyDefinitionList'),

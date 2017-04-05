@@ -36,9 +36,17 @@ function DecimalLiteralNode(value, ...args) {
 function ArrayLiteralNode(elements, ...args) {
   BaseNode.call(
     this,
-    Object.assign({}, { type: 'ArrayLiteral', elements }, ...args),
+    Object.assign({}, { type: 'ArrayLiteral' }, ...args),
   );
   this.elements = elements;
+}
+
+function ObjectLiteralNode(properties, ...args) {
+  BaseNode.call(
+    this,
+    Object.assign({}, { type: 'ObjectLiteral' }, ...args),
+  );
+  this.properties = properties;
 }
 
 exports.NullLiteralNode = NullLiteralNode;
@@ -46,3 +54,4 @@ exports.BooleanLiteralNode = BooleanLiteralNode;
 exports.StringLiteralNode = StringLiteralNode;
 exports.DecimalLiteralNode = DecimalLiteralNode;
 exports.ArrayLiteralNode = ArrayLiteralNode;
+exports.ObjectLiteralNode = ObjectLiteralNode;
