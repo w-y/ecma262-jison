@@ -6,9 +6,9 @@ module.exports = {
     'IdentifierReference',
     'Literal',
     // 'ArrayLiteral',
-    'ObjectLiteral',
-    //'CoverParenthesizedExpressionAndArrowParameterList',
-    //'FunctionExpression',
+    // 'ObjectLiteral',
+    // 'CoverParenthesizedExpressionAndArrowParameterList',
+    'FunctionExpression',
   ],
   handlers: [
     '$$ = $1;console.log($1);',
