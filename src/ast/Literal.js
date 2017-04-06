@@ -34,18 +34,12 @@ function DecimalLiteralNode(value, ...args) {
 }
 
 function ArrayLiteralNode(elements, ...args) {
-  BaseNode.call(
-    this,
-    Object.assign({}, { type: 'ArrayLiteral' }, ...args),
-  );
+  BaseNode.call(this, Object.assign({}, { type: 'ArrayLiteral' }, ...args));
   this.elements = elements;
 }
 
 function ObjectLiteralNode(properties, ...args) {
-  BaseNode.call(
-    this,
-    Object.assign({}, { type: 'ObjectLiteral' }, ...args),
-  );
+  BaseNode.call(this, Object.assign({}, { type: 'ObjectLiteral' }, ...args));
   this.properties = properties;
 }
 
