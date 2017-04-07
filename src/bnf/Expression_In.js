@@ -6,7 +6,7 @@ module.exports = {
     'Expression_In , AssignmentExpression_In',
   ],
   handlers: [
-    ';',
+    '$$ = $1;',
     ';',
   ],
   subRules: [

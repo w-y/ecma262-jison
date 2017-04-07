@@ -17,7 +17,7 @@ module.exports = {
     //'TryStatement',
   ],
   handlers: [
-    '$$ = $1;',
+    '$$ = new (require(\'./ast/EmptyStatement\').EmptyStatementNode)();',
     '$$ = $1;',
     '$$ = $1;',
     'console.log(\'block statement: \' + $1);$$ = $1;',

@@ -6,8 +6,8 @@ module.exports = {
     'Declaration',
   ],
   handlers: [
-    ';',
-    ';',
+    '$$ = $1;',
+    '$$ = $1',
   ],
   subRules: [
     require('./Statement'),

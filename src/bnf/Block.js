@@ -6,8 +6,8 @@ module.exports = {
     '{ StatementList }',
   ],
   handlers: [
-    '$$ = $1 + $2',
-    '$$ = $1 + $2 + $3',
+    '$$ = new (require(\'./ast/BlockStatement\').BlockStatementNode)([]);',
+    '$$ = new (require(\'./ast/BlockStatement\').BlockStatementNode)($1);',
   ],
   subRules: [
     require('./StatementList'),

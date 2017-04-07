@@ -5,10 +5,7 @@ module.exports = {
     ';',
   ],
   handlers: [
-    `
-      console.log(yy.lexer.comment);
-      console.log('empty statement');
-    `,
+    '$$ = new (require(\'./ast/EmptyStatement\').EmptyStatementNode)();',
   ],
   subRules: [],
 };

@@ -7,7 +7,7 @@ module.exports = {
   ],
   handlers: [
     '$$ = $1',
-    '$$ = $1 + $2 + $3',
+    '$$ = new (require(\'./ast/AssignmentExpression\').AssignmentExpressionNode)($2, $1, $3);',
   ],
   subRules: [
     require('./ConditionalExpression_In'),
