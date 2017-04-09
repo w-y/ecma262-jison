@@ -7,7 +7,7 @@ module.exports = {
   ],
   handlers: [
     '$$ = $1;',
-    '$$ = $1 + $2 + $3 + $4 + $5;',
+    '$$ = new (require(\'./ast/ConditionalExpression\').ConditionalExpressionNode)($1, $3, $5);',
   ],
   subRules: [
     require('./LogicalORExpression'),
