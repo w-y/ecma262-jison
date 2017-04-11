@@ -7,7 +7,7 @@ module.exports = {
   ],
   handlers: [
     '$$ = $1;',
-    '$$ = $1 + $2 + $3;',
+    '$$ = new (require(\'./ast/BitwiseExpression\').BitwiseANDExpressionNode)($2, $1, $3)',
   ],
   subRules: [
     require('./EqualityExpression'),
