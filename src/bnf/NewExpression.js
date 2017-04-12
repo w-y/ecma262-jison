@@ -7,7 +7,7 @@ module.exports = {
   ],
   handlers: [
     '$$ = $1',
-    '$$ = $1 + $2',
+    '$$ = new (require(\'./ast/LeftHandleSideExpression\').NewExpressionNode)($2)',
   ],
   subRules: [
     require('./MemberExpression'),

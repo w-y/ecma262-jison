@@ -9,11 +9,11 @@ module.exports = {
     'CallExpression . IdentifierName',
   ],
   handlers: [
-    '$$ = $1 + $2',
-    '$$ = $1',
-    '$$ = $1 + $2',
-    '$$ = $1 + $2 + $3 + $4',
-    '$$ = $1 + $2 + $3',
+    '$$ = new (require(\'./ast/LeftHandSideExpression\').CallExpressionNode)($1, $2)',
+    '$$ = new (require(\'./ast/LeftHandSideExpression\').CallExpressionNode)($1, [])',
+    '$$ = new (require(\'./ast/LeftHandSideExpression\').CallExpressionNode)($1, [])',
+    '$$ = new (require(\'./ast/LeftHandSideExpression\').MemberExpressionNode)($1, $3)',
+    '$$ = new (require(\'./ast/LeftHandSideExpression\').MemberExpressionNode)($1, $3)',
   ],
   subRules: [
     require('./MemberExpression'),

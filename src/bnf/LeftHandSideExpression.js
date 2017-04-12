@@ -7,7 +7,7 @@ module.exports = {
   ],
   handlers: [
     '$$ = $1;',
-    '$$ = $1;console.log(\'call expression: \' + $1)',
+    '$$ = $1;',
   ],
   subRules: [
     require('./NewExpression'),
