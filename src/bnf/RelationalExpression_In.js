@@ -8,8 +8,8 @@ module.exports = {
   ],
   handlers: [
     '$$ = $1',
-    '$$ = $1 + $2 + $3',
-    '$$ = $1 + $2 + $3',
+    '$$ = new (require(\'./ast/RelationalExpression\').RelationalExpressionNode)($2, $1, $3)',
+    '$$ = new (require(\'./ast/RelationalExpression\').RelationalExpressionNode)($2, $1, $3)',
   ],
   subRules: [
     require('./ShiftExpression'),
