@@ -6,8 +6,12 @@ module.exports = {
     'super . IdentifierName',
   ],
   handlers: [
-    '$$ = $1 + $2 + $3 + $4',
-    '$$ = $1 + $2 + $3',
+    `$$ =
+      new (require('./ast/LeftHandSideExpression').MemberExpressionNode)(new (require('./ast/SuperNode')($1)), $3)
+    `,
+    `$$ =
+      new (require('./ast/LeftHandSideExpression').MemberExpressionNode)(new (require('./ast/SuperNode')($1)), $3)
+    `,
   ],
   subRules: [
     require('./Expression_In'),

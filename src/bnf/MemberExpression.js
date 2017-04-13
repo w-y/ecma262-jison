@@ -11,11 +11,11 @@ module.exports = {
   ],
   handlers: [
     '$$ = $1',
-    '$$ = $1 + $2 + $3 + $4',
-    '$$ = $1 + $2 + $3',
+    '$$ = new (require(\'./ast/LeftHandSideExpression\').MemberExpressionNode)($1, $3)',
+    '$$ = new (require(\'./ast/LeftHandSideExpression\').MemberExpressionNode)($1, $3)',
     '$$ = $1',
     '$$ = $1',
-    '$$ = $1 + $2 + $3',
+    '$$ = new (require(\'./ast/LeftHandSideExpression\').NewExpressionNode)($2, $3)',
   ],
   subRules: [
     require('./PrimaryExpression'),
