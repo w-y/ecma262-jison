@@ -190,7 +190,7 @@ exports.assignment = {
   conditions: ['*'],
   rule: '=',
   handler: `
-    return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
+    return require('./util').parseOperator.call(this, this.match, '=');
   `,
 };
 

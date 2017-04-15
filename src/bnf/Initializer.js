@@ -5,7 +5,7 @@ module.exports = {
     '= AssignmentExpression',
   ],
   handlers: [
-    '$$ = $1 + $2',
+    '$$ = $2',
   ],
   subRules: [
     require('./AssignmentExpression'),
