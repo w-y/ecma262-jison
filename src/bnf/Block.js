@@ -7,7 +7,7 @@ module.exports = {
   ],
   handlers: [
     '$$ = new (require(\'./ast/BlockStatement\').BlockStatementNode)([]);',
-    '$$ = new (require(\'./ast/BlockStatement\').BlockStatementNode)($1);',
+    '$$ = new (require(\'./ast/BlockStatement\').BlockStatementNode)($2);',
   ],
   subRules: [
     require('./StatementList'),
