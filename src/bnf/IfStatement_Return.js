@@ -6,8 +6,8 @@ module.exports = {
     'if ( Expression_In ) Statement_Return else Statement_Return',
   ],
   handlers: [
-    '$$ = $1 + $2 + $3 + $4 + $5;',
-    '$$ = $1 + $2 + $3 + $4 + $5 + $6 + $7;',
+    '$$ = new (require(\'./ast/IfStatement\').IfStatementNode)($3, $5)',
+    '$$ = new (require(\'./ast/IfStatement\').IfStatementNode)($3, $5, $7)',
   ],
   subRules: [
     require('./Statement_Return'),
