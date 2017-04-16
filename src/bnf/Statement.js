@@ -8,7 +8,7 @@ module.exports = {
     'BlockStatement',
     'LabelledStatement',
     'IfStatement',
-    //'BreakableStatement',
+    'BreakableStatement',
     //'ContinueStatement',
     //'BreakStatement',
     //'WithStatement',
@@ -17,6 +17,7 @@ module.exports = {
     //'TryStatement',
   ],
   handlers: [
+    '$$ = $1;',
     '$$ = $1;',
     '$$ = $1;',
     '$$ = $1;',

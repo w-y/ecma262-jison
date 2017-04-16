@@ -5,7 +5,7 @@ module.exports = {
     'LetOrConst BindingList_In ;',
   ],
   handlers: [
-    '$$ = $1 + \' \' + $2 + $3',
+    '$$ = new (require(\'./ast/LexicalDeclaration\').LexicalDeclarationNode)($1, $2)',
   ],
   subRules: [
     require('./BindingList_In'),
