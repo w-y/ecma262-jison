@@ -6,8 +6,8 @@ module.exports = {
     'default :',
   ],
   handlers: [
-    '$$ = $1 + $2 + $3',
-    '$$ = $1 + $2',
+    '$$ = new (require(\'./ast/SwitchStatement\').SwitchCaseNode)(null, $3)',
+    '$$ = new (require(\'./ast/SwitchStatement\').SwitchCaseNode)(null, null)',
   ],
   subRules: [
     require('./StatementList'),

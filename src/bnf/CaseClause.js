@@ -6,8 +6,8 @@ module.exports = {
     'case Expression_In :',
   ],
   handlers: [
-    '$$ = $1 + $2 + $3 + $4',
-    '$$ = $1 + $2 + $3',
+    '$$ = new (require(\'./ast/SwitchStatement\').SwitchCaseNode)($2, $4)',
+    '$$ = new (require(\'./ast/SwitchStatement\').SwitchCaseNode)($2, null)',
   ],
   subRules: [
     require('./Expression_In'),
