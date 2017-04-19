@@ -5,7 +5,10 @@ module.exports = {
     'ScriptBody',
   ],
   handlers: [
-    ';',
+    `
+      $$ = $1;
+      return $$;
+    `,
   ],
   subRules: [
     require('./ScriptBody'),
