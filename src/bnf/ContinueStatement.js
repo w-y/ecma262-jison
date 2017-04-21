@@ -7,9 +7,9 @@ module.exports = {
     'continue LabelIdentifier ;',
   ],
   handlers: [
-    '$$ = $1 + $2;',
-    '$$ = $1;',
-    '$$ = $1 + $2 + $3;',
+    `$$ = new (require('./ast/ContinueStatement'))(null);`,
+    `throw new (require('./error').ParseError)();`,
+    `$$ = new (require('./ast/ContinueStatement'))($2);`,
   ],
   subRules: [
     require('./LabelIdentifier'),

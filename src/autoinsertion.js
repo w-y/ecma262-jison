@@ -2,13 +2,15 @@ const fs = require('fs');
 const parser = require('./parser');
 const { isWhiteSpace, isLineTerminator } = require('./util');
 
+const { ParseError } = require('./error');
+
 const BITE_SIZE = 256;
 const values = [];
 
 let file = null;
 let readbytes = 0;
 
-fs.open('./test.js', 'r', (err, fd) => {
+fs.open('./testtest.js', 'r', (err, fd) => {
   file = fd;
   readsome();
 });
@@ -39,22 +41,23 @@ function processsome(err, bytecount, buff) {
 function canApplyRule(source, ex) {
   const token = ex.hash.token;
   const text = ex.hash.text;
-  const offset = ex.hash.offset - text.length;
+
+  const ranges = ex.hash.ranges;
+  console.log(ranges);
 
   if (token === ';' && ex.hash.failedAutoSemicolon) {
     return -1;
   }
   // NOTICE: the end of the input stream of tokens
   if (token === 1) {
-    console.log('rule 1');
-    return offset;
+    return ranges[0];
   }
+  // The offending token is }
   if (token === '}') {
-    console.log('rule 4');
-    return offset;
+    return ranges[0];
   }
 
-  let prevPtr = offset;
+  let prevPtr = ranges[0] - 1;
 
   while (prevPtr >= 0 && isWhiteSpace(source[prevPtr])) {
     prevPtr -= 1;
@@ -65,13 +68,13 @@ function canApplyRule(source, ex) {
   // TODO: only do-while
   if (source[prevPtr] === ')') {
     console.log('rule 3');
-    return offset;
+    return ranges[0];
   }
 
   // The offending token is separated from the previous token by at least one LineTerminator.
   if (isLineTerminator(source[prevPtr])) {
     console.log('rule 2');
-    return offset;
+    return ranges[0];
   }
   return -1;
 }
@@ -93,13 +96,7 @@ function autoinsertion(source) {
     if (hash.recoverable) {
       this.trace(str);
     } else {
-      function _parseError (msg, hash) {
-        this.message = msg;
-        this.hash = hash;
-      }
-      _parseError.prototype = Error;
-
-      throw new _parseError(str, hash);
+      throw new ParseError(str, hash);
     }
   };
 
@@ -108,11 +105,12 @@ function autoinsertion(source) {
     if (test > 0) {
       parser.parser.yy.autoinsertion = test;
       parser.parser.yy.autoinsertion_loc = getNextLoc(ex.hash.loc);
-      return newSource = `${src.substring(0, test)};${src.substring(test)}`;
+      newSrc = src.substring(0, test) + ';' + src.substring(test);
+      return newSrc;
     }
     return false;
   }
-  const i = 0;
+  let i = 0;
   while (true) {
     try {
       res = parser.parse(src);

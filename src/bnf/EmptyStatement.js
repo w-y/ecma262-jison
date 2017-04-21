@@ -14,20 +14,14 @@ module.exports = {
           locAutoInsertion.first_line === loc.first_line &&
           locAutoInsertion.last_column === loc.last_column) {
 
-          function _parseError (msg, hash) {
-            this.message = msg;
-            this.hash = hash;
-          }
-          _parseError.prototype = Error;
-
-          throw new _parseError('a semicolon is never inserted automatically if the semicolon would then be parsed as an empty statement', {
+          throw new ((require('./error').ParseError)('a semicolon is never inserted automatically if the semicolon would then be parsed as an empty statement', {
             text: this.$,
             token: this.$,
             line: loc.first_line,
             loc: loc,
             offset: yy.autoinsertion,
             failedAutoSemicolon: true,
-          });
+          }));
         }
       }
       $$ = new (require('./ast/EmptyStatement').EmptyStatementNode)();
