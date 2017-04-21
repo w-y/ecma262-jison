@@ -6,7 +6,7 @@ module.exports = {
   ],
   handlers: [
     `{
-     const loc = this._$;
+     const loc = yy.lexer.yylloc;
      const locAutoInsertion = yy.autoinsertion_loc;
      if (locAutoInsertion) {
         if (locAutoInsertion.first_line === loc.first_line &&

@@ -7,6 +7,7 @@ module.exports = {
   handlers: [
     `
       $$ = $1;
+      console.log(JSON.stringify($$));
       return $$;
     `,
   ],

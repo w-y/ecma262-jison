@@ -7,7 +7,7 @@ module.exports = {
   ],
   handlers: [
     '$$ = [$1];',
-    '$$ = $1.concat([$2]);console.log($$);',
+    '$$ = $1.concat([$2]);',
   ],
   subRules: [
     require('./StatementListItem'),
