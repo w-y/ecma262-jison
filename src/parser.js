@@ -104,27 +104,18 @@ case 6: case 24: case 29: case 31: case 41: case 44: case 46: case 48: case 52: 
 this.$ = $$[$0]
 break;
 case 20:
-{
-     const loc = yy.lexer.yylloc;
-     const locAutoInsertion = yy.autoinsertion_loc;
-     if (locAutoInsertion) {
-        if (locAutoInsertion.first_line === loc.first_line &&
-          locAutoInsertion.first_column === loc.first_column &&
-          locAutoInsertion.first_line === loc.first_line &&
-          locAutoInsertion.last_column === loc.last_column) {
 
-          throw new ((require('./error').ParseError)('a semicolon is never inserted automatically if the semicolon would then be parsed as an empty statement', {
-            text: this.$,
-            token: this.$,
-            line: loc.first_line,
-            loc: loc,
-            offset: yy.autoinsertion,
-            failedAutoSemicolon: true,
-          }));
-        }
+      if (yy.autoInsertionOffset && yy.autoInsertionOffset === yy.lexer.offset) {
+        throw new (require('./error').ParseError)('a semicolon is never inserted automatically if the semicolon would then be parsed as an empty       statement', {
+          text: $$[$0],
+          token: $$[$0],
+          line: yy.lexer.yylloc.first_line,
+          loc: yy.lexer.yylloc,
+          failedAutoSemicolon: true,
+        });
       }
       this.$ = new (require('./ast/EmptyStatement').EmptyStatementNode)();
-    }
+    
 break;
 case 21: case 272: case 315:
 this.$ = $$[$0-1]
@@ -427,13 +418,21 @@ case 282:
 this.$ = new (require('./ast/SwitchStatement').SwitchCaseNode)(null, null)
 break;
 case 283:
-this.$ = new (require('./ast/ContinueStatement'))(null);
+this.$ = new (require('./ast/ContinueStatementNode'))(null);
 break;
 case 284:
-throw new (require('./error').ParseError)();
+
+      throw new (require('./error').NoLineTerminatorError)('no line terminator', {
+        text: $$[$0],
+        token: 'CONTINUE_LF',
+        line: yy.lexer.yylloc.first_line,
+        loc: yy.lexer.yylloc,
+        offset: yy.lexer.offset,
+      });
+    
 break;
 case 285:
-this.$ = new (require('./ast/ContinueStatement'))($$[$0-1]);
+this.$ = new (require('./ast/ContinueStatementNode'))($$[$0-1]);
 break;
 case 287:
 this.$ = $$[$0-1];
