@@ -1,5 +1,27 @@
 const BaseNode = require('./Base');
 
+function checkForAutoSemicolonInsertion(
+  autoInsertionOffset, leftParenthesisRange, rightParenthesisRange, loc) {
+  if (leftParenthesisRange && rightParenthesisRange && autoInsertionOffset) {
+    // semicolon can't become one of the two semicolons
+    // in the header of a for statement
+
+    if (autoInsertionOffset > leftParenthesisRange[0] &&
+        autoInsertionOffset < rightParenthesisRange[1]) {
+      throw new (require('../error').ParseError)(
+        'semicolon can\'t become one of the two semicolons in the header of a for statement',
+        {
+          text: ';',
+          token: ';',
+          line: loc.first_line,
+          loc,
+          failedAutoSemicolon: true,
+        },
+      );
+    }
+  }
+}
+
 function IterationStatementNode(type, test, body, ...args) {
   BaseNode.call(this, Object.assign({}, { type }, ...args));
   this.test = test;
@@ -44,3 +66,4 @@ exports.ForInStatementNode = ForInStatementNode;
 
 exports.ForOfStatementNode = ForOfStatementNode;
 
+exports.checkForAutoSemicolonInsertion = checkForAutoSemicolonInsertion;

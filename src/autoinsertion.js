@@ -11,6 +11,7 @@ let file = null;
 let readbytes = 0;
 
 function canApplyRule(source, ex) {
+  console.log(ex);
   const token = ex.hash.token;
   const range = ex.hash.loc.range;
   let tokenOffset = range[1];

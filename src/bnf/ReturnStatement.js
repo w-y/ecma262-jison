@@ -6,8 +6,8 @@ module.exports = {
     'return Expression_In ;',
   ],
   handlers: [
-    '$$ = $1 + $2;',
-    '$$ = $1 + $2 + $3;',
+    '$$ = new (require(\'./ast/ReturnStatementNode\'))(null)',
+    '$$ = new (require(\'./ast/ReturnStatementNode\'))($1)',
   ],
   subRules: [
     require('./Expression_In'),
