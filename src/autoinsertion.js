@@ -11,7 +11,6 @@ let file = null;
 let readbytes = 0;
 
 function canApplyRule(source, ex) {
-  console.log(ex);
   const token = ex.hash.token;
   const range = ex.hash.loc.range;
   let tokenOffset = range[1];
@@ -80,6 +79,7 @@ function autoinsertion(source) {
     if (test > 0) {
       parser.parser.yy.autoInsertionOffset = test + 1;
       const newSrc = `${src.substring(0, test)};${src.substring(test)}`;
+      console.log(newSrc);
       return newSrc;
     }
     return false;

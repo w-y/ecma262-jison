@@ -117,6 +117,8 @@ exports.grammar = {
       singleLineComment,
       singleString,
       doubleString,
+      increment,
+      decrement,
       tokens,
       keywords,
 
@@ -131,8 +133,8 @@ exports.grammar = {
 
       inequality,
       equality,
-      increment,
-      decrement,
+      // increment,
+      // decrement,
       additionAssignment,
       subtractionAssignment,
       multiplicationAssignment,

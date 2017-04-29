@@ -10,13 +10,7 @@ function checkForAutoSemicolonInsertion(
         autoInsertionOffset < rightParenthesisRange[1]) {
       throw new (require('../error').ParseError)(
         'semicolon can\'t become one of the two semicolons in the header of a for statement',
-        {
-          text: ';',
-          token: ';',
-          line: loc.first_line,
-          loc,
-          failedAutoSemicolon: true,
-        },
+        { text: ';', token: ';', line: loc.first_line, loc, failedAutoSemicolon: true },
       );
     }
   }

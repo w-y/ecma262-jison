@@ -104,7 +104,6 @@ function parseOperator(operator, alias) {
       res = alias || operator;
       break;
   }
-
   // TODO: 具体情况具体分析
   // case : 后面的{ 应该是语句块而不是表达式的开头
   // } 后面的{是语句块开头？
@@ -128,7 +127,6 @@ function parseOperator(operator, alias) {
   } else if (/^function/.test(input.substring(i))) {
     this.begin('function_start');
   }
-
   if (res) { return res; }
 
   return undefined;

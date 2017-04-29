@@ -194,6 +194,14 @@ const With = {
   `,
 };
 
+const ReturnLf = {
+  conditions: ['*'],
+  rule: 'return[\\u0009|\\u0020]*[\\u000A]',
+  handler: `
+    return require('./util').parseKeyword.call(this, this.match, 'RETURN_LF');
+  `,
+};
+
 const Return = {
   conditions: ['*'],
   rule: 'return',
@@ -331,7 +339,9 @@ exports.keywords = [
   FunctionExpression, FunctionStatement,
   Switch, Case, Default,
   With,
-  Try, Catch, Finally, Throw, ThrowLf,
+  ThrowLf,
+  Try, Catch, Finally, Throw,
   Debugger,
+  ReturnLf,
   Return,
 ];
