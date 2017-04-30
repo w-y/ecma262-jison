@@ -1,7 +1,6 @@
 // make tokens of similar bnf rule keep same name to accelerate construct speed
 // example: '===','==','!=' => EqualityOperator and seperate them later at ast phase
 
-
 // EqualityOperator
 
 exports.identity = {
@@ -75,28 +74,6 @@ exports.lessThan = {
 exports.increment = [
   {
     conditions: ['*'],
-    rule: '[\\u0009|\\u0020]*[\\u000A]+\\+\\+',
-    handler: `
-      throw new (require('./error').NoLineTerminatorError)('no line terminator', {
-        text: yy.lexer.yytext,
-        token: 'UpdateOperator_LF',
-        line: yy.lexer.yylloc.first_line,
-        loc: {
-          first_line: yy.lexer.yylloc.first_line, 
-          last_line: yy.lexer.yylloc.last_line, 
-          first_column: yy.lexer.yylloc.first_column,
-          last_column: yy.lexer.yylloc.last_column,
-          range: [
-            yy.lexer.yylloc.range[0],
-            yy.lexer.yylloc.range[1] - 2,
-          ],
-        },
-        offset: yy.lexer.offset - 2,
-      });
-    `,
-  },
-  {
-    conditions: ['*'],
     rule: '\\+\\+',
     handler: `
       return require('./util').parseOperator.call(this, this.match, 'UpdateOperator');
@@ -105,28 +82,6 @@ exports.increment = [
 ];
 
 exports.decrement = [
-  {
-    conditions: ['*'],
-    rule: '[\\u0009|\\u0020]*[\\u000A]+--',
-    handler: `
-      throw new (require('./error').NoLineTerminatorError)('no line terminator', {
-        text: yy.lexer.yytext,
-        token: 'UpdateOperator_LF',
-        line: yy.lexer.yylloc.first_line,
-        loc: {
-          first_line: yy.lexer.yylloc.first_line, 
-          last_line: yy.lexer.yylloc.last_line, 
-          first_column: yy.lexer.yylloc.first_column,
-          last_column: yy.lexer.yylloc.last_column,
-          range: [
-            yy.lexer.yylloc.range[0],
-            yy.lexer.yylloc.range[1] - 2,
-          ],
-        },
-        offset: yy.lexer.offset - 2,
-      });
-    `,
-  },
   {
     conditions: ['*'],
     rule: '--',

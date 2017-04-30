@@ -3,7 +3,7 @@ module.exports = {
   name: 'ThrowStatement',
   rules: [
     'throw Expression_In ;',
-    'THROW_LF ;',
+    'THROW_LF',
   ],
   handlers: [
     '$$ = $1 + $2 + $3;',

@@ -70,6 +70,45 @@ function parseKeyword(keyword, alias) {
 exports.parseKeyword = parseKeyword;
 
 function parseOperator(operator, alias) {
+   // NOTICE: restrict line terminator for update express
+  if (alias === 'UpdateOperator') {
+    let start = this.matched.length - 3;
+    let hasLF = false;
+    let hasSemiColon = false;
+
+    while (start >= 0 && require('./util').isWhiteSpace(this.matched[start])) {
+      start -= 1;
+    }
+    while (start >= 0 && require('./util').isLineTerminator(this.matched[start])) {
+      start -= 1;
+      hasLF = true;
+    }
+    while (start >= 0 && require('./util').isWhiteSpace(this.matched[start])) {
+      start -= 1;
+    }
+    if (this.matched[start] === ';') {
+      hasSemiColon = true;
+    }
+    if (hasLF && !hasSemiColon) {
+      throw new (require('./error').NoLineTerminatorError)('no line terminator', {
+        text: this.yytext,
+        token: 'UpdateOperator_LF',
+        line: this.yylloc.first_line,
+        loc: {
+          first_line: this.yylloc.first_line,
+          last_line: this.yylloc.last_line,
+          first_column: this.yylloc.first_column,
+          last_column: this.yylloc.last_column,
+          range: [
+            this.yylloc.range[0],
+            this.yylloc.range[1] - 2,
+          ],
+        },
+        offset: this.offset - 2,
+      });
+    }
+  }
+
   let i = this.matches.index + this.match.length;
   const input = this.matches.input;
 

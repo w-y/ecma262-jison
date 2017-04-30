@@ -3,7 +3,7 @@ module.exports = {
   name: 'BreakStatement',
   rules: [
     'break ;',
-    'BREAK_LF ;',
+    'BREAK_LF',
     'break LabelIdentifier ;',
   ],
   handlers: [
