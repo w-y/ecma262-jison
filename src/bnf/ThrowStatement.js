@@ -6,8 +6,16 @@ module.exports = {
     'THROW_LF',
   ],
   handlers: [
-    '$$ = $1 + $2 + $3;',
-    '$$ = $1 + $2;',
+    '$$ = new (require(\'./ast/ThrowStatementNode\'))($2)',
+    `
+      throw new (require('./error').NoLineTerminatorError)('no line terminator', {
+        text: $1,
+        token: 'THROW_LF',
+        line: yy.lexer.yylloc.first_line,
+        loc: yy.lexer.yylloc,
+        offset: yy.lexer.offset,
+      });
+    `,
   ],
   subRules: [
     require('./Expression_In'),

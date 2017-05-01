@@ -7,9 +7,17 @@ module.exports = {
     'break LabelIdentifier ;',
   ],
   handlers: [
-    '$$ = $1 + $2;',
-    '$$ = $1;',
-    '$$ = $1 + $2 + $3;',
+    '$$ = new (require(\'./ast/BreakStatementNode\'))()',
+    `
+      throw new (require('./error').NoLineTerminatorError)('no line terminator', {
+        text: $1,
+        token: 'BREAK_LF',
+        line: yy.lexer.yylloc.first_line,
+        loc: yy.lexer.yylloc,
+        offset: yy.lexer.offset,
+      });
+    `,
+    '$$ = new (require(\'./ast/BreakStatementNode\'))($2)',
   ],
   subRules: [
     require('./LabelIdentifier'),

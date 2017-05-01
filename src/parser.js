@@ -91,7 +91,7 @@ case 1:
       return this.$;
     
 break;
-case 2: case 5: case 7: case 8: case 9: case 10: case 11: case 12: case 13: case 14: case 15: case 16: case 17: case 18: case 19: case 22: case 27: case 33: case 35: case 37: case 39: case 50: case 58: case 59: case 63: case 64: case 65: case 66: case 67: case 69: case 71: case 72: case 73: case 74: case 77: case 78: case 79: case 80: case 81: case 82: case 92: case 94: case 100: case 102: case 107: case 108: case 110: case 112: case 184: case 185: case 186: case 187: case 188: case 189: case 190: case 191: case 192: case 193: case 194: case 195: case 196: case 197: case 198: case 199: case 206: case 210: case 211: case 212: case 217: case 219: case 223: case 224: case 256: case 262: case 264: case 266: case 268: case 280: case 301: case 317: case 318: case 341:
+case 2: case 5: case 7: case 8: case 9: case 10: case 11: case 12: case 13: case 14: case 15: case 16: case 17: case 18: case 19: case 22: case 27: case 33: case 35: case 37: case 39: case 50: case 58: case 59: case 63: case 64: case 65: case 66: case 67: case 69: case 71: case 72: case 73: case 74: case 77: case 78: case 79: case 80: case 81: case 82: case 92: case 94: case 100: case 102: case 107: case 108: case 110: case 112: case 184: case 185: case 186: case 187: case 188: case 189: case 190: case 191: case 192: case 193: case 194: case 195: case 196: case 197: case 198: case 199: case 206: case 210: case 211: case 212: case 217: case 219: case 223: case 224: case 256: case 262: case 264: case 266: case 268: case 280: case 317: case 318: case 341:
 this.$ = $$[$0];
 break;
 case 3: case 218: case 221: case 272:
@@ -180,7 +180,7 @@ break;
 case 68:
 this.$ = new (require('./ast/Identifier').IdentifierNode)($$[$0]);
 break;
-case 70: case 83: case 90: case 91: case 93: case 95: case 101: case 103: case 104: case 106: case 109: case 111: case 113: case 208: case 300:
+case 70: case 83: case 90: case 91: case 93: case 95: case 101: case 103: case 104: case 106: case 109: case 111: case 113: case 208:
 this.$ = $$[$0-1] + $$[$0];
 break;
 case 75:
@@ -201,7 +201,7 @@ break;
 case 87:
 this.$ = new (require('./ast/Literal').DecimalLiteralNode)($$[$0], { raw: $$[$0] });
 break;
-case 88: case 89: case 105: case 207: case 281: case 302: case 304:
+case 88: case 89: case 105: case 207: case 281:
 this.$ = $$[$0-2] + $$[$0-1] + $$[$0];
 break;
 case 96: case 97:
@@ -488,11 +488,39 @@ break;
 case 299:
 this.$ = new (require('./ast/ContinueStatementNode'))($$[$0-1]);
 break;
+case 300:
+this.$ = new (require('./ast/BreakStatementNode'))()
+break;
+case 301:
+
+      throw new (require('./error').NoLineTerminatorError)('no line terminator', {
+        text: $$[$0],
+        token: 'BREAK_LF',
+        line: yy.lexer.yylloc.first_line,
+        loc: yy.lexer.yylloc,
+        offset: yy.lexer.offset,
+      });
+    
+break;
+case 302:
+this.$ = new (require('./ast/BreakStatementNode'))($$[$0-1])
+break;
 case 303: case 346:
 this.$ = $$[$0-4] + $$[$0-3] + $$[$0-2] + $$[$0-1] + $$[$0];
 break;
+case 304:
+this.$ = new (require('./ast/ThrowStatementNode'))($$[$0-1])
+break;
 case 305:
-this.$ = $$[$0] + $$[$01];
+
+      throw new (require('./error').NoLineTerminatorError)('no line terminator', {
+        text: $$[$0],
+        token: 'THROW_LF',
+        line: yy.lexer.yylloc.first_line,
+        loc: yy.lexer.yylloc,
+        offset: yy.lexer.offset,
+      });
+    
 break;
 case 314:
 this.$ = new (require('./ast/ReturnStatementNode'))(null)
