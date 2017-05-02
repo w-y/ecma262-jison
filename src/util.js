@@ -58,7 +58,7 @@ function parseKeyword(keyword, alias) {
     // return 后面的function应该是表达式
     if (this.match === 'throw' || this.match === 'return') {
       if (/^{/.test(input.substring(i))) {
-        this.begin('block_start');
+        this.begin('brace_start');
       }
       if (/^function/.test(input.substring(i))) {
         this.begin('function_start');
@@ -135,7 +135,7 @@ function parseOperator(operator, alias) {
       this.popState();
       res = alias || operator;
       break;
-    case 'block_start':
+    case 'brace_start':
       this.popState();
       res = alias || operator;
       break;
@@ -151,7 +151,7 @@ function parseOperator(operator, alias) {
     if (this.topState() === 'case_start') {
       this.popState();
     } else if (/^{/.test(input.substring(i))) {
-      this.begin('block_start');
+      this.begin('brace_start');
     }
   } else if (this.match === ')') {
 
@@ -162,7 +162,7 @@ function parseOperator(operator, alias) {
   } else if (isWhiteSpace(this.match) || isLineTerminator(this.match)) {
 
   } else if (/^{/.test(input.substring(i))) {
-    this.begin('block_start');
+    this.begin('brace_start');
   } else if (/^function/.test(input.substring(i))) {
     this.begin('function_start');
   }

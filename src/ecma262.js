@@ -106,7 +106,7 @@ exports.grammar = {
       new_target: 'new_target',
       decimal_digit_dot_start: 'decimal_digit_dot_start',
       function_start: 'function_start',
-      block_start: 'block_start',
+      brace_start: 'brace_start',
       case_start: 'case_start',
       single_line_comment_start: 'single_line_comment_start',
       multi_line_comment_start: 'multi_line_comment_start',

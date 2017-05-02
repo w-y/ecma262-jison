@@ -14,6 +14,7 @@ module.exports = {
   handlers: [
     '$$ = new (require(\'./ast/ArrayBindingPatternNode\'))([])',
     '$$ = new (require(\'./ast/ArrayBindingPatternNode\'))($2)',
+    '$$ = new (require(\'./ast/ArrayBindingPatternNode\'))($2)',
     '$$ = new (require(\'./ast/ArrayBindingPatternNode\'))($2.concat([$3]))',
     '$$ = new (require(\'./ast/ArrayBindingPatternNode\'))($2)',
     '$$ = new (require(\'./ast/ArrayBindingPatternNode\'))($2.concat([$3]))',
