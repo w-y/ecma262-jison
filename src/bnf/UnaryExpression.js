@@ -4,12 +4,12 @@ module.exports = {
   rules: [
     'UpdateExpression',
     'UnaryOperator UnaryExpression',
-    'AdditiveOperator  UnaryExpression',
+    'AdditiveOperator UnaryExpression',
   ],
   handlers: [
     '$$ = $1',
-    '$$ = $1 + $2',
-    '$$ = $1 + $2',
+    '$$ = new (require(\'./ast/UnaryExpression\').UnaryExpressionNode)($1, $2)',
+    '$$ = new (require(\'./ast/UnaryExpression\').UnaryExpressionNode)($1, $2)',
   ],
   subRules: [
     require('./UpdateExpression'),

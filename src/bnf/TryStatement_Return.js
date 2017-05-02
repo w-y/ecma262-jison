@@ -7,9 +7,9 @@ module.exports = {
     'try Block_Return Catch_Return Finally_Return',
   ],
   handlers: [
-    '$$ = $1 + $2 + $3',
-    '$$ = $1 + $2 + $3',
-    '$$ = $1 + $2 + $3 + $4',
+    '$$ = new (require(\'./ast/TryStatement\').TryStatementNode)($2, $3, null)',
+    '$$ = new (require(\'./ast/TryStatement\').TryStatementNode)($2, null, $3)',
+    '$$ = new (require(\'./ast/TryStatement\').TryStatementNode)($2, $3, $4)',
   ],
   subRules: [
     require('./Block_Return'),

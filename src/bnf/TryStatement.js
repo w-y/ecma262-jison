@@ -7,9 +7,9 @@ module.exports = {
     'try Block Catch Finally',
   ],
   handlers: [
-    '$$ = $1 + $2 + $3',
-    '$$ = $1 + $2 + $3',
-    '$$ = $1 + $2 + $3 + $4',
+    '$$ = new (require(\'./ast/TryStatement\').TryStatementNode)($2, $3, null)',
+    '$$ = new (require(\'./ast/TryStatement\').TryStatementNode)($2, null, $3)',
+    '$$ = new (require(\'./ast/TryStatement\').TryStatementNode)($2, $3, $4)',
   ],
   subRules: [
     require('./Block'),

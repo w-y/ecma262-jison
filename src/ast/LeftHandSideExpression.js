@@ -16,6 +16,12 @@ function CallExpressionNode(callee, parameters, ...args) {
   this.parameters = parameters;
 }
 
+function SuperCallExpressionNode(callee, parameters, ...args) {
+  LeftHandSideExpressionNode.call(this, 'SuperCallExpressionNode', ...args);
+  this.callee = callee;
+  this.parameters = parameters;
+}
+
 function MemberExpressionNode(element, property, ...args) {
   LeftHandSideExpressionNode.call(this, 'MemberExpressionNode', ...args);
   this.element = element;
@@ -25,3 +31,4 @@ function MemberExpressionNode(element, property, ...args) {
 exports.NewExpressionNode = NewExpressionNode;
 exports.CallExpressionNode = CallExpressionNode;
 exports.MemberExpressionNode = MemberExpressionNode;
+exports.SuperCallExpressionNode = SuperCallExpressionNode;

@@ -71,9 +71,9 @@ const {
   rightBracket,             // ]
   leftParenthesis,          // (
   rightParenthesis,         // )
-  leftBlockExp,             // {
-  leftBlock,                // }
-  rightBlock,               // }
+  leftBraceExp,             // {
+  leftBrace,                // }
+  rightBrace,               // }
   spread,                   // ...
 } = require('./lex/operators');
 
@@ -172,9 +172,9 @@ exports.grammar = {
       leftParenthesis,
       rightParenthesis,
 
-      leftBlockExp,
-      leftBlock,
-      rightBlock,
+      leftBraceExp,
+      leftBrace,
+      rightBrace,
 
       semicolon,
       spread,

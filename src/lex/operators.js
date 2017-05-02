@@ -389,15 +389,15 @@ exports.rightParenthesis = {
   `,
 };
 
-exports.leftBlockExp = {
-  conditions: ['block_start'],
+exports.leftBraceExp = {
+  conditions: ['brace_start'],
   rule: '\\{',
   handler: `
-    return require('./util').parseOperator.call(this, this.match, 'BLOCK_START');
+    return require('./util').parseOperator.call(this, this.match, 'BRACE_START');
   `,
 };
 
-exports.leftBlock = {
+exports.leftBrace = {
   conditions: ['*'],
   rule: '\\{',
   handler: `
@@ -405,12 +405,12 @@ exports.leftBlock = {
   `,
 };
 
-exports.rightBlock = {
+exports.rightBrace = {
   conditions: ['*'],
   rule: '\\}',
   handler: `
     this.__temp__ = require('./util').parseOperator.call(this, this.match);
-    if (this.topState() === 'block_start') {
+    if (this.topState() === 'brace_start') {
       this.popState();
     }
     return this.__temp__;

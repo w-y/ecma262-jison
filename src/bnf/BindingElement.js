@@ -8,8 +8,8 @@ module.exports = {
   ],
   handlers: [
     '$$ = $1',
-    '$$ = $1 + $2',
-    '$$ = $1',
+    '$$ = {key: $1, value: $2}',
+    '$$ = {key: $1, value: $1}',
   ],
   subRules: [
     require('./SingleNameBinding'),

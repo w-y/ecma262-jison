@@ -5,7 +5,7 @@ module.exports = {
     'catch ( CatchParameter ) Block',
   ],
   handlers: [
-    '$$ = $1 + $2 + $3 + $4 + $5',
+    '$$ = new (require(\'./ast/TryStatement\').CatchNode)($3, $5)',
   ],
   subRules: [
     require('./Block'),

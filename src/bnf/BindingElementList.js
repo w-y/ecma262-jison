@@ -6,8 +6,8 @@ module.exports = {
     'BindingElementList , BindingElisionElement',
   ],
   handlers: [
-    '$$ = $1',
-    '$$ = $1 + $2 + $3',
+    '$$ = [$1]',
+    '$$ = $1.push([$3])',
   ],
   subRules: [
     require('./BindingElisionElement'),

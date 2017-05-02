@@ -2,9 +2,9 @@ module.exports = {
   conditions: [''],
   name: 'ObjectLiteral',
   rules: [
-    'BLOCK_START }',
-    'BLOCK_START PropertyDefinitionList }',
-    'BLOCK_START PropertyDefinitionList , }',
+    'BRACE_START }',
+    'BRACE_START PropertyDefinitionList }',
+    'BRACE_START PropertyDefinitionList , }',
   ],
   handlers: [
     '$$ = new (require(\'./ast/Literal\').ObjectLiteralNode)([])',
