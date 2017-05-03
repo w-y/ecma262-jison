@@ -5,9 +5,9 @@ module.exports = {
     'this',
     'IdentifierReference',
     'Literal',
-    // 'ArrayLiteral',
-    // 'ObjectLiteral',
-    // 'CoverParenthesizedExpressionAndArrowParameterList',
+    'ArrayLiteral',
+    'ObjectLiteral',
+    'CoverParenthesizedExpressionAndArrowParameterList',
     'FunctionExpression',
   ],
   handlers: [
