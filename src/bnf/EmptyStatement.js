@@ -15,7 +15,9 @@ module.exports = {
           failedAutoSemicolon: true,
         });
       }
-      $$ = new (require('./ast/EmptyStatement').EmptyStatementNode)();
+      $$ = new (require('./ast/EmptyStatement').EmptyStatementNode)({
+        loc: this._$,
+      });
     `,
   ],
   subRules: [],
