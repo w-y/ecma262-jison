@@ -8,10 +8,10 @@ module.exports = {
     'FUNCTION BindingIdentifier ( FormalParameters ) { }',
   ],
   handlers: [
-    '$$ = new (require(\'./ast/FunctionDeclaration\').FunctionDeclarationNode)($2, [], $6)',
-    '$$ = new (require(\'./ast/FunctionDeclaration\').FunctionDeclarationNode)($2, [], null)',
-    '$$ = new (require(\'./ast/FunctionDeclaration\').FunctionDeclarationNode)($2, $4, $7)',
-    '$$ = new (require(\'./ast/FunctionDeclaration\').FunctionDeclarationNode)($2, $4, null)',
+    '$$ = new (require(\'./ast/FunctionDeclaration\').FunctionDeclarationNode)($2, [], $6, { loc: this._$, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/FunctionDeclaration\').FunctionDeclarationNode)($2, [], null, { loc: this._$, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/FunctionDeclaration\').FunctionDeclarationNode)($2, $4, $7, { loc: this._$, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/FunctionDeclaration\').FunctionDeclarationNode)($2, $4, null, { loc: this._$, lexer: yy.lexer })',
   ],
   subRules: [
     require('./BindingIdentifier'),

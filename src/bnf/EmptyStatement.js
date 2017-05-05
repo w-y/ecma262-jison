@@ -17,6 +17,7 @@ module.exports = {
       }
       $$ = new (require('./ast/EmptyStatement').EmptyStatementNode)({
         loc: this._$,
+        lexer: yy.lexer,
       });
     `,
   ],

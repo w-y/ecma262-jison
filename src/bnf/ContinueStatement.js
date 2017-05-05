@@ -7,7 +7,7 @@ module.exports = {
     'continue LabelIdentifier ;',
   ],
   handlers: [
-    '$$ = new (require(\'./ast/ContinueStatementNode\'))(null);',
+    '$$ = new (require(\'./ast/ContinueStatementNode\'))(null, { loc: $._this, lexer: yy.lexer });',
     `
       throw new (require('./error').NoLineTerminatorError)('no line terminator', {
         text: $1,
@@ -17,7 +17,7 @@ module.exports = {
         offset: yy.lexer.offset,
       });
     `,
-    '$$ = new (require(\'./ast/ContinueStatementNode\'))($2);',
+    '$$ = new (require(\'./ast/ContinueStatementNode\'))($2, { loc: $._this, lexer: yy.lexer });',
   ],
   subRules: [
     require('./LabelIdentifier'),

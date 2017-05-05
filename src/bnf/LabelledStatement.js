@@ -5,7 +5,7 @@ module.exports = {
     'LabelIdentifier : LabelledItem',
   ],
   handlers: [
-    '$$ = new (require(\'./ast/LabelledStatement\').LabelledStatementNode)($1, $3)',
+    '$$ = new (require(\'./ast/LabelledStatement\').LabelledStatementNode)($1, $3, { loc: this._$, lexer: yy.lexer })',
   ],
   subRules: [
     require('./LabelIdentifier'),

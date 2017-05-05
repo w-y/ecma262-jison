@@ -6,8 +6,8 @@ module.exports = {
     'if ( Expression_In ) Statement else Statement',
   ],
   handlers: [
-    '$$ = new (require(\'./ast/IfStatement\').IfStatementNode)($3, $5)',
-    '$$ = new (require(\'./ast/IfStatement\').IfStatementNode)($3, $5, $7)',
+    '$$ = new (require(\'./ast/IfStatement\').IfStatementNode)($3, $5, { loc: this._$, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/IfStatement\').IfStatementNode)($3, $5, $7, { loc: this._$, lexer: yy.lexer })',
   ],
   subRules: [
     require('./Statement'),

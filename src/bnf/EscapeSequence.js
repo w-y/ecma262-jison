@@ -6,8 +6,8 @@ module.exports = {
     'CharacterEscapeSequence',
   ],
   handlers: [
-    '$$ = $1; console.log($1);',
-    '$$ = $1; console.log($1);',
+    '$$ = $1;',
+    '$$ = $1;',
   ],
   subRules: [
     require('./UnicodeEscapeSequence'),

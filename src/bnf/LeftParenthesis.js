@@ -5,7 +5,7 @@ module.exports = {
     '(',
   ],
   handlers: [
-    '$$ = yy.lexer.yylloc',
+    '$$ = yy.lexer.yylloc', // this._$ ?
   ],
   subRules: [
   ],

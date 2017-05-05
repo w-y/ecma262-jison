@@ -7,4 +7,12 @@ function TryStatementNode(block, handler, finalizer, ...args) {
   this.finalizer = finalizer;
 }
 
+function CatchNode(id, body, ...args) {
+  BaseNode.call(this, Object.assign({}, { type: 'CatchClause' }, ...args));
+  this.id =  id;
+  this.body = body;
+}
+
 exports.TryStatementNode = TryStatementNode;
+
+exports.CatchNode = CatchNode;

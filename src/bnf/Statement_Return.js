@@ -4,7 +4,7 @@ module.exports = {
   rules: [
     'EmptyStatement',
     'ExpressionStatement',
-    'VariableStatement',
+    /*'VariableStatement',
     'BlockStatement_Return',
     'LabelledStatement',
     'IfStatement_Return',
@@ -15,7 +15,7 @@ module.exports = {
     'ThrowStatement',
     'DebuggerStatement',
     'TryStatement_Return',
-    'ReturnStatement',
+    'ReturnStatement',*/
   ],
   handlers: [
     '$$ = $1;',

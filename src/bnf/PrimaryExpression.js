@@ -4,11 +4,11 @@ module.exports = {
   rules: [
     'this',
     'IdentifierReference',
-    'Literal',
+    /*'Literal',
     'ArrayLiteral',
     'ObjectLiteral',
     'CoverParenthesizedExpressionAndArrowParameterList',
-    'FunctionExpression',
+    'FunctionExpression',*/
   ],
   handlers: [
     '$$ = $1;',

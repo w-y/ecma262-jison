@@ -7,7 +7,7 @@ module.exports = {
     'break LabelIdentifier ;',
   ],
   handlers: [
-    '$$ = new (require(\'./ast/BreakStatementNode\'))()',
+    '$$ = new (require(\'./ast/BreakStatementNode\'))({ loc: this._$, lexer: yy.lexer })',
     `
       throw new (require('./error').NoLineTerminatorError)('no line terminator', {
         text: $1,
@@ -17,7 +17,7 @@ module.exports = {
         offset: yy.lexer.offset,
       });
     `,
-    '$$ = new (require(\'./ast/BreakStatementNode\'))($2)',
+    '$$ = new (require(\'./ast/BreakStatementNode\'))($2, { loc: this._$, lexer: yy.lexer })',
   ],
   subRules: [
     require('./LabelIdentifier'),
