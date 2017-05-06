@@ -8,8 +8,8 @@ module.exports = {
   ],
   handlers: [
     '$$ = $1',
-    '$$ = new (require(\'./ast/UnaryExpression\').UnaryExpressionNode)($1, $2)',
-    '$$ = new (require(\'./ast/UnaryExpression\').UnaryExpressionNode)($1, $2)',
+    '$$ = new (require(\'./ast/UnaryExpression\').UnaryExpressionNode)($1, $2, { loc: this._$, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/UnaryExpression\').UnaryExpressionNode)($1, $2, { loc: this._$, lexer: yy.lexer })',
   ],
   subRules: [
     require('./UpdateExpression'),

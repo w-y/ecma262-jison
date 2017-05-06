@@ -3,11 +3,11 @@ module.exports = {
   name: 'MemberExpression',
   rules: [
     'PrimaryExpression',
-    /*'MemberExpression [ Expression_In ]',
+    'MemberExpression [ Expression_In ]',
     'MemberExpression . IdentifierName',
     'SuperProperty',
     'MetaProperty',
-    'new MemberExpression Arguments',*/
+    'new MemberExpression Arguments',
   ],
   handlers: [
     '$$ = $1',

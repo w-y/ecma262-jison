@@ -6,7 +6,7 @@ module.exports = {
     'THROW_LF',
   ],
   handlers: [
-    '$$ = new (require(\'./ast/ThrowStatementNode\'))($2)',
+    '$$ = new (require(\'./ast/ThrowStatementNode\'))($2, { loc: this._$, lexer: yy.lexer })',
     `
       throw new (require('./error').NoLineTerminatorError)('no line terminator', {
         text: $1,

@@ -7,7 +7,7 @@ module.exports = {
     'return Expression_In ;',
   ],
   handlers: [
-    '$$ = new (require(\'./ast/ReturnStatementNode\'))(null)',
+    '$$ = new (require(\'./ast/ReturnStatementNode\'))(null, { loc: this._$, lexer: yy.lexer })',
     `
       throw new (require('./error').NoLineTerminatorError)('no line terminator', {
         text: $1,
@@ -17,7 +17,7 @@ module.exports = {
         offset: yy.lexer.offset,
       });
     `,
-    '$$ = new (require(\'./ast/ReturnStatementNode\'))($1)',
+    '$$ = new (require(\'./ast/ReturnStatementNode\'))($1, { loc: this._$, lexer: yy.lexer })',
   ],
   subRules: [
     require('./Expression_In'),
