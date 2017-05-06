@@ -9,7 +9,7 @@ function TryStatementNode(block, handler, finalizer, ...args) {
 
 function CatchNode(id, body, ...args) {
   BaseNode.call(this, Object.assign({}, { type: 'CatchClause' }, ...args));
-  this.id =  id;
+  this.id = id;
   this.body = body;
 }
 

@@ -4,6 +4,7 @@ function BaseNode({
   leadingComments = [],
   trailingComments = [],
   loc,
+  lexer,
 }) {
   this.type = type;
   this.raw = raw;
@@ -24,6 +25,12 @@ function BaseNode({
 
     this.lastLine = lastLine;
     this.lastColumn = lastColumn;
+  }
+
+  if (lexer.comments && lexer.comments.length > 0) {
+    for (let i = 0; i < lexer.comments.length; i++) {
+      console.log(lexer.comments[i].range);
+    }
   }
 
   this.leadingComments = leadingComments;
