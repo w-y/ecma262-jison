@@ -1114,13 +1114,13 @@ var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0:
     this.popState();
-    require('./lex/comment').onCommentEnd(this, 'MultiLine', yy_.yylloc.last_line, yy_.yylloc.last_column);
+    require('./lex/comment').onCommentEnd(this, 'MultiLine', yy_.yylloc.last_line, yy_.yylloc.last_column, yy_.yylloc.range[1]);
     return '';
   
 break;
 case 1:
     this.begin('multi_line_comment_start');
-    require('./lex/comment').onCommentStart(this, 'MultiLine', yy_.yylloc.first_line, yy_.yylloc.first_column);
+    require('./lex/comment').onCommentStart(this, 'MultiLine', yy_.yylloc.first_line, yy_.yylloc.first_column, yy_.yylloc.range[0]);
     return '';
   
 break;
@@ -1153,14 +1153,14 @@ case 4:
 break;
 case 5:
     this.begin('single_line_comment_start');
-    require('./lex/comment').onCommentStart(this, 'SingleLine', yy_.yylloc.first_line, yy_.yylloc.first_column);
+    require('./lex/comment').onCommentStart(this, 'SingleLine', yy_.yylloc.first_line, yy_.yylloc.first_column, yy_.yylloc.range[0]);
     return '';
   
 break;
 case 6:
     //SourceCharacterbut not LineTerminator
     this.popState();
-    require('./lex/comment').onCommentEnd(this, 'SingleLine', yy_.yylloc.last_line, yy_.yylloc.last_column);
+    require('./lex/comment').onCommentEnd(this, 'SingleLine', yy_.yylloc.first_line, yy_.yylloc.first_column, yy_.yylloc.range[0]);
 
     return '';
   
