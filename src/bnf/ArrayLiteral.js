@@ -8,10 +8,10 @@ module.exports = {
     '[ ElementList , Elision ]',
   ],
   handlers: [
-    '$$ = new (require(\'./ast/Literal\').ArrayLiteralNode)([], { loc: $._this, lexer: yy.lexer })',
-    '$$ = new (require(\'./ast/Literal\').ArrayLiteralNode)($2, { loc: $._this, lexer: yy.lexer })',
-    '$$ = new (require(\'./ast/Literal\').ArrayLiteralNode)($2, { loc: $._this, lexer: yy.lexer })',
-    '$$ = new (require(\'./ast/Literal\').ArrayLiteralNode)($2.concat($4), { loc: $._this, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/Literal\').ArrayLiteralNode)([], { loc: this._$, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/Literal\').ArrayLiteralNode)($2, { loc: this._$, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/Literal\').ArrayLiteralNode)($2, { loc: this._$, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/Literal\').ArrayLiteralNode)($2.concat($4), { loc: this._$, lexer: yy.lexer })',
   ],
   subRules: [
     require('./Elision'),

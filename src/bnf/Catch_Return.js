@@ -5,7 +5,7 @@ module.exports = {
     'catch ( CatchParameter ) Block_Return',
   ],
   handlers: [
-    '$$ = new (require(\'./ast/TryStatement\').CatchNode)($3, $5, { loc: $._this, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/TryStatement\').CatchNode)($3, $5, { loc: this._$, lexer: yy.lexer })',
   ],
   subRules: [
     require('./Block_Return'),

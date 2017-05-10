@@ -26,8 +26,8 @@ module.exports = {
     'for LeftParenthesis ; Expression_In ; RightParenthesis Statement',
   ],
   handlers: [
-    '$$ = new (require(\'./ast/IterationStatement\').DoWhileStatementNode)($5, $2)',
-    '$$ = new (require(\'./ast/IterationStatement\').WhileStatementNode)($3, $5)',
+    '$$ = new (require(\'./ast/IterationStatement\').DoWhileStatementNode)($5, $2, { loc: this._$, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/IterationStatement\').WhileStatementNode)($3, $5, { loc: this._$, lexer: yy.lexer })',
     `
       require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $7.range, yy.lexer.yylloc);
       $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, $4, $6, $8, { loc: this._$, lexer: yy.lexer })

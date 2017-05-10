@@ -169,7 +169,7 @@ case 25: case 26: case 262: case 263:
 this.$ = new (require('./ast/AssignmentExpression').AssignmentExpressionNode)($$[$0-1], $$[$0-2], $$[$0], { loc: this._$, lexer: yy.lexer });
 break;
 case 28:
-this.$ = new (require('./ast/ConditionalExpression')).ConditionalExpressionNode($$[$0-4], $$[$0-2], $$[$0], { loc: $._this, lexer: yy.lexer });
+this.$ = new (require('./ast/ConditionalExpression')).ConditionalExpressionNode($$[$0-4], $$[$0-2], $$[$0], { loc: this._$, lexer: yy.lexer });
 break;
 case 30: case 267:
 this.$ = new (require('./ast/LogicalExpression').LogicalORExpressionNode)($$[$0-1], $$[$0-2], $$[$0], { loc: this._$, lexer: yy.lexer })
@@ -259,13 +259,13 @@ case 107:
 this.$ = '\\' + $$[$0];
 break;
 case 122:
-this.$ = new (require('./ast/Literal').ArrayLiteralNode)([], { loc: $._this, lexer: yy.lexer })
+this.$ = new (require('./ast/Literal').ArrayLiteralNode)([], { loc: this._$, lexer: yy.lexer })
 break;
 case 123: case 124:
-this.$ = new (require('./ast/Literal').ArrayLiteralNode)($$[$0-1], { loc: $._this, lexer: yy.lexer })
+this.$ = new (require('./ast/Literal').ArrayLiteralNode)($$[$0-1], { loc: this._$, lexer: yy.lexer })
 break;
 case 125:
-this.$ = new (require('./ast/Literal').ArrayLiteralNode)($$[$0-3].concat($$[$0-1]), { loc: $._this, lexer: yy.lexer })
+this.$ = new (require('./ast/Literal').ArrayLiteralNode)($$[$0-3].concat($$[$0-1]), { loc: this._$, lexer: yy.lexer })
 break;
 case 126:
 this.$ = [,]
@@ -415,16 +415,16 @@ case 228: case 230:
 this.$ = $$[$0-2].concat([$$[$0]]);
 break;
 case 233: case 352:
-this.$ = new (require('./ast/IfStatement').IfStatementNode)($$[$0-2], $$[$0], { loc: this._$, lexer: yy.lexer })
+this.$ = new (require('./ast/IfStatement').IfStatementNode)($$[$0-2], $$[$0], null, { loc: this._$, lexer: yy.lexer })
 break;
 case 234: case 353:
 this.$ = new (require('./ast/IfStatement').IfStatementNode)($$[$0-4], $$[$0-2], $$[$0], { loc: this._$, lexer: yy.lexer })
 break;
 case 237:
-this.$ = new (require('./ast/IterationStatement').DoWhileStatementNode)($$[$0-2], $$[$0-5])
+this.$ = new (require('./ast/IterationStatement').DoWhileStatementNode)($$[$0-2], $$[$0-5], { loc: this._$, lexer: yy.lexer })
 break;
 case 238:
-this.$ = new (require('./ast/IterationStatement').WhileStatementNode)($$[$0-2], $$[$0])
+this.$ = new (require('./ast/IterationStatement').WhileStatementNode)($$[$0-2], $$[$0], { loc: this._$, lexer: yy.lexer })
 break;
 case 239:
 
@@ -508,7 +508,7 @@ case 254: case 328:
 this.$ = new (require('./ast/LexicalDeclaration').LexicalDeclarationNode)($$[$0-2], $$[$0-1], { loc: this._$, lexer: yy.lexer })
 break;
 case 265:
-this.$ = new (require('./ast/ConditionalExpression').ConditionalExpressionNode)($$[$0-4], $$[$0-2], $$[$0], { loc: $._this, lexer: yy.lexer });
+this.$ = new (require('./ast/ConditionalExpression').ConditionalExpressionNode)($$[$0-4], $$[$0-2], $$[$0], { loc: this._$, lexer: yy.lexer });
 break;
 case 281:
 this.$ = $$[$0-2].concat($$[$0]);
@@ -541,10 +541,10 @@ case 298:
 this.$ = $$[$0-3].concat([$$[$0-2]]).concat($$[$0-1])
 break;
 case 301:
-this.$ = new (require('./ast/SwitchStatement').SwitchCaseNode)($$[$0-2], $$[$0], { loc: $._this, lexer: yy.lexer })
+this.$ = new (require('./ast/SwitchStatement').SwitchCaseNode)($$[$0-2], $$[$0], { loc: this._$, lexer: yy.lexer })
 break;
 case 302:
-this.$ = new (require('./ast/SwitchStatement').SwitchCaseNode)($$[$0-1], null, { loc: $._this, lexer: yy.lexer })
+this.$ = new (require('./ast/SwitchStatement').SwitchCaseNode)($$[$0-1], null, { loc: this._$, lexer: yy.lexer })
 break;
 case 303:
 this.$ = new (require('./ast/SwitchStatement').SwitchCaseNode)(null, $$[$0], { loc: this._$, lexer: yy.lexer })
@@ -553,7 +553,7 @@ case 304:
 this.$ = new (require('./ast/SwitchStatement').SwitchCaseNode)(null, null, { loc: this._$, lexer: yy.lexer })
 break;
 case 305:
-this.$ = new (require('./ast/ContinueStatementNode'))(null, { loc: $._this, lexer: yy.lexer });
+this.$ = new (require('./ast/ContinueStatementNode'))(null, { loc: this._$, lexer: yy.lexer });
 break;
 case 306:
 
@@ -567,10 +567,10 @@ case 306:
     
 break;
 case 307:
-this.$ = new (require('./ast/ContinueStatementNode'))($$[$0-1], { loc: $._this, lexer: yy.lexer });
+this.$ = new (require('./ast/ContinueStatementNode'))($$[$0-1], { loc: this._$, lexer: yy.lexer });
 break;
 case 308:
-this.$ = new (require('./ast/BreakStatementNode'))({ loc: this._$, lexer: yy.lexer })
+this.$ = new (require('./ast/BreakStatementNode'))(null, { loc: this._$, lexer: yy.lexer })
 break;
 case 309:
 
@@ -616,7 +616,7 @@ case 317: case 357:
 this.$ = new (require('./ast/TryStatement').TryStatementNode)($$[$0-2], $$[$0-1], $$[$0], { loc: this._$, lexer: yy.lexer })
 break;
 case 318: case 358:
-this.$ = new (require('./ast/TryStatement').CatchNode)($$[$0-2], $$[$0], { loc: $._this, lexer: yy.lexer })
+this.$ = new (require('./ast/TryStatement').CatchNode)($$[$0-2], $$[$0], { loc: this._$, lexer: yy.lexer })
 break;
 case 322:
 this.$ = new (require('./ast/ReturnStatementNode'))(null, { loc: this._$, lexer: yy.lexer })
@@ -655,19 +655,19 @@ case 342:
 this.$ = $$[$0-3].concat([new (require('./ast/SpreadElementNode'))($$[$0], { loc: this._$, lexer: yy.lexer })])
 break;
 case 343:
-this.$ = new (require('./ast/LeftHandSideExpression').CallExpressionNode)($$[$0-1], $$[$0], { loc: $._this, lexer: yy.lexer })
+this.$ = new (require('./ast/LeftHandSideExpression').CallExpressionNode)($$[$0-1], $$[$0], { loc: this._$, lexer: yy.lexer })
 break;
 case 344:
-this.$ = new (require('./ast/LeftHandSideExpression').CallExpressionNode)($$[$0], [], { loc: $._this, lexer: yy.lexer })
+this.$ = new (require('./ast/LeftHandSideExpression').CallExpressionNode)($$[$0], [], { loc: this._$, lexer: yy.lexer })
 break;
 case 345:
-this.$ = new (require('./ast/LeftHandSideExpression').CallExpressionNode)($$[$0-1], [], { loc: $._this, lexer: yy.lexer })
+this.$ = new (require('./ast/LeftHandSideExpression').CallExpressionNode)($$[$0-1], [], { loc: this._$, lexer: yy.lexer })
 break;
 case 346:
-this.$ = new (require('./ast/LeftHandSideExpression').MemberExpressionNode)($$[$0-3], $$[$0-1], { loc: $._this, lexer: yy.lexer })
+this.$ = new (require('./ast/LeftHandSideExpression').MemberExpressionNode)($$[$0-3], $$[$0-1], { loc: this._$, lexer: yy.lexer })
 break;
 case 347:
-this.$ = new (require('./ast/LeftHandSideExpression').MemberExpressionNode)($$[$0-2], $$[$0], { loc: $._this, lexer: yy.lexer })
+this.$ = new (require('./ast/LeftHandSideExpression').MemberExpressionNode)($$[$0-2], $$[$0], { loc: this._$, lexer: yy.lexer })
 break;
 case 348:
 this.$ = new (require('./ast/LeftHandSideExpression').SuperCallExpressionNode)($$[$0], [], { loc: this._$, lexer: yy.lexer })
