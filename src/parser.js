@@ -86,8 +86,47 @@ var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
 
-      this.$ = $$[$0];
-      console.log(JSON.stringify(this.$));
+      this.$ = new (require('./ast/ScriptNode'))($$[$0], { loc: this._$, lexer: yy.lexer });
+      if (yy.lexer.comments) {
+        for (let i = 0; i < yy.lexer.comments.length; i++) {
+          const comments = yy.lexer.comments;
+          const comment = comments[i];
+          if (yy.lexer.comments[i].leadingLinkNode) {
+            yy.lexer.comments[i].leadingLinkNode.leadingComments.push({
+              type: comment.type,
+              value: comment.buffer.join(''),
+              range: [comment.range[0], comment.range[1]],
+            });
+            comment.hasLinked = true;
+          }
+          if (yy.lexer.comments[i].trailingLinkNode) {
+            yy.lexer.comments[i].trailingLinkNode.trailingComments.push({
+              type: comment.type,
+              value: comment.buffer.join(''),
+              range: [comment.range[0], comment.range[1]],
+            });
+            comment.hasLinked = true;
+          }
+        }
+        // NOTICE:
+        // still some comments will not link to the ast node
+        // (e.g, "return /*comment*/ ;", comments in the end)
+        // here simply put all these comments to the root node
+
+        for (let i = 0; i < yy.lexer.comments.length; i++) {
+          const comments = yy.lexer.comments;
+          const comment = comments[i];
+
+          if (!comment.hasLinked) {
+            this.$.trailingComments.push({
+              type: comment.type,
+              value: comment.buffer.join(''),
+              range: [comment.range[0], comment.range[1]],
+            });
+          }
+        }
+      }
+      console.log(JSON.stringify(this.$, null, 2));
       return this.$;
     
 break;
@@ -120,11 +159,11 @@ case 20:
       });
     
 break;
-case 21: case 294: case 338:
-this.$ = $$[$0-1]
+case 21:
+this.$ = new (require('./ast/ExpressionStatement').ExpressionStatementNode)($$[$0-1], { loc: this._$, lexer: yy.lexer })
 break;
 case 23: case 289:
-this.$ = (require('../ast/SequenceExpressionNode'))([$$[$0-2]].concat([$$[$0]]), { loc: this._$, lexer: yy.lexer })
+this.$ = new (require('../ast/SequenceExpressionNode'))([$$[$0-2]].concat([$$[$0]]), { loc: this._$, lexer: yy.lexer })
 break;
 case 25: case 26: case 262: case 263:
 this.$ = new (require('./ast/AssignmentExpression').AssignmentExpressionNode)($$[$0-1], $$[$0-2], $$[$0], { loc: this._$, lexer: yy.lexer });
@@ -485,6 +524,9 @@ this.$ = new (require('./ast/SwitchStatement').SwitchStatementNode)($$[$0-2], $$
 break;
 case 293: case 337:
 this.$ = [];
+break;
+case 294: case 338:
+this.$ = $$[$0-1]
 break;
 case 295:
 this.$ = [$$[$0-2]].concat($$[$0-1]);
@@ -1158,7 +1200,7 @@ case 5:
   
 break;
 case 6:
-    //SourceCharacterbut not LineTerminator
+    // SourceCharacterbut not LineTerminator
     this.popState();
     require('./lex/comment').onCommentEnd(this, 'SingleLine', yy_.yylloc.first_line, yy_.yylloc.first_column, yy_.yylloc.range[0]);
 

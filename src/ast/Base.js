@@ -33,25 +33,28 @@ function BaseNode({
   if (lexer.comments && lexer.comments.length > 0) {
     for (let i = 0; i < lexer.comments.length; i++) {
       const comment = lexer.comments[i];
-      const loc = lexer.comments[i].loc;
-      const range = lexer.comments[i].range;
+      const commentRange = lexer.comments[i].range;
 
-      if (range[0] < this.range[0] && !comment.hasLeading) {
-        comment.hasLeading = true;
-        this.leadingComments.push({
-          type: comment.type,
-          value: comment.buffer.join(''),
-          range: comment.range,
-       });
+      if (comment.leadingLinkNode) {
+        if (comment.leadingLinkNode.range[0] >= this.range[0] &&
+            comment.leadingLinkNode.range[1] <= this.range[1]) {
+          if (commentRange[1] < this.range[0]) {
+            comment.leadingLinkNode = this;
+          }
+        }
+      } else if (commentRange[1] < this.range[0] && !comment.leadingLinkNode) {
+        comment.leadingLinkNode = this;
       }
 
-      if (range[1] > this.range[1] && !comment.hasTrailing) {
-        comment.hasTrailing = true;
-        this.trailingComments.push({
-          type: comment.type,
-          value: comment.buffer.join(''),
-          range: comment.range,
-       });
+      if (comment.trailingLinkNode) {
+        if (comment.trailingLinkNode.range[0] >= this.range[0] &&
+            comment.trailingLinkNode.range[1] <= this.range[1]) {
+          if (commentRange[0] > this.range[1]) {
+            comment.trailingLinkNode = this;
+          }
+        }
+      } else if (commentRange[0] > this.range[1] && !comment.trailingLinkNode) {
+        comment.trailingLinkNode = this;
       }
     }
   }

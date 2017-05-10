@@ -1,4 +1,4 @@
-const LINE_TERMINATORS  = '\\u000A|\\u000D|\\u2028\\|\\u2029';
+const LINE_TERMINATORS = '\\u000A|\\u000D|\\u2028\\|\\u2029';
 
 exports.onCommentStart = (lexerRef, type, line, column, range) => {
   const lexer = lexerRef;
