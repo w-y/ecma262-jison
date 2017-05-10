@@ -71,9 +71,9 @@ const {
   rightBracket,             // ]
   leftParenthesis,          // (
   rightParenthesis,         // )
-  leftBlockExp,             // {
-  leftBlock,                // }
-  rightBlock,               // }
+  leftBraceExp,             // {
+  leftBrace,                // }
+  rightBrace,               // }
   spread,                   // ...
 } = require('./lex/operators');
 
@@ -106,7 +106,7 @@ exports.grammar = {
       new_target: 'new_target',
       decimal_digit_dot_start: 'decimal_digit_dot_start',
       function_start: 'function_start',
-      block_start: 'block_start',
+      brace_start: 'brace_start',
       case_start: 'case_start',
       single_line_comment_start: 'single_line_comment_start',
       multi_line_comment_start: 'multi_line_comment_start',
@@ -115,10 +115,10 @@ exports.grammar = {
     rules: transLex([
       multiLineComment,
       singleLineComment,
-      tokens,
-      keywords,
       singleString,
       doubleString,
+      tokens,
+      keywords,
 
       unsignedRightShiftAssignment,
 
@@ -172,9 +172,9 @@ exports.grammar = {
       leftParenthesis,
       rightParenthesis,
 
-      leftBlockExp,
-      leftBlock,
-      rightBlock,
+      leftBraceExp,
+      leftBrace,
+      rightBrace,
 
       semicolon,
       spread,

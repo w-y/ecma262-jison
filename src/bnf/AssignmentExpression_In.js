@@ -3,19 +3,17 @@ module.exports = {
   name: 'AssignmentExpression_In',
   rules: [
     'ConditionalExpression_In',
-    'LeftHandSideExpression = AssignmentExpression_In',
     'LeftHandSideExpression AssignmentOperator AssignmentExpression_In',
+    'LeftHandSideExpression = AssignmentExpression_In',
   ],
   handlers: [
     '$$ = $1',
-    '$$ = $1 + $2 + $3',
-    '$$ = $1 + $2 + $3',
+    '$$ = new (require(\'./ast/AssignmentExpression\').AssignmentExpressionNode)($2, $1, $3, { loc: this._$, lexer: yy.lexer });',
+    '$$ = new (require(\'./ast/AssignmentExpression\').AssignmentExpressionNode)($2, $1, $3, { loc: this._$, lexer: yy.lexer });',
   ],
   subRules: [
     require('./ConditionalExpression_In'),
     require('./LeftHandSideExpression'),
-    require('./AssignmentExpression_In'),
-    require('./AssignmentOperator'),
   ],
 };
 

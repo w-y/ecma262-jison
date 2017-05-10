@@ -8,10 +8,10 @@ module.exports = {
     'FUNCTION BindingIdentifier ( FormalParameters ) { }',
   ],
   handlers: [
-    '$$ = $1 + $2 + $3 + $4 + $5 + $6 + $7',
-    '$$ = $1 + $2 + $3 + $4 + $5 + $6',
-    '$$ = $1 + $2 + $3 + $4 + $5 + $6 + $7 + $8',
-    '$$ = $1 + $2 + $3 + $4 + $5 + $6 + $7',
+    '$$ = new (require(\'./ast/FunctionDeclaration\').FunctionDeclarationNode)($2, [], $6, { loc: this._$, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/FunctionDeclaration\').FunctionDeclarationNode)($2, [], null, { loc: this._$, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/FunctionDeclaration\').FunctionDeclarationNode)($2, $4, $7, { loc: this._$, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/FunctionDeclaration\').FunctionDeclarationNode)($2, $4, null, { loc: this._$, lexer: yy.lexer })',
   ],
   subRules: [
     require('./BindingIdentifier'),

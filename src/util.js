@@ -58,7 +58,7 @@ function parseKeyword(keyword, alias) {
     // return 后面的function应该是表达式
     if (this.match === 'throw' || this.match === 'return') {
       if (/^{/.test(input.substring(i))) {
-        this.begin('block_start');
+        this.begin('brace_start');
       }
       if (/^function/.test(input.substring(i))) {
         this.begin('function_start');
@@ -70,6 +70,45 @@ function parseKeyword(keyword, alias) {
 exports.parseKeyword = parseKeyword;
 
 function parseOperator(operator, alias) {
+   // NOTICE: restrict line terminator for update express
+  if (alias === 'UpdateOperator') {
+    let start = this.matched.length - 3;
+    let hasLF = false;
+    let hasSemiColon = false;
+
+    while (start >= 0 && require('./util').isWhiteSpace(this.matched[start])) {
+      start -= 1;
+    }
+    while (start >= 0 && require('./util').isLineTerminator(this.matched[start])) {
+      start -= 1;
+      hasLF = true;
+    }
+    while (start >= 0 && require('./util').isWhiteSpace(this.matched[start])) {
+      start -= 1;
+    }
+    if (this.matched[start] === ';') {
+      hasSemiColon = true;
+    }
+    if (hasLF && !hasSemiColon) {
+      throw new (require('./error').NoLineTerminatorError)('no line terminator', {
+        text: this.yytext,
+        token: 'UpdateOperator_LF',
+        line: this.yylloc.first_line,
+        loc: {
+          first_line: this.yylloc.first_line,
+          last_line: this.yylloc.last_line,
+          first_column: this.yylloc.first_column,
+          last_column: this.yylloc.last_column,
+          range: [
+            this.yylloc.range[0],
+            this.yylloc.range[1] - 2,
+          ],
+        },
+        offset: this.offset - 2,
+      });
+    }
+  }
+
   let i = this.matches.index + this.match.length;
   const input = this.matches.input;
 
@@ -96,11 +135,14 @@ function parseOperator(operator, alias) {
       this.popState();
       res = alias || operator;
       break;
+    case 'brace_start':
+      this.popState();
+      res = alias || operator;
+      break;
     default:
       res = alias || operator;
       break;
   }
-
   // TODO: 具体情况具体分析
   // case : 后面的{ 应该是语句块而不是表达式的开头
   // } 后面的{是语句块开头？
@@ -109,7 +151,7 @@ function parseOperator(operator, alias) {
     if (this.topState() === 'case_start') {
       this.popState();
     } else if (/^{/.test(input.substring(i))) {
-      this.begin('block_start');
+      this.begin('brace_start');
     }
   } else if (this.match === ')') {
 
@@ -120,11 +162,10 @@ function parseOperator(operator, alias) {
   } else if (isWhiteSpace(this.match) || isLineTerminator(this.match)) {
 
   } else if (/^{/.test(input.substring(i))) {
-    this.begin('block_start');
+    this.begin('brace_start');
   } else if (/^function/.test(input.substring(i))) {
     this.begin('function_start');
   }
-
   if (res) { return res; }
 
   return undefined;
@@ -151,8 +192,8 @@ function parseString(ch) {
   const isSingleQuote = ch === 'SingleStringCharacter';
   const isDoubleQuote = ch === 'DoubleStringCharacter';
 
-  if (this.match === '\u0009' || this.match === '\u000A') {
-    throw new Error('Syntax error');
+  if (this.match === '\u000A' || this.match === '\u000D') {
+    throw new Error('SyntaxError: Invalid or unexpected token');
   } else if (this.match === '\\') {
     if (isSingleQuote) {
       this.begin('single_escape_string');
@@ -221,3 +262,33 @@ function parseToken(token, alias) {
 }
 
 exports.parseToken = parseToken;
+
+// mathematical value
+function getMVHexDigit(v1) {
+  switch (v1) {
+    case 'a':
+      return 10;
+    case 'b':
+      return 11;
+    case 'c':
+      return 12;
+    case 'd':
+      return 13;
+    case 'e':
+      return 14;
+    case 'f':
+      return 15;
+    default:
+      break;
+  }
+  return parseInt(v1, 10);
+}
+
+function getMVHexDigits(v1, v2, v3, v4) {
+  return (4096 * getMVHexDigit(v1)) +
+    (256 * getMVHexDigit(v2)) +
+    (16 * getMVHexDigit(v3)) +
+    getMVHexDigit(v4);
+}
+
+exports.getMVHexDigits = getMVHexDigits;

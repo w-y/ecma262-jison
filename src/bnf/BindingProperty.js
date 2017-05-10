@@ -7,7 +7,7 @@ module.exports = {
   ],
   handlers: [
     '$$ = $1',
-    '$$ = $1 + $2 + $3',
+    '$$ = {key:$1, value:$3}',
   ],
   subRules: [
     require('./SingleNameBinding'),

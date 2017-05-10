@@ -5,7 +5,7 @@ module.exports = {
     'StatementList',
   ],
   handlers: [
-    ';',
+    '$$ = $1;',
   ],
   subRules: [
     require('./StatementList'),

@@ -7,7 +7,7 @@ module.exports = {
   ],
   handlers: [
     '$$ = $1;',
-    '$$ = $1 + $2 + $3;',
+    '$$ = new (require(\'./ast/BitwiseExpression\').BitwiseXORExpressionNode)($2, $1, $3, { loc: this._$, lexer: yy.lexer })',
   ],
   subRules: [
     require('./BitwiseANDExpression_In'),

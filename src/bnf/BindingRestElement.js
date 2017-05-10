@@ -6,8 +6,8 @@ module.exports = {
     '... BindingPattern',
   ],
   handlers: [
-    '$$ = $1 + $2',
-    '$$ = $1 + $2',
+    '$$ = new (require(\'./ast/BindingRestElement\').BindingIdentifierNode)($2, { loc: this._$, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/BindingRestElement\').BindingPatternNode)($2, { loc: this._$, lexer: yy.lexer })',
   ],
   subRules: [
     require('./BindingIdentifier'),

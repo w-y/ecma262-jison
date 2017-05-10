@@ -2,42 +2,96 @@ module.exports = {
   name: 'IterationStatement',
   conditions: [''],
   rules: [
-    'do Statement while ( Expression_In ) ;',
-    'while ( Expression_In ) Statement',
-    'for ( LexicalDeclaration Expression_In ; Expression_In ) Statement',
-    'for ( var VariableDeclarationList ; Expression_In ; Expression_In ) Statement',
-    'for ( LeftHandSideExpression in Expression_In ) Statement',
-    'for ( ForDeclaration in Expression_In ) Statement',
-    'for ( LeftHandSideExpression of AssignmentExpression_In ) Statement',
-    'for ( var ForBinding of AssignmentExpression_In ) Statement',
-    'for ( ForDeclaration of AssignmentExpression_In ) Statement',
-    'for ( Expression ; Expression_In ; Expression_In ) Statement',
-    'for ( Expression ; ; Expression_In ) Statement',
-    'for ( Expression ; ; ) Statement',
-    'for ( Expression ; Expression_In ; ) Statement',
-    'for ( ; Expression_In ; Expression_In ) Statement',
-    'for ( ; ; Expression_In ) Statement',
-    'for ( ; ; ) Statement',
-    'for ( ; Expression_In ; ) Statement',
+    'do Statement while LeftParenthesis Expression_In RightParenthesis ;',
+    'while LeftParenthesis Expression_In RightParenthesis Statement',
+
+    'for LeftParenthesis LexicalDeclaration Expression_In ; Expression_In RightParenthesis Statement',
+    'for LeftParenthesis var VariableDeclarationList ; Expression_In ; Expression_In RightParenthesis Statement',
+
+    'for LeftParenthesis LeftHandSideExpression in Expression_In RightParenthesis Statement',
+    'for LeftParenthesis ForDeclaration in Expression_In RightParenthesis Statement',
+
+    'for LeftParenthesis LeftHandSideExpression of AssignmentExpression_In RightParenthesis Statement',
+    'for LeftParenthesis var ForBinding of AssignmentExpression_In RightParenthesis Statement',
+    'for LeftParenthesis ForDeclaration of AssignmentExpression_In RightParenthesis Statement',
+
+    'for LeftParenthesis Expression ; Expression_In ; Expression_In RightParenthesis Statement',
+    'for LeftParenthesis Expression ; ; Expression_In RightParenthesis Statement',
+    'for LeftParenthesis Expression ; ; RightParenthesis Statement',
+    'for LeftParenthesis Expression ; Expression_In ; RightParenthesis Statement',
+
+    'for LeftParenthesis ; Expression_In ; Expression_In RightParenthesis Statement',
+    'for LeftParenthesis ; ; Expression_In RightParenthesis Statement',
+    'for LeftParenthesis ; ; RightParenthesis Statement',
+    'for LeftParenthesis ; Expression_In ; RightParenthesis Statement',
   ],
   handlers: [
-    '$$ = $1 + $2 + $3 + $4 + $5 + $6 + $7',
-    '$$ = $1 + $2 + $3 + $4 + $5',
-    '$$ = $1 + $2 + $3 + $4 + $5 + $6 + $7 + $8',
-    '$$ = $1 + $2 + $3 + $4 + $5 + $6 + $7 + $8 + $9',
-    '$$ = $1 + $2 + $3 + $4 + $5 + $6 + $7',
-    '$$ = $1 + $2 + $3 + $4 + $5 + $6',
-    '$$ = $1 + $2 + $3 + $4 + $5 + $6',
-    '$$ = $1 + $2 + $3 + $4 + $5 + $6 + $7 + $8',
-    '$$ = $1 + $2 + $3 + $4 + $5 + $6 + $7',
-    '$$ = $1 + $2 + $3 + $4 + $5 + $6 + $7 + $8 + $9',
-    '$$ = $1 + $2 + $3 + $4 + $5 + $6 + $7 + $8',
-    '$$ = $1 + $2 + $3 + $4 + $5 + $6 + $7',
-    '$$ = $1 + $2 + $3 + $4 + $5 + $6 + $7',
-    '$$ = $1 + $2 + $3 + $4 + $5 + $6 + $7 + $8',
-    '$$ = $1 + $2 + $3 + $4 + $5 + $6 + $7',
-    '$$ = $1 + $2 + $3 + $4 + $5 + $6',
-    '$$ = $1 + $2 + $3 + $4 + $5 + $6 + $7',
+    '$$ = new (require(\'./ast/IterationStatement\').DoWhileStatementNode)($5, $2)',
+    '$$ = new (require(\'./ast/IterationStatement\').WhileStatementNode)($3, $5)',
+    `
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $7.range, yy.lexer.yylloc);
+      $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, $4, $6, $8, { loc: this._$, lexer: yy.lexer })
+    `,
+    `
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $9.range, yy.lexer.yylloc);
+      $$ = new (require('./ast/IterationStatement').ForStatementNode)($4, $6, $8, $10, { loc: this._$, lexer: yy.lexer })
+    `,
+
+    `
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $6.range, yy.lexer.yylloc);
+      $$ = new (require('./ast/IterationStatement').ForInStatementNode)($3, $5, $7, { loc: this._$, lexer: yy.lexer })
+    `,
+    `
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $6.range, yy.lexer.yylloc);
+      $$ = new (require('./ast/IterationStatement').ForInStatementNode)($3, $5, $7, { loc: this._$, lexer: yy.lexer })
+    `,
+
+    `
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $6.range, yy.lexer.yylloc);
+      $$ = new (require('./ast/IterationStatement').ForOfStatementNode)($3, $5, $7, { loc: this._$, lexer: yy.lexer })
+    `,
+    `
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $7.range, yy.lexer.yylloc);
+      $$ = new (require('./ast/IterationStatement').ForOfStatementNode)($4, $6, $8, { loc: this._$, lexer: yy.lexer })
+    `,
+    `
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $6.range, yy.lexer.yylloc);
+      $$ = new (require('./ast/IterationStatement').ForOfStatementNode)($3, $5, $7, { loc: this._$, lexer: yy.lexer })
+    `,
+
+    `
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $8.range, yy.lexer.yylloc);
+      $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, $5, $7, $9, { loc: this._$, lexer: yy.lexer })
+    `,
+    `
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $7.range, yy.lexer.yylloc);
+      $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, null, $6, $7, { loc: this._$, lexer: yy.lexer })
+    `,
+    `
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $6.range, yy.lexer.yylloc);
+      $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, null, null, $7, { loc: this._$, lexer: yy.lexer })
+    `,
+    `
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $7.range, yy.lexer.yylloc);
+      $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, $5, null, $8, { loc: this._$, lexer: yy.lexer })
+    `,
+
+    `
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $7.range, yy.lexer.yylloc);
+      $$ = new (require('./ast/IterationStatement').ForStatementNode)(null, $4, $6, $8, { loc: this._$, lexer: yy.lexer })
+    `,
+    `
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $6.range, yy.lexer.yylloc);
+      $$ = new (require('./ast/IterationStatement').ForStatementNode)(null, null, $5, $7, { loc: this._$, lexer: yy.lexer })
+    `,
+    `
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $5.range, yy.lexer.yylloc);
+      $$ = new (require('./ast/IterationStatement').ForStatementNode)(null, null, null, $6, { loc: this._$, lexer: yy.lexer })
+    `,
+    `
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $6.range, yy.lexer.yylloc);
+      $$ = new (require('./ast/IterationStatement').ForStatementNode)(null, $4, null, $7, { loc: this._$, lexer: yy.lexer })
+    `,
   ],
   subRules: [
     require('./Expression_In'),
@@ -49,5 +103,7 @@ module.exports = {
     require('./AssignmentExpression_In'),
     require('./ForBinding'),
     require('./Expression'),
+    require('./LeftParenthesis'),
+    require('./RightParenthesis'),
   ],
 };

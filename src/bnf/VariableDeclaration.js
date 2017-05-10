@@ -7,9 +7,9 @@ module.exports = {
     'BindingPattern Initializer',
   ],
   handlers: [
-    '$$ = $1',
-    '$$ = $1 + $2',
-    '$$ = $1 + $2',
+    '$$ = new (require(\'./ast/VariableDeclaratorNode\'))($1, { loc: this._$, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/VariableDeclaratorNode\'))($1, $2, { loc: this._$, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/VariableDeclaratorNode\'))($1, $2, { loc: this._$, lexer: yy.lexer })',
   ],
   subRules: [
     require('./BindingIdentifier'),

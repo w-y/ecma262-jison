@@ -5,7 +5,7 @@ module.exports = {
     'debugger ;',
   ],
   handlers: [
-    '$$ = $1 + $2',
+    '$$ = new (require(\'./ast/DebuggerStatementNode\'))({ loc: this._$, lexer: yy.lexer })',
   ],
   subRules: [
   ],

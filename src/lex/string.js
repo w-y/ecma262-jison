@@ -6,9 +6,17 @@ const SingleStringCharacter = {
   `,
 };
 
+const SingleStringCharacterLineTerminator = {
+  conditions: ['single_string_start'],
+  rule: '\\u000A|\\u000D',
+  handler: `
+    return require('./util').parseString.call(this, 'SingleStringCharacter');
+  `,
+};
+
 const SingleStringEscapeStart = {
   conditions: ['single_escape_string'],
-  rule: '\\\\u|\\\\U',
+  rule: '\\u|\\U',
   handler: `
    return require('./util').parseEscapeString.call(this, this.match);
   `,
@@ -39,9 +47,17 @@ const DoubleStringCharacter = {
   `,
 };
 
+const DoubleStringCharacterLineTerminator = {
+  conditions: ['double_string_start'],
+  rule: '\\u000A|\\u000D',
+  handler: `
+    return require('./util').parseString.call(this, 'DoubleStringCharacter');
+  `,
+};
+
 const DoubleStringEscapeStart = {
   conditions: ['double_escape_string'],
-  rule: '\\\\u|\\\\U',
+  rule: '\\u|\\U',
   handler: `
    return require('./util').parseEscapeString.call(this, this.match);
   `,
@@ -57,15 +73,16 @@ const DoubleStringEscape = {
 
 const DoubleQuoteStart = {
   conditions: ['INITIAL'],
-  rule: '\\\'',
+  rule: '"',
   handler: `
-    this.begin('double_escape_string');
+    this.begin('double_string_start');
     return 'DoubleQuoteStart';
   `,
 };
 
 exports.singleString = [
   SingleStringCharacter,
+  SingleStringCharacterLineTerminator,
   SingleStringEscapeStart,
   SingleStringEscape,
   SingleQuoteStart,
@@ -73,6 +90,7 @@ exports.singleString = [
 
 exports.doubleString = [
   DoubleStringCharacter,
+  DoubleStringCharacterLineTerminator,
   DoubleStringEscapeStart,
   DoubleStringEscape,
   DoubleQuoteStart,

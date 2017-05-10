@@ -1,26 +1,28 @@
-const WHITESPACES = '\\u000A|\\u000D|\\u2028\\|\\u2029';
+const LINE_TERMINATORS = '\\u000A|\\u000D|\\u2028\\|\\u2029';
 
-exports.onCommentStart = (lexerRef, type, line, column) => {
+exports.onCommentStart = (lexerRef, type, line, column, range) => {
   const lexer = lexerRef;
   if (!lexer.comments) {
     lexer.comments = [];
   }
   // range: [[first_line, first_column], [end_line, end_column]]
   lexer.comment = {
-    range: [
+    loc: [
       [line, column],
     ],
+    range: [range],
     type,
     buffer: [],
   };
 };
 
-exports.onCommentEnd = (lexerRef, type, line, column) => {
+exports.onCommentEnd = (lexerRef, type, line, column, range) => {
   const lexer = lexerRef;
   if (!lexer.comments) {
     lexer.comments = [];
   }
-  lexer.comment.range.push([line, column]);
+  lexer.comment.loc.push([line, column]);
+  lexer.comment.range.push(range);
   lexer.comments.push(lexer.comment);
 };
 
@@ -34,7 +36,7 @@ const MultiLineCommentCharsStart = {
   rule: '/\\*',
   handler: `
     this.begin('multi_line_comment_start');
-    require('./lex/comment').onCommentStart(this, 'MultiLine', yylloc.first_line, yylloc.first_column);
+    require('./lex/comment').onCommentStart(this, 'MultiLine', yylloc.first_line, yylloc.first_column, yylloc.range[0]);
     return '';
   `,
 };
@@ -44,7 +46,7 @@ const MultiLineCommentCharsEnd = {
   rule: '\\*/',
   handler: `
     this.popState();
-    require('./lex/comment').onCommentEnd(this, 'MultiLine', yylloc.last_line, yylloc.last_column);
+    require('./lex/comment').onCommentEnd(this, 'MultiLine', yylloc.last_line, yylloc.last_column, yylloc.range[1]);
     return '';
   `,
 };
@@ -70,7 +72,7 @@ const PostAsteriskCommentCharsStart = {
 
 const PostAsteriskCommentChars = {
   conditions: ['multi_line_comment_post_asterisk_start'],
-  rule: `.|${WHITESPACES}`,
+  rule: `.|${LINE_TERMINATORS}`,
   handler: `
     this.popState();
     require('./lex/comment').onComment(this, this.match);
@@ -93,18 +95,18 @@ const SingleLineCommentCharsStart = {
   rule: '//',
   handler: `
     this.begin('single_line_comment_start');
-    require('./lex/comment').onCommentStart(this, 'SingleLine', yylloc.first_line, yylloc.first_column);
+    require('./lex/comment').onCommentStart(this, 'SingleLine', yylloc.first_line, yylloc.first_column, yylloc.range[0]);
     return '';
   `,
 };
 
 const SingleLineCommentCharEnd = {
   conditions: ['single_line_comment_start'],
-  rule: WHITESPACES,
+  rule: LINE_TERMINATORS,
   handler: `
-    //SourceCharacterbut not LineTerminator
+    // SourceCharacterbut not LineTerminator
     this.popState();
-    require('./lex/comment').onCommentEnd(this, 'SingleLine', yylloc.last_line, yylloc.last_column);
+    require('./lex/comment').onCommentEnd(this, 'SingleLine', yylloc.first_line, yylloc.first_column, yylloc.range[0]);
 
     return '';
   `,

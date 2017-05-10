@@ -6,8 +6,8 @@ module.exports = {
     'BindingIdentifier',
   ],
   handlers: [
-    '$$ = $1 + $2',
-    '$$ = $1',
+    '$$ = {key: $1, value: $2}',
+    '$$ = {key: $1, value: $1}',
   ],
   subRules: [
     require('./BindingIdentifier'),

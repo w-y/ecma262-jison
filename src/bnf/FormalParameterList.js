@@ -7,9 +7,9 @@ module.exports = {
     'FormalsList , FunctionRestParameter',
   ],
   handlers: [
+    '$$ = [$1];',
     '$$ = $1;',
-    '$$ = $1;',
-    '$$ = $1 + $2 + $3;',
+    '$$ = $1.concat([$3]);',
   ],
   subRules: [
     require('./FormalsList'),

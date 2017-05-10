@@ -6,8 +6,8 @@ module.exports = {
     'new NewExpression',
   ],
   handlers: [
-    'console.log(\'member expression: \' + $1); $$ = $1;',
-    'console.log(\'new expression: \' + $2); $$ = $1 + $2;',
+    '$$ = $1',
+    '$$ = new (require(\'./ast/LeftHandSideExpression\').NewExpressionNode)($2, [], { loc: this._$, lexer: yy.lexer })',
   ],
   subRules: [
     require('./MemberExpression'),

@@ -5,7 +5,7 @@ module.exports = {
     'finally Block',
   ],
   handlers: [
-    '$$ = $1 + $2',
+    '$$ = $2',
   ],
   subRules: [
     require('./Block'),

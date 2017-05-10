@@ -5,7 +5,7 @@ module.exports = {
     'IdentifierName',
   ],
   handlers: [
-    '$$ = $1;',
+    '$$ = new (require(\'./ast/Identifier\').IdentifierNode)($1, { loc: this._$, lexer: yy.lexer });',
   ],
   subRules: [
     require('./IdentifierName'),

@@ -7,9 +7,9 @@ module.exports = {
     'PropertyName : AssignmentExpression_In',
   ],
   handlers: [
+    '$$ = {key:$1, value:$1}',
     '$$ = $1',
-    '$$ = $1',
-    '$$ = $1 + $2 + $3',
+    '$$ = {key:$1, value:$3}',
   ],
   subRules: [
     require('./IdentifierReference'),
