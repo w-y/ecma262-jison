@@ -5,7 +5,7 @@ module.exports = {
     'UnicodeEscapeSequenceContinueStart Hex4Digits', // TODO: id condition true
   ],
   handlers: [
-    '$$ = $1 + $2;',
+    '$$ = String.fromCodePoint($2);',
   ],
   subRules: [
     require('./Hex4Digits'),

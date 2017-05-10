@@ -83,6 +83,9 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 /* this == yyval */
 
 var $0 = $$.length - 1;
+console.log('=======');
+console.log(yystate);
+console.log('=======');
 switch (yystate) {
 case 1:
 
@@ -228,7 +231,10 @@ break;
 case 76:
 this.$ = new (require('./ast/Identifier').IdentifierNode)($$[$0], { loc: this._$, lexer: yy.lexer });
 break;
-case 78: case 91: case 98: case 99: case 101: case 103: case 109: case 111: case 112: case 114: case 117: case 119: case 121:
+case 91:
+this.$ = String.fromCodePoint($$[$0]);
+break;
+case 78: case 98: case 99: case 101: case 103: case 109: case 111: case 112: case 114: case 117: case 119: case 121:
 this.$ = $$[$0-1] + $$[$0];
 break;
 case 83:
