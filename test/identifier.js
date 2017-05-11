@@ -69,4 +69,25 @@ describe('identifier', function() {
       done();
     });
   });
+
+  describe('start with ID_start false', function() {
+    it('should throw error when parsing 1a', function(done) {
+      try {
+        parser.parse('1a;');
+      } catch (ex) {
+        assert.equal(true, ex instanceof Error);
+      }
+      done();
+    });
+  });
+
+  describe('start with keyword', function() {
+    it('should return identifier node', function(done) {
+      ast = parser.parse('constA;');
+      assert.equal('Identifier', ast.body[0].expression.type);
+      assert.equal('constA', ast.body[0].expression.name);
+      done();
+    });
+  });
+
 });

@@ -49,6 +49,16 @@ function parseKeyword(keyword, alias) {
     let i = this.matches.index + this.match.length;
     const input = this.matches.input;
 
+    // look behind for id_continue
+
+    if (this.topState() === 'INITIAL') {
+      const idContinueReg = require('unicode-6.3.0/Binary_Property/ID_Continue/regex');
+      if (idContinueReg.test(input[i])) {
+        this.begin('identifier_start');
+        res = 'UnicodeIDStart';
+      }
+    }
+
     // 跳过空白字符
     while (i < input.length && isWhiteSpace(input[i])) { i++; }
 
@@ -62,6 +72,12 @@ function parseKeyword(keyword, alias) {
       }
       if (/^function/.test(input.substring(i))) {
         this.begin('function_start');
+      }
+    }
+    // { after const/let/var should be brace not block
+    if (this.match === 'const' || this.match === 'var' || this.match === 'let') {
+      if (/^{/.test(input.substring(i))) {
+         this.begin('brace_start');
       }
     }
     return res;

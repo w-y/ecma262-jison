@@ -6,7 +6,7 @@ module.exports = {
   ],
   handlers: [
     `
-      $$ = new require('./ast/ScriptNode')($1));
+      $$ = new (require('./ast/ScriptNode'))($1, { loc: this._$, lexer: yy.lexer });
       if (yy.lexer.comments) {
         for (let i = 0; i < yy.lexer.comments.length; i++) {
           const comments = yy.lexer.comments;

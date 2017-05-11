@@ -4,6 +4,10 @@ const { isWhiteSpace, isLineTerminator } = require('./util');
 const { ParseError } = require('./error');
 
 function canApplyRule(source, ex) {
+  // lexical error
+  if (!ex.hash || !ex.hash.loc) {
+    return false;
+  }
   const token = ex.hash.token;
   const range = ex.hash.loc.range;
   let tokenOffset = range[1];

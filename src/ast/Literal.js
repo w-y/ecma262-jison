@@ -14,14 +14,14 @@ function LiteralNode(value, ...args) {
 }
 
 function NullLiteralNode(...args) {
-  LiteralNode.call(this, null, ...args);
+  LiteralNode.call(this, 'null', ...args);
 }
 
 function BooleanLiteralNode(value, ...args) {
   if (value === 'true') {
-    LiteralNode.call(this, true, ...args);
+    LiteralNode.call(this, 'true', ...args);
   } else {
-    LiteralNode.call(this, false, ...args);
+    LiteralNode.call(this, 'false', ...args);
   }
 }
 
