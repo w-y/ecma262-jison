@@ -77,7 +77,7 @@ function parseKeyword(keyword, alias) {
     // { after const/let/var should be brace not block
     if (this.match === 'const' || this.match === 'var' || this.match === 'let') {
       if (/^{/.test(input.substring(i))) {
-         this.begin('brace_start');
+        this.begin('brace_start');
       }
     }
     return res;
@@ -189,7 +189,7 @@ function parseOperator(operator, alias) {
 
 exports.parseOperator = parseOperator;
 
-function parseIdentifier(ch) {
+function parseIdentifier() {
   switch (this.topState()) {
     case 'single_string_start':
       return 'SingleStringCharacter';
@@ -198,8 +198,11 @@ function parseIdentifier(ch) {
     default:
       break;
   }
+  if (this.topState() === 'identifier_start') {
+    return 'UnicodeIDContinue';
+  }
   this.begin('identifier_start');
-  return ch;
+  return 'UnicodeIDStart';
 }
 
 exports.parseIdentifier = parseIdentifier;

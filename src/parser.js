@@ -304,10 +304,10 @@ case 140:
 throw new Error('Syntax Error');
 break;
 case 145:
-this.$ = (require('./ast/CoverParenthesizedExpressionNode'))([$$[$0-1]], { loc: this._$, lexer: yy.lexer })
+this.$ = new (require('./ast/CoverParenthesizedExpressionNode'))([$$[$0-1]], { loc: this._$, lexer: yy.lexer })
 break;
 case 146:
-this.$ = (require('./ast/CoverParenthesizedExpressionNode'))([], { loc: this._$, lexer: yy.lexer })
+this.$ = new (require('./ast/CoverParenthesizedExpressionNode'))([], { loc: this._$, lexer: yy.lexer })
 break;
 case 147:
 this.$ = [new (require('./ast/BindingRestElement').BindingIdentifierNode)($$[$0-1], { loc: this._$, lexer: yy.lexer })]

@@ -132,41 +132,31 @@ describe('iteral', function() {
       assert.equal(1.23, ast.body[14].expression.value);
       done();
     });
-  });
 
-  describe('decimal number with 0', function() {
     it('2.02232', function(done) {
       assert.equal('Literal', ast.body[15].expression.type);
       assert.equal(2.02232, ast.body[15].expression.value);
       done();
     });
-  });
 
-  describe('decimal number starts with 0', function() {
     it('0.99', function(done) {
       assert.equal('Literal', ast.body[16].expression.type);
       assert.equal(0.99, ast.body[16].expression.value);
       done();
     });
-  });
 
-  describe('decimal number starts with dot', function() {
     it('.123', function(done) {
       assert.equal('Literal', ast.body[17].expression.type);
       assert.equal(.123, ast.body[17].expression.value);
       done();
     });
-  });
 
-  describe('decimal number ends with dot', function() {
     it('0.', function(done) {
       assert.equal('Literal', ast.body[18].expression.type);
       assert.equal(0, ast.body[18].expression.value);
       done();
     });
-  });
 
-  describe('decimal integer', function() {
     it('123', function(done) {
       assert.equal('Literal', ast.body[19].expression.type);
       assert.equal(123, ast.body[19].expression.value);
@@ -174,4 +164,67 @@ describe('iteral', function() {
     });
   });
 
+  describe('array literal', function() {
+    it('empty array: []', function(done) {
+      assert.equal('ArrayLiteral', ast.body[20].expression.type);
+      assert.equal(0, ast.body[20].expression.elements.length);
+      done();
+    });
+    it('elison: [,]', function(done) {
+      assert.equal('ArrayLiteral', ast.body[21].expression.type);
+      assert.equal(null, ast.body[21].expression.elements[0]);
+      assert.equal(1, ast.body[21].expression.elements.length);
+      done();
+    });
+    it('[a,b,c]', function(done) {
+      assert.equal('ArrayLiteral', ast.body[22].expression.type);
+      assert.equal('a', ast.body[22].expression.elements[0].name);
+      assert.equal('b', ast.body[22].expression.elements[1].name);
+      assert.equal('c', ast.body[22].expression.elements[2].name);
+      assert.equal(3, ast.body[22].expression.elements.length);
+      done();
+    });
+    it('[1,2,3]', function(done) {
+      assert.equal('ArrayLiteral', ast.body[23].expression.type);
+      assert.equal(1, ast.body[23].expression.elements[0].value);
+      assert.equal(2, ast.body[23].expression.elements[1].value);
+      assert.equal(3, ast.body[23].expression.elements[2].value);
+      assert.equal(3, ast.body[23].expression.elements.length);
+      done();
+    });
+    /*it('[$1,\'2\',a_,]', function(done) {
+      assert.equal('ArrayLiteral', ast.body[24].expression.type);
+      assert.equal('$1', ast.body[24].expression.elements[0].name);
+      assert.equal('2', ast.body[24].expression.elements[1].value);
+      assert.equal('a_', ast.body[24].expression.elements[2].name);
+      assert.equal(4, ast.body[24].expression.elements.length);
+      done();
+    });*/
+  });
+
+  describe('object literal', function() {
+    it('({})', function(done) {
+      assert.equal('ObjectLiteral', ast.body[25].expression.expressions[0].type);
+      assert.equal(0, ast.body[25].expression.expressions[0].properties.length);
+      done();
+    });
+    it('({a_:1.2})', function(done) {
+      assert.equal('ObjectLiteral', ast.body[26].expression.expressions[0].type);
+      assert.equal('a_', ast.body[26].expression.expressions[0].properties[0].key);
+      assert.equal('1.2', ast.body[26].expression.expressions[0].properties[0].value.value);
+      done();
+    });
+    it('({a_})', function(done) {
+      assert.equal('ObjectLiteral', ast.body[27].expression.expressions[0].type);
+      assert.equal('a_', ast.body[27].expression.expressions[0].properties[0].key.name);
+      assert.equal('a_', ast.body[27].expression.expressions[0].properties[0].value.name);
+      done();
+    });
+    it('({\'$a\' : 1.23});', function(done) {
+      assert.equal('ObjectLiteral', ast.body[28].expression.expressions[0].type);
+      // assert.equal('$a', ast.body[28].expression.expressions[0].properties[0].key);
+      // assert.equal('1.23', ast.body[28].expression.expressions[0].properties[0].value.value);
+      done();
+    });
+  });
 });
