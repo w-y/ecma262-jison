@@ -8,7 +8,7 @@ module.exports = {
   ],
   handlers: [
     '$$ = $1;',
-    '$$ = new (require(\'./ast/ConditionalExpression\')).ConditionalExpressionNode($1, $3, $5, { loc: this._$, lexer: yy.lexer });',
+    '$$ = new (require(\'./ast/ConditionalExpression\')).ConditionalExpressionNode($1, $3, $5, { loc: this._$, yy });',
   ],
   subRules: [
     require('./LogicalORExpression_In'),

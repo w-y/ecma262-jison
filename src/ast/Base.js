@@ -4,7 +4,7 @@ function BaseNode({
   leadingComments = [],
   trailingComments = [],
   loc,
-  lexer,
+  yy,
 }) {
   this.type = type;
   this.raw = raw;
@@ -18,7 +18,25 @@ function BaseNode({
       last_column: lastColumn,
     } = loc;
 
-    this.range = range;
+
+    // subtract insertion offset
+    let rangeStart = range[0];
+    let rangeEnd = range[1];
+
+    if (yy.autoInsertions) {
+      for (let i = 0; i < yy.autoInsertions.length; i++) {
+        if (yy.autoInsertions[i]) {
+          if (yy.autoInsertions[i] < rangeStart) {
+            rangeStart--;
+          }
+          if (yy.autoInsertions[i] < rangeEnd) {
+            rangeEnd--;
+          }
+        }
+      }
+    }
+
+    this.range = [rangeStart, rangeEnd];
 
     this.firstLine = firstLine;
     this.firstColumn = firstColumn;
@@ -29,6 +47,8 @@ function BaseNode({
 
   this.leadingComments = leadingComments;
   this.trailingComments = trailingComments;
+
+  const lexer = yy.lexer;
 
   if (lexer.comments && lexer.comments.length > 0) {
     for (let i = 0; i < lexer.comments.length; i++) {

@@ -7,9 +7,9 @@ module.exports = {
     'BRACE_START PropertyDefinitionList , }',
   ],
   handlers: [
-    '$$ = new (require(\'./ast/Literal\').ObjectLiteralNode)([], { loc: this._$, lexer: yy.lexer })',
-    '$$ = new (require(\'./ast/Literal\').ObjectLiteralNode)($2, { loc: this._$, lexer: yy.lexer })',
-    '$$ = new (require(\'./ast/Literal\').ObjectLiteralNode)($2, { loc: this._$, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/Literal\').ObjectLiteralNode)([], { loc: this._$, yy })',
+    '$$ = new (require(\'./ast/Literal\').ObjectLiteralNode)($2, { loc: this._$, yy })',
+    '$$ = new (require(\'./ast/Literal\').ObjectLiteralNode)($2, { loc: this._$, yy })',
   ],
   subRules: [
     require('./PropertyDefinitionList'),

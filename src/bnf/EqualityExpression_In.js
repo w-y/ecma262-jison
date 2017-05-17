@@ -7,7 +7,7 @@ module.exports = {
   ],
   handlers: [
     '$$ = $1;',
-    '$$ = new (require(\'./ast/EqualityExpression\').EqualityExpressionNode)($2, $1, $3, { loc: this._$, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/EqualityExpression\').EqualityExpressionNode)($2, $1, $3, { loc: this._$, yy })',
   ],
   subRules: [
     require('./RelationalExpression_In'),

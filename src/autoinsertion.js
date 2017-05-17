@@ -73,9 +73,17 @@ function autoinsertion(source) {
     parser.parser.yy.autoInsertionOffset = null;
     const test = canApplyRule(s, ex);
     if (test > 0) {
+      // range should ajust by subtracting number of inserted semicolons
+      if (!parser.parser.yy.autoInsertionCount) {
+        parser.parser.yy.autoInsertionCount = 1;
+        parser.parser.yy.autoInsertions = [test + 1];
+      } else {
+        parser.parser.yy.autoInsertionCount += 1;
+        parser.parser.yy.autoInsertions.push(test + 1);
+      }
       parser.parser.yy.autoInsertionOffset = test + 1;
+
       const newSrc = `${src.substring(0, test)};${src.substring(test)}`;
-      console.log(newSrc);
       return newSrc;
     }
     return false;

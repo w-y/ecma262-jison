@@ -12,13 +12,13 @@ module.exports = {
   // TODO: IdentifierNode add loc info
   handlers: [
     '$$ = $1',
-    '$$ = new (require(\'./ast/LeftHandSideExpression\').MemberExpressionNode)($1, $3, true, { loc: this._$, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/LeftHandSideExpression\').MemberExpressionNode)($1, $3, true, { loc: this._$, yy })',
     `
-      $$ = new (require('./ast/LeftHandSideExpression').MemberExpressionNode)($1, (new (require('./ast/Identifier').IdentifierNode)($3, { lexer: yy.lexer })), false, { loc: this._$, lexer: yy.lexer }),
+      $$ = new (require('./ast/LeftHandSideExpression').MemberExpressionNode)($1, (new (require('./ast/Identifier').IdentifierNode)($3, { yy })), false, { loc: this._$, yy }),
     `,
     '$$ = $1',
     '$$ = $1',
-    '$$ = new (require(\'./ast/LeftHandSideExpression\').NewExpressionNode)($2, $3, { loc: this._$, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/LeftHandSideExpression\').NewExpressionNode)($2, $3, { loc: this._$, yy })',
   ],
   subRules: [
     require('./PrimaryExpression'),
