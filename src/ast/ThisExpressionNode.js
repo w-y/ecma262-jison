@@ -1,8 +1,7 @@
 const BaseNode = require('./Base');
 
-function ThisExpressionNode(body, ...args) {
+function ThisExpressionNode(...args) {
   BaseNode.call(this, Object.assign({}, { type: 'ThisExpression' }, ...args));
-  this.body = body;
 }
 
 module.exports = ThisExpressionNode;
