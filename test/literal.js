@@ -25,7 +25,7 @@ describe('iteral', function() {
   describe('true', function() {
     it('should return Literal with value ture', function(done) {
       assert.equal('Literal', ast.body[1].expression.type);
-      assert.equal('true', ast.body[1].expression.value);
+      assert.equal(true, ast.body[1].expression.value);
       done();
     });
   });
@@ -33,7 +33,7 @@ describe('iteral', function() {
   describe('false', function() {
     it('should return Literal with value false', function(done) {
       assert.equal('Literal', ast.body[2].expression.type);
-      assert.equal('false', ast.body[2].expression.value);
+      assert.equal(false, ast.body[2].expression.value);
       done();
     });
   });

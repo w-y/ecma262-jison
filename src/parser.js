@@ -144,7 +144,7 @@ break;
 case 20:
 
       if (yy.autoInsertionOffset && yy.autoInsertionOffset === yy.lexer.offset) {
-        throw new (require('./error').ParseError)('a semicolon is never inserted automatically if the semicolon would then be parsed as an empty       statement', {
+        throw new (require('./error').ParseError)('a semicolon is never inserted automatically if the semicolon would then be parsed as an empty statement', {
           text: $$[$0],
           token: $$[$0],
           line: yy.lexer.yylloc.first_line,
@@ -216,10 +216,17 @@ case 61:
 this.$ = new (require('./ast/LeftHandSideExpression').NewExpressionNode)($$[$0], [], { loc: this._$, yy })
 break;
 case 63: case 347:
-this.$ = new (require('./ast/LeftHandSideExpression').MemberExpressionNode)($$[$0-3], $$[$0-1], false, { loc: this._$, yy })
+this.$ = new (require('./ast/LeftHandSideExpression').MemberExpressionNode)($$[$0-3], $$[$0-1], true, { loc: this._$, yy })
 break;
-case 64: case 348:
-this.$ = new (require('./ast/LeftHandSideExpression').MemberExpressionNode)($$[$0-2], $$[$0], false, { loc: this._$, yy })
+case 64:
+
+      this.$ = new (require('./ast/LeftHandSideExpression').MemberExpressionNode)(
+          $$[$0-2], 
+          new (require('./ast/Identifier').IdentifierNode)($$[$0], { yy }), 
+          false, 
+          { loc: this._$, yy }
+      );
+    
 break;
 case 67:
 this.$ = new (require('./ast/LeftHandSideExpression').NewExpressionNode)($$[$0-1], $$[$0], { loc: this._$, yy })
@@ -642,12 +649,12 @@ this.$ = new (require('./ast/ReturnStatementNode'))($$[$0-2], { loc: this._$, yy
 break;
 case 335:
 this.$ =
-      new (require('./ast/LeftHandSideExpression').MemberExpressionNode)(new (require('./ast/SuperNode')($$[$0-3])), $$[$0-1], false, { loc: this._$, yy })
+      new (require('./ast/LeftHandSideExpression').MemberExpressionNode)(new (require('./ast/SuperNode')($$[$0-3])), $$[$0-1], { loc: this._$, yy })
     
 break;
 case 336:
 this.$ =
-      new (require('./ast/LeftHandSideExpression').MemberExpressionNode)(new (require('./ast/SuperNode')($$[$0-2])), $$[$0], false, { loc: this._$, yy })
+      new (require('./ast/LeftHandSideExpression').MemberExpressionNode)(new (require('./ast/SuperNode')($$[$0-2])), $$[$0], { loc: this._$, yy })
     
 break;
 case 337:
@@ -667,6 +674,9 @@ this.$ = new (require('./ast/LeftHandSideExpression').CallExpressionNode)($$[$0]
 break;
 case 346:
 this.$ = new (require('./ast/LeftHandSideExpression').CallExpressionNode)($$[$0-1], [], { loc: this._$, yy })
+break;
+case 348:
+this.$ = new (require('./ast/LeftHandSideExpression').MemberExpressionNode)($$[$0-2], $$[$0], false, { loc: this._$, yy })
 break;
 case 349:
 this.$ = new (require('./ast/LeftHandSideExpression').SuperCallExpressionNode)($$[$0], [], { loc: this._$, yy })

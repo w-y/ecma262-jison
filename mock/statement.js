@@ -24,6 +24,14 @@ if (exp) {
   console.log('hello');
 }
 
+if (a) {
+
+
+} else if(b) {
+} else {
+  ;
+}
+
 do {
   ;
 } while (exp);

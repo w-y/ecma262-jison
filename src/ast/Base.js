@@ -26,10 +26,10 @@ function BaseNode({
     if (yy.autoInsertions) {
       for (let i = 0; i < yy.autoInsertions.length; i++) {
         if (yy.autoInsertions[i]) {
-          if (yy.autoInsertions[i] < rangeStart) {
+          if (yy.autoInsertions[i] <= rangeStart) {
             rangeStart--;
           }
-          if (yy.autoInsertions[i] < rangeEnd) {
+          if (yy.autoInsertions[i] <= rangeEnd) {
             rangeEnd--;
           }
         }
