@@ -37,7 +37,7 @@ do {
 } while (exp);
 
 
-while (i < 100) {
+While (i < 100) {
   i++;
 }
 
