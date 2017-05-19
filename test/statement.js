@@ -107,5 +107,54 @@ describe('expression', function() {
       done();
     });
 
+    it('while statement', function(done) {
+      assert.equal('DoWhileStatement', ast.body[9].type);
+      assert.equal('exp', ast.body[9].test.name);
+      assert.equal('BlockStatement', ast.body[9].body.type);
+      assert.equal(1, ast.body[9].body.body.length);
+      assert.equal('EmptyStatement', ast.body[9].body.body[0].type);
+
+      assert.equal('WhileStatement', ast.body[10].type);
+      assert.equal('RelationalExpression', ast.body[10].test.type);
+      assert.equal('<', ast.body[10].test.operator);
+      assert.equal('i', ast.body[10].test.left.name);
+      assert.equal(100, ast.body[10].test.right.value);
+      assert.equal(1, ast.body[10].body.body.length);
+      assert.equal('ExpressionStatement', ast.body[10].body.body[0].type);
+      assert.equal('UpdateExpression', ast.body[10].body.body[0].expression.type);
+
+      done();
+    });
+
+    it('for statement', function(done) {
+      assert.equal('ForStatement', ast.body[11].type);
+      assert.equal('LexicalDeclaration', ast.body[11].init.type);
+      assert.equal('a', ast.body[11].init.declarations[0].id.name);
+      assert.equal(1, ast.body[11].init.declarations[0].init.value);
+      assert.equal('RelationalExpression', ast.body[11].test.type);
+      assert.equal('<', ast.body[11].test.operator);
+      assert.equal('a', ast.body[11].test.left.name);
+      assert.equal(10, ast.body[11].test.right.value);
+      assert.equal('UpdateExpression', ast.body[11].update.type);
+      assert.equal('++', ast.body[11].update.operator);
+      assert.equal('i', ast.body[11].update.operand.name);
+      assert.equal(false, ast.body[11].update.prefix);
+
+      assert.equal('ForStatement', ast.body[12].type);
+      assert.equal('VariableDeclarator', JSON.stringify(ast.body[12].init));
+      assert.equal('i', ast.body[12].init.declarations[0].id.name);
+      assert.equal(100, ast.body[12].init.declarations[0].init.value);
+      assert.equal('RelationalExpression', ast.body[12].test.type);
+      assert.equal('>=', ast.body[12].test.operator);
+      assert.equal('i', ast.body[12].test.left.name);
+      assert.equal(0, ast.body[12].test.right.value);
+      assert.equal('UpdateExpression', ast.body[12].update.type);
+      assert.equal('--', ast.body[12].update.operator);
+      assert.equal('i', ast.body[12].update.operand.name);
+      assert.equal(true, ast.body[12].update.prefix);
+
+      done();
+    });
+
   });
 });

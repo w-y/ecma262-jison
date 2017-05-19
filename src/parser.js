@@ -132,7 +132,10 @@ break;
 case 2: case 5: case 7: case 8: case 9: case 10: case 11: case 12: case 13: case 14: case 15: case 16: case 17: case 18: case 19: case 22: case 27: case 33: case 35: case 37: case 39: case 50: case 58: case 59: case 69: case 70: case 71: case 72: case 73: case 74: case 75: case 77: case 79: case 80: case 81: case 82: case 85: case 86: case 87: case 88: case 89: case 90: case 100: case 102: case 104: case 105: case 108: case 110: case 115: case 116: case 118: case 120: case 193: case 194: case 195: case 196: case 197: case 198: case 199: case 200: case 201: case 202: case 203: case 204: case 205: case 206: case 207: case 208: case 215: case 219: case 220: case 221: case 226: case 228: case 232: case 233: case 265: case 271: case 273: case 275: case 277: case 289: case 326: case 327: case 350:
 this.$ = $$[$0];
 break;
-case 3: case 227: case 230: case 281:
+case 281:
+this.$ = $$[$0];
+break;
+case 3: case 227: case 230:
 this.$ = [$$[$0]];
 break;
 case 4:
