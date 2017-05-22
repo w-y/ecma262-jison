@@ -37,7 +37,7 @@ do {
 } while (exp);
 
 
-While (i < 100) {
+while (i < 100) {
   i++;
 }
 
@@ -45,7 +45,7 @@ for (let a = 1; a < 10; i++) {
 
 }
 
-for (var i = 100; i >= 0; --i) {
+for (var i = 100, j = 0; i >= 0; --i) {
 
 }
 

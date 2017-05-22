@@ -141,9 +141,12 @@ describe('expression', function() {
       assert.equal(false, ast.body[11].update.prefix);
 
       assert.equal('ForStatement', ast.body[12].type);
-      assert.equal('VariableDeclarator', JSON.stringify(ast.body[12].init));
+      assert.equal('VariableStatement', ast.body[12].init.type);
+      assert.equal(2, ast.body[12].init.declarations.length);
       assert.equal('i', ast.body[12].init.declarations[0].id.name);
       assert.equal(100, ast.body[12].init.declarations[0].init.value);
+      assert.equal('j', ast.body[12].init.declarations[1].id.name);
+      assert.equal(0, ast.body[12].init.declarations[1].init.value);
       assert.equal('RelationalExpression', ast.body[12].test.type);
       assert.equal('>=', ast.body[12].test.operator);
       assert.equal('i', ast.body[12].test.left.name);

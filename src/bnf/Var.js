@@ -1,11 +1,11 @@
 module.exports = {
   conditions: [''],
-  name: 'Var',
+  name: 'VAR',
   rules: [
     'var',
   ],
   handlers: [
-    '$$ = this._$'
+    '$$ = this._$',
   ],
   subRules: [
   ],
