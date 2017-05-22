@@ -49,6 +49,19 @@ for (var i = 100, j = 0; i >= 0; --i) {
 
 }
 
+for (var i = 0; ; ) {
+
+}
+
+for (var i = 0; i; ) {
+
+}
+
+for (var i = 0; ; i) {
+
+}
+
+
 for (i in [1,2,3]) {
 
 }
