@@ -6,8 +6,8 @@ module.exports = {
     'VariableDeclarationList , VariableDeclaration',
   ],
   handlers: [
-    '$$ = $1;',
-    '$$ = $1;$$.declarations.concat($3.declarations);',
+    '$$ = [$1];',
+    '$$ = $1.concat([$3]);'
   ],
   subRules: [
     require('./VariableDeclaration'),

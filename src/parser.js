@@ -133,7 +133,7 @@ case 2: case 5: case 7: case 8: case 9: case 10: case 11: case 12: case 13: case
 this.$ = $$[$0];
 break;
 case 281:
-this.$ = $$[$0];
+this.$ = [$$[$0]];
 break;
 case 3: case 227: case 230:
 this.$ = [$$[$0]];
@@ -448,9 +448,10 @@ case 240: case 359:
     
 break;
 case 241: case 360:
-
       require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-8].range, $$[$0-1].range, yy.lexer.yylloc);
-      this.$ = new (require('./ast/IterationStatement').ForStatementNode)($$[$0-6], $$[$0-4], $$[$0-2], $$[$0], { loc: this._$, yy })
+      this.$ = new (require('./ast/IterationStatement').ForStatementNode)( 
+          new (require('./ast/VariableStatement').VariableStatementNode)($$[$0-6], { loc: $$[$0-6][0].range, yy }),
+          $$[$0-4], $$[$0-2], $$[$0], { loc: this._$, yy })
     
 break;
 case 242: case 243: case 361: case 362:

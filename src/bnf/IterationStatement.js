@@ -6,13 +6,13 @@ module.exports = {
     'while LeftParenthesis Expression_In RightParenthesis Statement',
 
     'for LeftParenthesis LexicalDeclaration Expression_In ; Expression_In RightParenthesis Statement',
-    'for LeftParenthesis var VariableDeclarationList ; Expression_In ; Expression_In RightParenthesis Statement',
+    'for LeftParenthesis VAR VariableDeclarationList ; Expression_In ; Expression_In RightParenthesis Statement',
 
     'for LeftParenthesis LeftHandSideExpression in Expression_In RightParenthesis Statement',
     'for LeftParenthesis ForDeclaration in Expression_In RightParenthesis Statement',
 
     'for LeftParenthesis LeftHandSideExpression of AssignmentExpression_In RightParenthesis Statement',
-    'for LeftParenthesis var ForBinding of AssignmentExpression_In RightParenthesis Statement',
+    'for LeftParenthesis VAR ForBinding of AssignmentExpression_In RightParenthesis Statement',
     'for LeftParenthesis ForDeclaration of AssignmentExpression_In RightParenthesis Statement',
 
     'for LeftParenthesis Expression ; Expression_In ; Expression_In RightParenthesis Statement',
@@ -34,7 +34,8 @@ module.exports = {
     `,
     `
       require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $9.range, yy.lexer.yylloc);
-      $$ = new (require('./ast/IterationStatement').ForStatementNode)($4, $6, $8, $10, { loc: this._$, yy })
+      $$ = new (require('./ast/IterationStatement').ForStatementNode)(
+        new (require('./ast/VariableStatement').VariableStatementNode)($4, { loc: $3, yy }), $6, $8, $10, { loc: this._$, yy });
     `,
 
     `
@@ -52,7 +53,8 @@ module.exports = {
     `,
     `
       require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $7.range, yy.lexer.yylloc);
-      $$ = new (require('./ast/IterationStatement').ForOfStatementNode)($4, $6, $8, { loc: this._$, yy })
+      $$ = new (require('./ast/IterationStatement').ForOfStatementNode)(
+        new (require('./ast/VariableStatement').VariableStatementNode)($4, { loc: $3, yy }), $6, $8, { loc: this._$, yy });
     `,
     `
       require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $6.range, yy.lexer.yylloc);
@@ -105,5 +107,6 @@ module.exports = {
     require('./Expression'),
     require('./LeftParenthesis'),
     require('./RightParenthesis'),
+    require('./Var'),
   ],
 };
