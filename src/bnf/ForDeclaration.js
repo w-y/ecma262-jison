@@ -5,7 +5,7 @@ module.exports = {
     'LetOrConst ForBinding',
   ],
   handlers: [
-    '$$ = new (require(\'./ast/LexicalDeclaration\').LexicalDeclarationNode)($1, $2, { loc: this._$, yy })',
+    '$$ = new (require(\'./ast/LexicalDeclaration\').LexicalDeclarationNode)($1, [$2], { loc: this._$, yy })',
   ],
   subRules: [
     require('./ForBinding'),

@@ -517,7 +517,7 @@ case 266:
 this.$ = new (require('./ast/ConditionalExpression').ConditionalExpressionNode)($$[$0-4], $$[$0-2], $$[$0], { loc: this._$, yy });
 break;
 case 286:
-this.$ = new (require('./ast/LexicalDeclaration').LexicalDeclarationNode)($$[$0-1], $$[$0], { loc: this._$, yy })
+this.$ = new (require('./ast/LexicalDeclaration').LexicalDeclarationNode)($$[$0-1], [$$[$0]], { loc: this._$, yy })
 break;
 case 291: case 292:
 this.$ = yy.lexer.yylloc

@@ -61,7 +61,7 @@ for (var i = 0; ; i) {
 
 }
 
-for (i in [1,2,3]) {
+for (i in [1,2,'a']) {
 
 }
 

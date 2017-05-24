@@ -156,6 +156,47 @@ describe('expression', function() {
       assert.equal('i', ast.body[12].update.operand.name);
       assert.equal(true, ast.body[12].update.prefix);
 
+      assert.equal('ForStatement', ast.body[13].type);
+      assert.equal('VariableStatement', ast.body[13].init.type);
+      assert.equal(null, ast.body[13].test);
+      assert.equal(null, ast.body[13].update);
+
+      assert.equal('ForStatement', ast.body[14].type);
+      assert.equal('VariableStatement', ast.body[14].init.type);
+      assert.equal('i', ast.body[14].test.name);
+      assert.equal(null, ast.body[14].update);
+
+      assert.equal('ForStatement', ast.body[15].type);
+      assert.equal('VariableStatement', ast.body[15].init.type);
+      assert.equal(null, ast.body[15].test);
+      assert.equal('i', ast.body[15].update.name);
+
+      assert.equal('ForInStatement', ast.body[16].type);
+      assert.equal('i', ast.body[16].left.name);
+      assert.equal('ArrayLiteral', ast.body[16].right.type);
+      assert.equal(3, ast.body[16].right.elements.length);
+      assert.equal(1, ast.body[16].right.elements[0].value);
+      assert.equal(2, ast.body[16].right.elements[1].value);
+      assert.equal('a', ast.body[16].right.elements[2].value);
+
+      assert.equal('ForInStatement', ast.body[17].type);
+      assert.equal('LexicalDeclaration', ast.body[17].left.type);
+      assert.equal(1, ast.body[17].left.declarations.length);
+      assert.equal('VariableDeclarator', ast.body[17].left.declarations[0].type);
+      assert.equal('a', ast.body[17].left.declarations[0].id.name);
+      assert.equal(3, ast.body[17].right.elements.length);
+
+      // in operator and for in
+      // https://stackoverflow.com/questions/41569958/javascript-for-statement-and-operator-in
+      try{
+        parser.parse('for (let a = b in c; false;);');
+      } catch(ex) {
+        assert.equal(true, ex instanceof Error);
+      }
+
+      const tempAst = parser.parse('for (let a = (b in c); false;);');
+      assert.equal('ForStatement', tempAst.body[0].type);
+
       done();
     });
 
