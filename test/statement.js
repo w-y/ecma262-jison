@@ -186,6 +186,7 @@ describe('expression', function() {
       assert.equal('a', ast.body[17].left.declarations[0].id.name);
       assert.equal(3, ast.body[17].right.elements.length);
 
+      // NOTICE:
       // in operator and for in
       // https://stackoverflow.com/questions/41569958/javascript-for-statement-and-operator-in
       try{
@@ -197,6 +198,78 @@ describe('expression', function() {
       const tempAst = parser.parse('for (let a = (b in c); false;);');
       assert.equal('ForStatement', tempAst.body[0].type);
 
+      assert.equal('ForOfStatement', ast.body[18].type);
+      assert.equal('a', ast.body[18].left.name);
+      assert.equal('ArrayLiteral', ast.body[18].right.type);
+      assert.equal(3, ast.body[18].right.elements.length);
+
+      assert.equal('ForOfStatement', ast.body[19].type);
+      assert.equal('VariableStatement', ast.body[19].left.type);
+      assert.equal('VariableDeclarator', ast.body[19].left.declarations[0].type);
+      assert.equal('a', ast.body[19].left.declarations[0].id.name);
+      assert.equal(0, ast.body[19].right.elements.length);
+
+      assert.equal('LexicalDeclaration', ast.body[20].left.type);
+      assert.equal('VariableDeclarator', ast.body[20].left.declarations[0].type);
+      assert.equal('b', ast.body[20].left.declarations[0].id.name);
+      assert.equal(0, ast.body[20].right.elements.length);
+
+      assert.equal('ForStatement', ast.body[21].type);
+      assert.equal('a', ast.body[21].init.name);
+      assert.equal('b', ast.body[21].test.name);
+      assert.equal('c', ast.body[21].update.name);
+      assert.equal('BlockStatement', ast.body[21].body.type);
+      assert.equal('EmptyStatement', ast.body[21].body.body[0].type);
+      assert.equal(1, ast.body[21].body.body.length);
+
+      assert.equal('ForStatement', ast.body[22].type);
+      assert.equal('a', ast.body[22].init.name);
+      assert.equal(null, ast.body[22].test);
+      assert.equal('c', ast.body[22].update.name);
+      assert.equal('BlockStatement', ast.body[22].body.type);
+      assert.equal(0, ast.body[22].body.body.length);
+
+      assert.equal('ForStatement', ast.body[23].type);
+      assert.equal('a', ast.body[23].init.name);
+      assert.equal(null, ast.body[23].test);
+      assert.equal(null, ast.body[23].update);
+      assert.equal('BlockStatement', ast.body[23].body.type);
+      assert.equal(0, ast.body[23].body.body.length);
+
+      assert.equal('ForStatement', ast.body[24].type);
+      assert.equal(null, ast.body[24].init);
+      assert.equal('a', ast.body[24].test.name);
+      assert.equal(null, ast.body[24].update);
+      assert.equal('BlockStatement', ast.body[24].body.type);
+      assert.equal(0, ast.body[24].body.body.length);
+
+      assert.equal('ForStatement', ast.body[25].type);
+      assert.equal(null, ast.body[25].init);
+      assert.equal(null, ast.body[25].test);
+      assert.equal(null, ast.body[25].update);
+      assert.equal('BlockStatement', ast.body[25].body.type);
+      assert.equal(0, ast.body[25].body.body.length);
+
+      assert.equal('ForStatement', ast.body[26].type);
+      assert.equal(null, ast.body[26].init);
+      assert.equal('exp', ast.body[26].test.name);
+      assert.equal(null, ast.body[26].update);
+      assert.equal('BlockStatement', ast.body[26].body.type);
+      assert.equal(0, ast.body[26].body.body.length);
+    });
+
+    it('switch statement', function(done) {
+      assert.equal('SwitchStatement', ast.body[27].type);
+      assert.equal('cond', ast.body[27].discriminant.name);
+      assert.equal(0, ast.body[27].cases.length);
+
+      assert.equal('SwitchStatement', ast.body[28].type);
+      assert.equal('cond', ast.body[28].discriminant.name);
+      assert.equal(1, ast.body[28].cases.length);
+      assert.equal('SwitchCase', ast.body[28].cases[0].type);
+
+      // assert.equal('Literal', JSON.stringify(ast.body[28], null, 2));
+      // assert.equal('a', ast.body[28].cases[0].test.value);
       done();
     });
 

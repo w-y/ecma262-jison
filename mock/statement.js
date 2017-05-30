@@ -77,7 +77,7 @@ for (var a of []) {
 
 }
 
-for (let a of []) {
+for (let b of []) {
 
 }
 

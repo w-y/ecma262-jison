@@ -1,8 +1,8 @@
 const BaseNode = require('./Base');
 
-function SwitchStatementNode(discrimnant, cases, ...args) {
+function SwitchStatementNode(discriminant, cases, ...args) {
   BaseNode.call(this, Object.assign({}, { type: 'SwitchStatement' }, ...args));
-  this.discrimnant = discrimnant;
+  this.discriminant = discriminant;
   this.cases = cases;
 }
 

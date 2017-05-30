@@ -471,7 +471,7 @@ break;
 case 248: case 367:
 
       require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
-      this.$ = new (require('./ast/IterationStatement').ForStatementNode)($$[$0-5], null, $$[$0-2], $$[$0-1], { loc: this._$, yy })
+      this.$ = new (require('./ast/IterationStatement').ForStatementNode)($$[$0-5], null, $$[$0-2], $$[$0], { loc: this._$, yy })
 
 break;
 case 249: case 368:
@@ -701,7 +701,7 @@ case 364:
         // NOTICE:
         // we need to merge the VAR's loc and VariableDeclarator's to get VaribleStatement's range
         // $$[$0-4] is a single VariableDeclarator
-        new (require('./ast/VariableStatement').VariableStatementNode)($$[$0-4], { loc: {
+        new (require('./ast/VariableStatement').VariableStatementNode)([$$[$0-4]], { loc: {
           first_line: $$[$0-5].first_line,
           last_line: $$[$0-4].lastLine,
           first_column: $$[$0-5].firts_column,

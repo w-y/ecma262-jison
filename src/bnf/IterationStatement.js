@@ -76,7 +76,7 @@ module.exports = {
         // NOTICE:
         // we need to merge the VAR's loc and VariableDeclarator's to get VaribleStatement's range
         // $4 is a single VariableDeclarator
-        new (require('./ast/VariableStatement').VariableStatementNode)($4, { loc: {
+        new (require('./ast/VariableStatement').VariableStatementNode)([$4], { loc: {
           first_line: $3.first_line,
           last_line: $4.lastLine,
           first_column: $3.firts_column,
@@ -95,7 +95,7 @@ module.exports = {
     `,
     `
       require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $7.range, yy.lexer.yylloc);
-      $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, null, $6, $7, { loc: this._$, yy })
+      $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, null, $6, $8, { loc: this._$, yy })
     `,
     `
       require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $6.range, yy.lexer.yylloc);
