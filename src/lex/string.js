@@ -31,7 +31,7 @@ const SingleStringEscape = {
 };
 
 const SingleQuoteStart = {
-  conditions: ['INITIAL'],
+  conditions: ['INITIAL', 'case_start'],
   rule: '\\\'',
   handler: `
     this.begin('single_string_start');
@@ -72,7 +72,7 @@ const DoubleStringEscape = {
 };
 
 const DoubleQuoteStart = {
-  conditions: ['INITIAL'],
+  conditions: ['INITIAL', 'case_start'],
   rule: '"',
   handler: `
     this.begin('double_string_start');

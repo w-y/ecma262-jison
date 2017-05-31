@@ -47,7 +47,7 @@ const decimalDigit = {
 };
 
 const decimalZero = {
-  conditions: ['INITIAL'],
+  conditions: ['INITIAL', 'case_start'],
   rule: '0',
   handler: `
     this.begin('decimal_digit_start');
@@ -56,7 +56,7 @@ const decimalZero = {
 };
 
 const decimalNonZero = {
-  conditions: ['INITIAL'],
+  conditions: ['INITIAL', 'case_start'],
   rule: '[1-9]',
   handler: `
     this.begin('decimal_digit_start');
