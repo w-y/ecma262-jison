@@ -717,7 +717,7 @@ case 331:
     
 break;
 case 332:
-this.$ = new (require('./ast/ReturnStatementNode'))($$[$0-2], { loc: this._$, yy })
+this.$ = new (require('./ast/ReturnStatementNode'))($$[$0-1], { loc: this._$, yy })
 break;
 case 342:
 this.$ =

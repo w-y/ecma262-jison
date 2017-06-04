@@ -204,7 +204,6 @@ describe('iteral', function() {
 
   describe('object literal', function() {
     it('({})', function(done) {
-      console.log(ast.body[25].expression);
       assert.equal('ObjectLiteral', ast.body[25].expression.expressions[0].type);
       assert.equal(0, ast.body[25].expression.expressions[0].properties.length);
       done();

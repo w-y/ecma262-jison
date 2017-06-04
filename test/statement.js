@@ -46,8 +46,7 @@ describe('expression', function() {
       assert.equal(1, ast.body[3].body[0].body.expression.value);
       done();
     });
-
-    it('multiple statements', function(done) {
+    it('statements list', function(done) {
       assert.equal('BlockStatement', ast.body[4].type);
       assert.equal(2, ast.body[4].body.length);
 
@@ -64,8 +63,10 @@ describe('expression', function() {
       assert.equal(1, ast.body[4].body[1].declarations[1].init.value);
       done();
     });
+  });
 
-    it('if statement', function(done) {
+  describe('if statement', function() {
+    it('only if',function(done) {
       assert.equal('IfStatement', ast.body[5].type);
       assert.equal('a', ast.body[5].test.name);
       assert.equal('BlockStatement', ast.body[5].consequent.type);
@@ -76,6 +77,10 @@ describe('expression', function() {
       assert.equal('BlockStatement', ast.body[6].consequent.type);
       assert.equal(0, ast.body[6].consequent.body.length);
 
+      done();
+    });
+
+    it('if else',function(done) {
       assert.equal('IfStatement', ast.body[7].type);
       assert.equal('exp', ast.body[7].test.name);
       assert.equal('BlockStatement', ast.body[7].consequent.type);
@@ -106,14 +111,19 @@ describe('expression', function() {
       assert.equal('EmptyStatement', ast.body[8].alternate.alternate.body[0].type);
       done();
     });
+  });
 
-    it('while statement', function(done) {
+  describe('while statements', function() {
+    it('do while', function(done) {
       assert.equal('DoWhileStatement', ast.body[9].type);
       assert.equal('exp', ast.body[9].test.name);
       assert.equal('BlockStatement', ast.body[9].body.type);
       assert.equal(1, ast.body[9].body.body.length);
       assert.equal('EmptyStatement', ast.body[9].body.body[0].type);
+      done();
+    });
 
+    it('while', function(done) {
       assert.equal('WhileStatement', ast.body[10].type);
       assert.equal('RelationalExpression', ast.body[10].test.type);
       assert.equal('<', ast.body[10].test.operator);
@@ -125,8 +135,10 @@ describe('expression', function() {
 
       done();
     });
+  });
 
-    it('for statement', function(done) {
+  describe('for statements', function() {
+    it('for lexical declarations', function(done) {
       assert.equal('ForStatement', ast.body[11].type);
       assert.equal('LexicalDeclaration', ast.body[11].init.type);
       assert.equal('a', ast.body[11].init.declarations[0].id.name);
@@ -140,6 +152,10 @@ describe('expression', function() {
       assert.equal('i', ast.body[11].update.operand.name);
       assert.equal(false, ast.body[11].update.prefix);
 
+      done();
+    });
+
+    it('for variable declarations', function(done) {
       assert.equal('ForStatement', ast.body[12].type);
       assert.equal('VariableStatement', ast.body[12].init.type);
       assert.equal(2, ast.body[12].init.declarations.length);
@@ -171,6 +187,10 @@ describe('expression', function() {
       assert.equal(null, ast.body[15].test);
       assert.equal('i', ast.body[15].update.name);
 
+      done();
+    });
+
+    it('for in', function(done) {
       assert.equal('ForInStatement', ast.body[16].type);
       assert.equal('i', ast.body[16].left.name);
       assert.equal('ArrayLiteral', ast.body[16].right.type);
@@ -198,6 +218,10 @@ describe('expression', function() {
       const tempAst = parser.parse('for (let a = (b in c); false;);');
       assert.equal('ForStatement', tempAst.body[0].type);
 
+      done();
+    });
+
+    it('for of', function(done) {
       assert.equal('ForOfStatement', ast.body[18].type);
       assert.equal('a', ast.body[18].left.name);
       assert.equal('ArrayLiteral', ast.body[18].right.type);
@@ -214,13 +238,15 @@ describe('expression', function() {
       assert.equal('b', ast.body[20].left.declarations[0].id.name);
       assert.equal(0, ast.body[20].right.elements.length);
 
+      done();
+    });
+
+    it('for initial test update', function(done) {
       assert.equal('ForStatement', ast.body[21].type);
       assert.equal('a', ast.body[21].init.name);
       assert.equal('b', ast.body[21].test.name);
       assert.equal('c', ast.body[21].update.name);
-      assert.equal('BlockStatement', ast.body[21].body.type);
-      assert.equal('EmptyStatement', ast.body[21].body.body[0].type);
-      assert.equal(1, ast.body[21].body.body.length);
+      assert.equal('EmptyStatement', ast.body[21].body.type);
 
       assert.equal('ForStatement', ast.body[22].type);
       assert.equal('a', ast.body[22].init.name);
@@ -256,9 +282,13 @@ describe('expression', function() {
       assert.equal(null, ast.body[26].update);
       assert.equal('BlockStatement', ast.body[26].body.type);
       assert.equal(0, ast.body[26].body.body.length);
-    });
 
-    it('switch statement', function(done) {
+      done();
+    });
+  });
+
+  describe('switch statements', function() {
+    it('switch 0 cases', function(done) {
       assert.equal('SwitchStatement', ast.body[27].type);
       assert.equal('cond', ast.body[27].discriminant.name);
       assert.equal(0, ast.body[27].cases.length);
@@ -267,11 +297,103 @@ describe('expression', function() {
       assert.equal('cond', ast.body[28].discriminant.name);
       assert.equal(1, ast.body[28].cases.length);
       assert.equal('SwitchCase', ast.body[28].cases[0].type);
+      assert.equal(1, ast.body[28].cases[0].test.value);
+      assert.equal('BlockStatement', ast.body[28].cases[0].consequent[0].type);
+      assert.equal(1, ast.body[28].cases[0].consequent[0].body.length);
+      assert.equal('BreakStatement', ast.body[28].cases[0].consequent[0].body[0].type);
 
-      // assert.equal('Literal', JSON.stringify(ast.body[28], null, 2));
-      // assert.equal('a', ast.body[28].cases[0].test.value);
       done();
     });
 
+    it('switch case and default', function(done) {
+      assert.equal('SwitchStatement', ast.body[29].type);
+      assert.equal('AdditiveExpression', ast.body[29].discriminant.type);
+      assert.equal('cond', ast.body[29].discriminant.left.name);
+      assert.equal(1, ast.body[29].discriminant.right.value);
+      assert.equal('a', ast.body[29].cases[0].test.name);
+      assert.equal('BlockStatement', ast.body[29].cases[0].consequent[0].type);
+      assert.equal(2, ast.body[29].cases.length);
+      assert.equal(2, ast.body[29].cases[0].consequent[0].body.length);
+
+      assert.equal('ExpressionStatement', ast.body[29].cases[0].consequent[0].body[0].type);
+      assert.equal('CallExpression', ast.body[29].cases[0].consequent[0].body[0].expression.type);
+      assert.equal('BreakStatement', ast.body[29].cases[0].consequent[0].body[1].type);
+      assert.equal(2, ast.body[29].cases[1].consequent.length);
+      assert.equal('ExpressionStatement', ast.body[29].cases[1].consequent[0].type);
+      assert.equal('foo', ast.body[29].cases[1].consequent[0].expression.name);
+      assert.equal('BreakStatement', ast.body[29].cases[1].consequent[1].type);
+      done();
+    });
+  });
+
+  describe('switch statements', function() {
+    it('with statement block', function(done) {
+      assert.equal('WithStatement', ast.body[30].type);
+      assert.equal('obj', ast.body[30].id.name);
+      assert.equal('BlockStatement', ast.body[30].body.type);
+      done();
+    });
+
+    it('with statement', function(done) {
+      assert.equal('WithStatement', ast.body[31].type);
+      assert.equal('obj', ast.body[31].id.name);
+      assert.equal('EmptyStatement', ast.body[31].body.type);
+      assert.equal('EmptyStatement', ast.body[32].type);
+      done();
+    });
+  });
+
+  describe('throw statements', function() {
+    it('throw expression', function(done) {
+      assert.equal('ThrowStatement', ast.body[33].type);
+      assert.equal('NewExpression', ast.body[33].params.type);
+      assert.equal('Error', ast.body[33].params.callee.name);
+      assert.equal(0, ast.body[33].params.params.length);
+
+      assert.equal('ThrowStatement', ast.body[34].type);
+      assert.equal('CoverParenthesizedExpression', ast.body[34].params.type);
+      assert.equal('FunctionExpression', ast.body[34].params.expressions[0].type);
+      assert.equal(null, ast.body[34].params.expressions[0].id);
+      assert.equal(2, ast.body[34].params.expressions[0].params.length);
+      assert.equal('BlockStatement', ast.body[34].params.expressions[0].body.type);
+      try{
+        parser.parse('throw\na;');
+      } catch(ex) {
+        assert.equal(true, ex instanceof Error);
+      }
+
+      done();
+    });
+  });
+
+  describe('try catch statements', function() {
+    it('try catch', function(done) {
+      assert.equal('TryStatement', ast.body[35].type);
+      assert.equal('BlockStatement', ast.body[35].block.type);
+      assert.equal('CatchClause', ast.body[35].handler.type);
+      assert.equal('ex', ast.body[35].handler.id.name);
+      assert.equal('BlockStatement', ast.body[35].handler.body.type);
+      assert.equal('EmptyStatement', ast.body[35].handler.body.body[0].type);
+      done();
+    });
+  });
+
+  describe('return statement', function() {
+    it('function return', function(done) {
+      assert.equal('FunctionDeclaration', ast.body[36].type);
+      assert.equal('ReturnStatement', ast.body[36].body[0].type);
+      assert.equal('ObjectLiteral', ast.body[36].body[0].params.type);
+      assert.equal(1, ast.body[36].body[0].params.properties.length);
+      assert.equal('name', ast.body[36].body[0].params.properties[0].key);
+      assert.equal('test', ast.body[36].body[0].params.properties[0].value.value);
+      done();
+    });
+    it('if return void', function(done) {
+      assert.equal('IfStatement', ast.body[37].body[0].type);
+      assert.equal('ReturnStatement', ast.body[37].body[0].consequent.body[0].type);
+      assert.equal('ReturnStatement', ast.body[37].body[0].consequent.body[0].type);
+      assert.equal(null, ast.body[37].body[0].consequent.body[0].params);
+      done();
+    });
   });
 });

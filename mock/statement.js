@@ -81,9 +81,8 @@ for (let b of []) {
 
 }
 
-for (a; b; c) {
+for (a; b; c)
   ;
-}
 
 for (a ; ; c) {
 
@@ -115,11 +114,13 @@ switch(cond) {
   }
 }
 
-switch(cond) {
+switch(cond + 1) {
   case a: {
+    console.log(a);
     break;
   }
   default:
+    foo;
     break;
 }
 
@@ -127,18 +128,28 @@ with(obj) {
   ;
 }
 
+with(obj)
+  ;
+;
+
 throw new Error();
 
-throw (function() {});
+throw (function(a, b) {});
 
 try {
 
 } catch(ex) {
-
+  ;
 }
 
 function foo() {
   return {
     name: 'test',
+  }
+}
+
+function foo() {
+  if (true) {
+    return;
   }
 }

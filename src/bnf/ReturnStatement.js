@@ -17,7 +17,7 @@ module.exports = {
         offset: yy.lexer.offset,
       });
     `,
-    '$$ = new (require(\'./ast/ReturnStatementNode\'))($1, { loc: this._$, yy })',
+    '$$ = new (require(\'./ast/ReturnStatementNode\'))($2, { loc: this._$, yy })',
   ],
   subRules: [
     require('./Expression_In'),
