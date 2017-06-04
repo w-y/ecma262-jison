@@ -5,27 +5,28 @@ function LeftHandSideExpressionNode(type, ...args) {
 }
 
 function NewExpressionNode(callee, parameters, ...args) {
-  LeftHandSideExpressionNode.call(this, 'NewExpressionNode', ...args);
+  LeftHandSideExpressionNode.call(this, 'NewExpression', ...args);
   this.callee = callee;
-  this.parameters = parameters;
+  this.params = parameters;
 }
 
 function CallExpressionNode(callee, parameters, ...args) {
-  LeftHandSideExpressionNode.call(this, 'CallExpressionNode', ...args);
+  LeftHandSideExpressionNode.call(this, 'CallExpression', ...args);
   this.callee = callee;
-  this.parameters = parameters;
+  this.params = parameters;
 }
 
 function SuperCallExpressionNode(callee, parameters, ...args) {
-  LeftHandSideExpressionNode.call(this, 'SuperCallExpressionNode', ...args);
+  LeftHandSideExpressionNode.call(this, 'SuperCallExpression', ...args);
   this.callee = callee;
-  this.parameters = parameters;
+  this.params = parameters;
 }
 
-function MemberExpressionNode(element, property, ...args) {
-  LeftHandSideExpressionNode.call(this, 'MemberExpressionNode', ...args);
+function MemberExpressionNode(element, property, computed, ...args) {
+  LeftHandSideExpressionNode.call(this, 'MemberExpression', ...args);
   this.element = element;
   this.property = property;
+  this.computed = computed;
 }
 
 exports.NewExpressionNode = NewExpressionNode;

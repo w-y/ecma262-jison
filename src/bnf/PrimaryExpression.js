@@ -11,7 +11,7 @@ module.exports = {
     'FunctionExpression',
   ],
   handlers: [
-    '$$ = $1;',
+    '$$ = new (require(\'./ast/ThisExpressionNode\'))({ loc: this._$, yy });',
     '$$ = $1;',
     '$$ = $1;',
     '$$ = $1;',

@@ -5,7 +5,7 @@ module.exports = {
     'Expression_In ;',
   ],
   handlers: [
-    '$$ = new (require(\'./ast/ExpressionStatement\').ExpressionStatementNode)($1, { loc: this._$, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/ExpressionStatement\').ExpressionStatementNode)($1, { loc: this._$, yy })',
   ],
   subRules: [
     require('./Expression_In'),

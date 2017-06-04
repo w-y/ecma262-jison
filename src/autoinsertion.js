@@ -1,17 +1,13 @@
-const fs = require('fs');
 const parser = require('./parser');
 const { isWhiteSpace, isLineTerminator } = require('./util');
 
 const { ParseError } = require('./error');
 
-const BITE_SIZE = 256;
-const values = [];
-
-let file = null;
-let readbytes = 0;
-
 function canApplyRule(source, ex) {
-  console.log(ex);
+  // lexical error
+  if (!ex.hash || !ex.hash.loc) {
+    return false;
+  }
   const token = ex.hash.token;
   const range = ex.hash.loc.range;
   let tokenOffset = range[1];
@@ -50,13 +46,11 @@ function canApplyRule(source, ex) {
   // of a do-while statement
   // TODO: only do-while
   if (source[prevPtr] === ')') {
-    console.log('rule 3');
     return tokenOffset;
   }
 
   // The offending token is separated from the previous token by at least one LineTerminator.
   if (isLineTerminator(source[prevPtr])) {
-    console.log('rule 2');
     return tokenOffset;
   }
   return -1;
@@ -79,9 +73,17 @@ function autoinsertion(source) {
     parser.parser.yy.autoInsertionOffset = null;
     const test = canApplyRule(s, ex);
     if (test > 0) {
+      // range should ajust by subtracting number of inserted semicolons
+      if (!parser.parser.yy.autoInsertionCount) {
+        parser.parser.yy.autoInsertionCount = 1;
+        parser.parser.yy.autoInsertions = [test + 1];
+      } else {
+        parser.parser.yy.autoInsertionCount += 1;
+        parser.parser.yy.autoInsertions.push(test + 1);
+      }
       parser.parser.yy.autoInsertionOffset = test + 1;
+
       const newSrc = `${src.substring(0, test)};${src.substring(test)}`;
-      console.log(newSrc);
       return newSrc;
     }
     return false;
@@ -90,8 +92,7 @@ function autoinsertion(source) {
     try {
       res = parser.parse(src);
       if (res) {
-        console.log(res);
-        break;
+        return res;
       }
     } catch (ex) {
       if (!parser.parser.yy.originEx) {
@@ -99,31 +100,10 @@ function autoinsertion(source) {
       }
       src = applyRule(src, ex);
       if (!src) {
-        console.log(parser.parser.yy.originEx);
-        break;
+        throw parser.parser.yy.originEx;
       }
     }
   }
 }
 
-function readsome() {
-  const stats = fs.fstatSync(file); // yes sometimes async does not make sense!
-  if (stats.size < readbytes + 1) {
-    autoinsertion(values.join(''));
-  } else {
-    fs.read(file, new Buffer(BITE_SIZE), 0, BITE_SIZE, readbytes, (err, bytecount, buff) => {
-      if (err) {
-        throw new Error(err);
-      }
-      values.push(buff.toString('utf-8', 0, bytecount));
-      readbytes += bytecount;
-      process.nextTick(readsome);
-    });
-  }
-}
-
-fs.open('./testtest.js', 'r', (err, fd) => {
-  file = fd;
-  readsome();
-});
-
+module.exports = autoinsertion;

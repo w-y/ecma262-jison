@@ -7,7 +7,7 @@ module.exports = {
   ],
   handlers: [
     '$$ = [$1]',
-    '$$ = $1.concat($3)',
+    '$$ = $1.concat([$3])',
   ],
   subRules: [
     require('./VariableDeclaration_In'),

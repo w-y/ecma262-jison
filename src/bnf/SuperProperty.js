@@ -7,10 +7,10 @@ module.exports = {
   ],
   handlers: [
     `$$ =
-      new (require('./ast/LeftHandSideExpression').MemberExpressionNode)(new (require('./ast/SuperNode')($1)), $3, { loc: this._$, lexer: yy.lexer })
+      new (require('./ast/LeftHandSideExpression').MemberExpressionNode)(new (require('./ast/SuperNode')($1)), $3, { loc: this._$, yy })
     `,
     `$$ =
-      new (require('./ast/LeftHandSideExpression').MemberExpressionNode)(new (require('./ast/SuperNode')($1)), $3, { loc: this._$, lexer: yy.lexer })
+      new (require('./ast/LeftHandSideExpression').MemberExpressionNode)(new (require('./ast/SuperNode')($1)), $3, { loc: this._$, yy })
     `,
   ],
   subRules: [

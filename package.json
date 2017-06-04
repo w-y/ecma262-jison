@@ -4,8 +4,8 @@
   "description": "ecma262 implementation in jison",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint --fix ./src"
+    "lint": "eslint --fix ./src",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -31,6 +31,7 @@
     "eslint-config-airbnb-base": "^11.1.1",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
-    "eslint-plugin-react": "^6.10.0"
+    "eslint-plugin-react": "^6.10.0",
+    "mocha": "^3.3.0"
   }
 }

@@ -5,7 +5,7 @@ module.exports = {
     'new . target',
   ],
   handlers: [
-    '$$ = new (require(\'./ast/MetaPropertyNode\'))($1, $3, { loc: this._$, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/MetaPropertyNode\'))($1, $3, { loc: this._$, yy })',
   ],
   subRules: [
   ],

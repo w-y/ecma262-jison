@@ -5,7 +5,7 @@ module.exports = {
     'super Arguments',
   ],
   handlers: [
-    '$$ = new (require(\'./ast/LeftHandSideExpression\').SuperCallExpressionNode)($2, [], { loc: this._$, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/LeftHandSideExpression\').SuperCallExpressionNode)($2, [], { loc: this._$, yy })',
   ],
   subRules: [
     require('./Arguments'),

@@ -14,7 +14,7 @@ function LiteralNode(value, ...args) {
 }
 
 function NullLiteralNode(...args) {
-  LiteralNode.call(this, null, ...args);
+  LiteralNode.call(this, 'null', ...args);
 }
 
 function BooleanLiteralNode(value, ...args) {

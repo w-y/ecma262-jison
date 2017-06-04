@@ -5,7 +5,7 @@ module.exports = {
     'switch ( Expression_In ) CaseBlock',
   ],
   handlers: [
-    '$$ = new (require(\'./ast/SwitchStatement\').SwitchStatementNode)($3, $5, { loc: this._$, lexer: yy.lexer })',
+    '$$ = new (require(\'./ast/SwitchStatement\').SwitchStatementNode)($3, $5, { loc: this._$, yy })',
   ],
   subRules: [
     require('./Expression_In'),

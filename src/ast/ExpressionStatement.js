@@ -1,7 +1,7 @@
 const BaseNode = require('./Base');
 
 function ExpressionStatementNode(expression, ...args) {
-  BaseNode.call(this, Object.assign({}, { type: 'ExpressionStatementNode' }, ...args));
+  BaseNode.call(this, Object.assign({}, { type: 'ExpressionStatement' }, ...args));
 
   this.expression = expression;
 }
