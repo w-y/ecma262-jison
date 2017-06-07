@@ -1,14 +1,17 @@
-const parser = require('./parser');
+const parser = require('./parser3');
 const { isWhiteSpace, isLineTerminator } = require('./util');
 
 const { ParseError } = require('./error');
 
 
 /**
- * "The JS Interpreter finds an error, adds a semicolon, and runs the whole thing again." -- Doug Crockford
- * When parse again, we need to reset all the flags
+ * "
+ *  The JS Interpreter finds an error,
+ *  adds a semicolon,
+ *  and runs the whole thing again."
+ *                                -- Doug Crockford
+ * when parse again, we need to reset all the flags
  */
-
 function reloadParser() {
   parser.parser.yy.autoInsertions = [];
   parser.parser.yy.autoInsertionCount = 0;
@@ -85,10 +88,11 @@ function autoinsertion(source) {
     const test = canApplyRule(s, ex);
 
     if (test > 0) {
-
       // NOTICE: range should be ajusted by subtracting number of inserted semicolons
       // range is [a, b) (>=a && < b), so plus one to compare with range[1]
-      // test + 1 is range upper boundery, test is semicolon self and test - 1 is the char before insertion 
+      // test + 1 is range upper boundery
+      // test is semicolon self
+      // test - 1 is the char before insertion
 
       if (!parser.parser.yy.autoInsertionCount) {
         parser.parser.yy.autoInsertionCount = 1;

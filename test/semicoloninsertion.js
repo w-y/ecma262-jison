@@ -62,8 +62,6 @@ describe('automatic semicolon insertion', function() {
       const ast = parser.parse('function foo() {\n  return\n  a + b\n}\n');
       assert.equal('FunctionDeclaration', ast.body[0].type);
 
-      console.log(JSON.stringify(ast.body[0], null, 2));
-
       assert.equal(0, ast.body[0].range[0]);
       assert.equal(35, ast.body[0].range[1]);
 

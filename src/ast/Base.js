@@ -1,4 +1,4 @@
-const { isLineTerminator, isWhiteSpace } = require('../util');
+const { isLineTerminator } = require('../util');
 
 function BaseNode({
   type,
@@ -22,9 +22,8 @@ function BaseNode({
 
     // NOTICE: need to fix range after auto semicolon insertion
     // subtract insertion offset
-    let rangeStart = range[0];
-    let rangeEnd = range[1];
-    let semicolonFlag = false;
+    const rangeStart = range[0];
+    const rangeEnd = range[1];
     let countStart = 0;
     let countEnd = 0;
 
@@ -41,7 +40,8 @@ function BaseNode({
           }
           if (yy.autoInsertions[i] === rangeEnd) {
             // NOTICE: [rangeStart, ... 'INSERT SEMICOLON', rangeEnd]
-            // Here we neet to jump over the LF, rangeEnd - 1 is the offset where we insert semicolon,
+            // here we neet to jump over the LF,
+            // rangeEnd - 1 is the offset where we insert semicolon,
             // rangeEnd - 2 is the character before insertion
 
             const ptr = rangeEnd - 2;
