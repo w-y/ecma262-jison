@@ -1,4 +1,4 @@
-const parser = require('./parser3');
+const parser = require('./parser');
 const { isWhiteSpace, isLineTerminator } = require('./util');
 
 const { ParseError } = require('./error');
