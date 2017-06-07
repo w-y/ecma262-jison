@@ -3,7 +3,7 @@ const parser = require('../src/index');
 
 const { createFileHelper } = require('../src/test/helpers');
 
-describe('iteral', function() {
+describe('literal', function() {
   let ast = null;
 
   before(function(done) {

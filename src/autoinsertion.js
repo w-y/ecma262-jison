@@ -3,6 +3,17 @@ const { isWhiteSpace, isLineTerminator } = require('./util');
 
 const { ParseError } = require('./error');
 
+
+/**
+ * "The JS Interpreter finds an error, adds a semicolon, and runs the whole thing again." -- Doug Crockford
+ * When parse again, we need to reset all the flags
+ */
+
+function reloadParser() {
+  parser.parser.yy.autoInsertions = [];
+  parser.parser.yy.autoInsertionCount = 0;
+}
+
 function canApplyRule(source, ex) {
   // lexical error
   if (!ex.hash || !ex.hash.loc) {
@@ -20,7 +31,7 @@ function canApplyRule(source, ex) {
   }
   // NOTICE: the end of the input stream of tokens
   if (token === 1) {
-    return tokenOffset;
+    return tokenOffset - 1;
   }
   // The offending token is }
   if (token === '}') {
@@ -72,8 +83,13 @@ function autoinsertion(source) {
   function applyRule(s, ex) {
     parser.parser.yy.autoInsertionOffset = null;
     const test = canApplyRule(s, ex);
+
     if (test > 0) {
-      // range should ajust by subtracting number of inserted semicolons
+
+      // NOTICE: range should be ajusted by subtracting number of inserted semicolons
+      // range is [a, b) (>=a && < b), so plus one to compare with range[1]
+      // test + 1 is range upper boundery, test is semicolon self and test - 1 is the char before insertion 
+
       if (!parser.parser.yy.autoInsertionCount) {
         parser.parser.yy.autoInsertionCount = 1;
         parser.parser.yy.autoInsertions = [test + 1];
@@ -92,6 +108,7 @@ function autoinsertion(source) {
     try {
       res = parser.parse(src);
       if (res) {
+        reloadParser();
         return res;
       }
     } catch (ex) {
@@ -100,6 +117,7 @@ function autoinsertion(source) {
       }
       src = applyRule(src, ex);
       if (!src) {
+        reloadParser();
         throw parser.parser.yy.originEx;
       }
     }

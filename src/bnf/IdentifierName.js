@@ -6,8 +6,8 @@ module.exports = {
     'IdentifierName IdentifierPart',
   ],
   handlers: [
-    '$$ = $1;',
-    '$$ = $1 + $2;',
+    '$$ = new (require(\'./ast/Identifier\').IdentifierNode)($1, { loc: this._$, yy })',
+    '$1.value += $2; $$ = $1;',
   ],
   subRules: [
     require('./IdentifierStart'),
