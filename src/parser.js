@@ -127,7 +127,7 @@ case 1:
         }
       }
       return this.$;
-    
+
 break;
 case 2: case 5: case 7: case 8: case 9: case 10: case 11: case 12: case 13: case 14: case 15: case 16: case 17: case 18: case 19: case 22: case 27: case 33: case 35: case 37: case 39: case 50: case 58: case 59: case 69: case 70: case 71: case 72: case 73: case 74: case 75: case 76: case 79: case 80: case 81: case 82: case 85: case 86: case 87: case 88: case 89: case 90: case 100: case 102: case 104: case 105: case 108: case 110: case 115: case 116: case 118: case 120: case 193: case 194: case 195: case 196: case 197: case 198: case 199: case 200: case 201: case 202: case 203: case 204: case 205: case 206: case 207: case 208: case 215: case 219: case 220: case 221: case 226: case 228: case 232: case 233: case 271: case 277: case 279: case 281: case 283: case 295: case 333: case 334: case 357:
 this.$ = $$[$0];
@@ -143,20 +143,25 @@ this.$ = $$[$0]
 break;
 case 20:
 
-      if (yy.autoInsertionOffset && yy.autoInsertionOffset === yy.lexer.offset) {
-        throw new (require('./error').ParseError)('a semicolon is never inserted automatically if the semicolon would then be parsed as an empty statement', {
-          text: $$[$0],
-          token: $$[$0],
-          line: yy.lexer.yylloc.first_line,
-          loc: yy.lexer.yylloc,
-          failedAutoSemicolon: true,
-        });
+      if (yy.autoInsertions) {
+        for (let i = 0; i < yy.autoInsertions.length; i++) {
+          const autoInsertionOffset = yy.autoInsertions[i];
+          if (autoInsertionOffset && autoInsertionOffset === this._$.range[1]) {
+            throw new (require('./error').ParseError)('a semicolon is never inserted automatically if the semicolon would then be parsed as an empty statement', {
+              text: $$[$0],
+              token: $$[$0],
+              line: yy.lexer.yylloc.first_line,
+              loc: yy.lexer.yylloc,
+              failedAutoSemicolon: true,
+            });
+          }
+        }
       }
       this.$ = new (require('./ast/EmptyStatement').EmptyStatementNode)({
         loc: this._$,
         yy,
       });
-    
+
 break;
 case 21:
 this.$ = new (require('./ast/ExpressionStatement').ExpressionStatementNode)($$[$0-1], { loc: this._$, yy })
@@ -221,7 +226,7 @@ break;
 case 64:
 
       this.$ = new (require('./ast/LeftHandSideExpression').MemberExpressionNode)($$[$0-2], $$[$0], false, { loc: this._$, yy });
-    
+
 break;
 case 67:
 this.$ = new (require('./ast/LeftHandSideExpression').NewExpressionNode)($$[$0-1], $$[$0], { loc: this._$, yy })
@@ -233,7 +238,7 @@ case 77:
 this.$ = new (require('./ast/Identifier').IdentifierNode)($$[$0], { loc: this._$, yy })
 break;
 case 78:
-$$[$0-1].name += $$[$0]; 
+$$[$0-1].name += $$[$0];
 $$[$0-1].range[1]++;
 $$[$0-1].lastColumn++;
 this.$ = $$[$0-1];
@@ -438,13 +443,13 @@ this.$ = new (require('./ast/IterationStatement').WhileStatementNode)($$[$0-2], 
 break;
 case 240: case 366:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)($$[$0-5], $$[$0-4], $$[$0-2], $$[$0], { loc: this._$, yy })
-    
+
 break;
 case 241: case 367:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-8].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-8].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)(
         // NOTICE:
         // we need to merge the VAR's loc and VariableDeclarator's to get VaribleStatement's range
@@ -459,23 +464,23 @@ case 241: case 367:
           last_column:  $$[$0-6][$$[$0-6].length-1].lastColumnu,
           range: [$$[$0-7].range[0], $$[$0-6][$$[$0-6].length-1].range[1]],
         }, yy }), $$[$0-4], $$[$0-2], $$[$0], { loc: this._$, yy });
-    
+
 break;
 case 242: case 243: case 368: case 369:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForInStatementNode)($$[$0-4], $$[$0-2], $$[$0], { loc: this._$, yy })
-    
+
 break;
 case 244: case 246: case 370: case 372:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForOfStatementNode)($$[$0-4], $$[$0-2], $$[$0], { loc: this._$, yy })
-    
+
 break;
 case 245:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForOfStatementNode)(
         // NOTICE:
         // we need to merge the VAR's loc and VariableDeclarator's to get VaribleStatement's range
@@ -487,59 +492,59 @@ case 245:
           last_column:  $$[$0-4].lastColumnu,
           range: [$$[$0-5].range[0], $$[$0-4].range[1]],
         }, yy }), $$[$0-2], $$[$0], { loc: this._$, yy });
-    
+
 break;
 case 247: case 373:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-7].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-7].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)($$[$0-6], $$[$0-4], $$[$0-2], $$[$0], { loc: this._$, yy })
-    
+
 break;
 case 248: case 374:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)($$[$0-5], null, $$[$0-2], $$[$0], { loc: this._$, yy })
-    
+
 break;
 case 249: case 375:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)($$[$0-4], null, null, $$[$0], { loc: this._$, yy })
-    
+
 break;
 case 250: case 376:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)($$[$0-5], $$[$0-3], null, $$[$0], { loc: this._$, yy })
-    
+
 break;
 case 251: case 377:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)(null, $$[$0-4], $$[$0-2], $$[$0], { loc: this._$, yy })
-    
+
 break;
 case 252: case 378:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)(null, null, $$[$0-2], $$[$0], { loc: this._$, yy })
-    
+
 break;
 case 253: case 379:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-4].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-4].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)(null, null, null, $$[$0], { loc: this._$, yy })
-    
+
 break;
 case 254: case 380:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)(null, $$[$0-3], null, $$[$0], { loc: this._$, yy })
-    
+
 break;
 case 255: case 381:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-7].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-7].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)(
         new (require('./ast/VariableStatement').VariableStatementNode)($$[$0-5], { loc: {
           first_line: $$[$0-6].first_line,
@@ -548,11 +553,11 @@ case 255: case 381:
           last_column:  $$[$0-5][$$[$0-5].length-1].lastColumnu,
           range: [$$[$0-6].range[0], $$[$0-5][$$[$0-5].length-1].range[1]],
         }, yy }), null, $$[$0-2], $$[$0], { loc: this._$, yy });
-    
+
 break;
 case 256: case 382:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-7].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-7].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)(
         new (require('./ast/VariableStatement').VariableStatementNode)($$[$0-5], { loc: {
           first_line: $$[$0-6].first_line,
@@ -561,11 +566,11 @@ case 256: case 382:
           last_column:  $$[$0-5][$$[$0-5].length-1].lastColumnu,
           range: [$$[$0-6].range[0], $$[$0-5][$$[$0-5].length-1].range[1]],
         }, yy }), $$[$0-3], null, $$[$0], { loc: this._$, yy });
-    
+
 break;
 case 257: case 383:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)(
         new (require('./ast/VariableStatement').VariableStatementNode)($$[$0-4], { loc: {
           first_line: $$[$0-5].first_line,
@@ -574,25 +579,25 @@ case 257: case 383:
           last_column:  $$[$0-4][$$[$0-4].length-1].lastColumnu,
           range: [$$[$0-5].range[0], $$[$0-4][$$[$0-4].length-1].range[1]],
         }, yy }), null, null, $$[$0], { loc: this._$, yy });
-    
+
 break;
 case 258: case 384:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)($$[$0-4], null, $$[$0-2], $$[$0], { loc: this._$, yy })
-    
+
 break;
 case 259: case 385:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)($$[$0-4], $$[$0-3], null, $$[$0], { loc: this._$, yy })
-    
+
 break;
 case 260: case 386:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-4].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-4].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)($$[$0-3], null, null, $$[$0], { loc: this._$, yy })
-    
+
 break;
 case 261: case 336:
 this.$ = new (require('./ast/LexicalDeclaration').LexicalDeclarationNode)($$[$0-2], $$[$0-1], { loc: this._$, yy })
@@ -654,7 +659,7 @@ case 314:
         loc: yy.lexer.yylloc,
         offset: yy.lexer.offset,
       });
-    
+
 break;
 case 315:
 this.$ = new (require('./ast/ContinueStatementNode'))($$[$0-1], { loc: this._$, yy });
@@ -671,7 +676,7 @@ case 317:
         loc: yy.lexer.yylloc,
         offset: yy.lexer.offset,
       });
-    
+
 break;
 case 318:
 this.$ = new (require('./ast/BreakStatementNode'))($$[$0-1], { loc: this._$, yy })
@@ -691,7 +696,7 @@ case 321:
         loc: yy.lexer.yylloc,
         offset: yy.lexer.offset,
       });
-    
+
 break;
 case 322:
 this.$ = new (require('./ast/DebuggerStatementNode'))({ loc: this._$, yy })
@@ -720,7 +725,7 @@ case 331:
         loc: yy.lexer.yylloc,
         offset: yy.lexer.offset,
       });
-    
+
 break;
 case 332:
 this.$ = new (require('./ast/ReturnStatementNode'))($$[$0-1], { loc: this._$, yy })
@@ -728,12 +733,12 @@ break;
 case 342:
 this.$ =
       new (require('./ast/LeftHandSideExpression').MemberExpressionNode)(new (require('./ast/SuperNode')($$[$0-3])), $$[$0-1], { loc: this._$, yy })
-    
+
 break;
 case 343:
 this.$ =
       new (require('./ast/LeftHandSideExpression').MemberExpressionNode)(new (require('./ast/SuperNode')($$[$0-2])), $$[$0], { loc: this._$, yy })
-    
+
 break;
 case 344:
 this.$ = new (require('./ast/MetaPropertyNode'))($$[$0-2], $$[$0], { loc: this._$, yy })
@@ -764,7 +769,7 @@ this.$ = new (require('./ast/LeftHandSideExpression').SuperCallExpressionNode)($
 break;
 case 371:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForOfStatementNode)(
         // NOTICE:
         // we need to merge the VAR's loc and VariableDeclarator's to get VaribleStatement's range
@@ -776,7 +781,7 @@ case 371:
           last_column:  $$[$0-4].lastColumnu,
           range: [$$[$0-5].range[0], $$[$0-4].range[1]],
         }, yy }), $$[$0-2], $$[$0], { loc: this._$, yy });
-    
+
 break;
 }
 },
@@ -1264,24 +1269,24 @@ case 0:
     this.popState();
     require('./lex/comment').onCommentEnd(this, 'MultiLine', yy_.yylloc.last_line, yy_.yylloc.last_column, yy_.yylloc.range[1]);
     return '';
-  
+
 break;
 case 1:
     this.begin('multi_line_comment_start');
     require('./lex/comment').onCommentStart(this, 'MultiLine', yy_.yylloc.first_line, yy_.yylloc.first_column, yy_.yylloc.range[0]);
     return '';
-  
+
 break;
 case 2:
     require('./lex/comment').onComment(this, this.match);
     return '';
-  
+
 break;
 case 3:
     this.begin('multi_line_comment_post_asterisk_start');
     require('./lex/comment').onComment(this, this.match);
     return '';
-  
+
 break;
 case 4:
     this.popState();
@@ -1297,13 +1302,13 @@ case 4:
       // MultiLineNotForwardSlashOrAsteriskChar
     }
     return '';
-  
+
 break;
 case 5:
     this.begin('single_line_comment_start');
     require('./lex/comment').onCommentStart(this, 'SingleLine', yy_.yylloc.first_line, yy_.yylloc.first_column, yy_.yylloc.range[0]);
     return '';
-  
+
 break;
 case 6:
     // SourceCharacterbut not LineTerminator
@@ -1311,414 +1316,414 @@ case 6:
     require('./lex/comment').onCommentEnd(this, 'SingleLine', yy_.yylloc.first_line, yy_.yylloc.first_column, yy_.yylloc.range[0]);
 
     return '';
-  
+
 break;
 case 7:
     require('./lex/comment').onComment(this, this.match);
     return '';
-  
+
 break;
 case 8:
     return require('./util').parseString.call(this, 'SingleStringCharacter');
-  
+
 break;
 case 9:
     return require('./util').parseString.call(this, 'SingleStringCharacter');
-  
+
 break;
 case 10:
    return require('./util').parseEscapeString.call(this, this.match);
-  
+
 break;
 case 11:
     return require('./util').parseEscapeStringCharacter.call(this, this.match);
-  
+
 break;
 case 12:
     this.begin('single_string_start');
     return 97;
-  
+
 break;
 case 13:
     return require('./util').parseString.call(this, 'DoubleStringCharacter');
-  
+
 break;
 case 14:
     return require('./util').parseString.call(this, 'DoubleStringCharacter');
-  
+
 break;
 case 15:
    return require('./util').parseEscapeString.call(this, this.match);
-  
+
 break;
 case 16:
     return require('./util').parseEscapeStringCharacter.call(this, this.match);
-  
+
 break;
 case 17:
     this.begin('double_string_start');
     return 100;
-  
+
 break;
 case 18:
     return require('./util').parseToken.call(this, this.match);
-  
+
 break;
 case 19:
     return require('./util').parseToken.call(this, this.match);
-  
+
 break;
 case 20:
     return require('./util').parseToken.call(this, this.match);
-  
+
 break;
 case 21:
     return require('./util').parseToken.call(this, this.match);
-  
+
 break;
 case 22:
     return require('./util').parseToken.call(this, this.match);
-  
+
 break;
 case 23:
     return require('./util').parseToken.call(this, this.match);
-  
+
 break;
 case 24:
     return require('./util').parseToken.call(this, this.match);
-  
+
 break;
 case 25:
     return require('./util').parseToken.call(this, this.match, 'ZWNJ');
-  
+
 break;
 case 26:
     return require('./util').parseToken.call(this, this.match, 'ZWJ');
-  
+
 break;
 case 27:
     return require('./util').parseToken.call(this, this.match);
-  
+
 break;
 case 28:
     return require('./util').parseKeyword.call(this, this.match, 'BooleanLiteral');
-  
+
 break;
 case 29:
     return require('./util').parseKeyword.call(this, this.match, 'BooleanLiteral');
-  
+
 break;
 case 30:
     return require('./util').parseKeyword.call(this, this.match, 'this');
-  
+
 break;
 case 31:
     return require('./util').parseKeyword.call(this, this.match, 'NullLiteral');
-  
+
 break;
 case 32:
     return require('./util').parseKeyword.call(this, this.match, 'LetOrConst');
-  
+
 break;
 case 33:
     return require('./util').parseKeyword.call(this, this.match, 'LetOrConst');
-  
+
 break;
 case 34:
     return require('./util').parseKeyword.call(this, this.match);
-  
+
 break;
 case 35:
     return require('./util').parseKeyword.call(this, this.match);
-  
+
 break;
 case 36:
     return require('./util').parseKeyword.call(this, this.match);
-  
+
 break;
 case 37:
     return require('./util').parseKeyword.call(this, this.match);
-  
+
 break;
 case 38:
     return require('./util').parseKeyword.call(this, this.match);
-  
+
 break;
 case 39:
     return require('./util').parseKeyword.call(this, this.match);
-  
+
 break;
 case 40:
     return require('./util').parseKeyword.call(this, this.match, 'CONTINUE_LF');
-  
+
 break;
 case 41:
     return require('./util').parseKeyword.call(this, this.match, 'BREAK_LF');
-  
+
 break;
 case 42:
     return require('./util').parseKeyword.call(this, this.match);
-  
+
 break;
 case 43:
     return require('./util').parseKeyword.call(this, this.match);
-  
+
 break;
 case 44:
     this.popState();
     return require('./util').parseKeyword.call(this, this.match);
-  
+
 break;
 case 45:
     this.popState();
     return require('./util').parseKeyword.call(this, this.match, 'FUNCTION');
-  
+
 break;
 case 46:
     return require('./util').parseKeyword.call(this, this.match);
-  
+
 break;
 case 47:
     this.begin('case_start');
     return require('./util').parseKeyword.call(this, this.match);
-  
+
 break;
 case 48:
     this.begin('case_start');
     return require('./util').parseKeyword.call(this, this.match);
-  
+
 break;
 case 49:
     return require('./util').parseKeyword.call(this, this.match);
-  
+
 break;
 case 50:
     return require('./util').parseKeyword.call(this, this.match, 'THROW_LF');
-  
+
 break;
 case 51:
     return require('./util').parseKeyword.call(this, this.match);
-  
+
 break;
 case 52:
     return require('./util').parseKeyword.call(this, this.match);
-  
+
 break;
 case 53:
     return require('./util').parseKeyword.call(this, this.match);
-  
+
 break;
 case 54:
     return require('./util').parseKeyword.call(this, this.match);
-  
+
 break;
 case 55:
     return require('./util').parseKeyword.call(this, this.match);
-  
+
 break;
 case 56:
     return require('./util').parseKeyword.call(this, this.match, 'RETURN_LF');
-  
+
 break;
 case 57:
     return require('./util').parseKeyword.call(this, this.match);
-  
+
 break;
 case 58:
     return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
-  
+
 break;
 case 59:
     return require('./util').parseOperator.call(this, this.match, 'EqualityOperator');
-  
+
 break;
 case 60:
     return require('./util').parseOperator.call(this, this.match, 'EqualityOperator');
-  
+
 break;
 case 61:
     return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
-  
+
 break;
 case 62:
     return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
-  
+
 break;
 case 63:
     return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
-  
+
 break;
 case 64:
     return require('./util').parseOperator.call(this, this.match, 'ShiftOperator');
-  
+
 break;
 case 65:
     return require('./util').parseOperator.call(this, this.match, 'EqualityOperator');
-  
+
 break;
 case 66:
     return require('./util').parseOperator.call(this, this.match, 'EqualityOperator');
-  
+
 break;
 case 67:
       return require('./util').parseOperator.call(this, this.match, 'UpdateOperator');
-    
+
 break;
 case 68:
       return require('./util').parseOperator.call(this, this.match, 'UpdateOperator');
-    
+
 break;
 case 69:
     return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
-  
+
 break;
 case 70:
     return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
-  
+
 break;
 case 71:
     return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
-  
+
 break;
 case 72:
     return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
-  
+
 break;
 case 73:
     return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
-  
+
 break;
 case 74:
     return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
-  
+
 break;
 case 75:
     return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
-  
+
 break;
 case 76:
     return require('./util').parseOperator.call(this, this.match, 'AssignmentOperator');
-  
+
 break;
 case 77:
     return require('./util').parseOperator.call(this, this.match, 'RelationalOperator');
-  
+
 break;
 case 78:
     return require('./util').parseOperator.call(this, this.match, 'RelationalOperator');
-  
+
 break;
 case 79:
     return require('./util').parseOperator.call(this, this.match);
-  
+
 break;
 case 80:
     return require('./util').parseOperator.call(this, this.match);
-  
+
 break;
 case 81:
     return require('./util').parseOperator.call(this, this.match);
-  
+
 break;
 case 82:
     return require('./util').parseOperator.call(this, this.match, 'ShiftOperator');
-  
+
 break;
 case 83:
     return require('./util').parseOperator.call(this, this.match, 'ShiftOperator');
-  
+
 break;
 case 84:
     return require('./util').parseOperator.call(this, this.match);
-  
+
 break;
 case 85:
     return require('./util').parseOperator.call(this, this.match);
-  
+
 break;
 case 86:
     return require('./util').parseOperator.call(this, this.match);
-  
+
 break;
 case 87:
     return require('./util').parseOperator.call(this, this.match);
-  
+
 break;
 case 88:
     return require('./util').parseOperator.call(this, this.match, 'UnaryOperator');
-  
+
 break;
 case 89:
     return require('./util').parseOperator.call(this, this.match, 'RelationalOperator');
-  
+
 break;
 case 90:
     return require('./util').parseOperator.call(this, this.match, 'RelationalOperator');
-  
+
 break;
 case 91:
     return require('./util').parseOperator.call(this, this.match, 'AdditiveOperator');
-  
+
 break;
 case 92:
     return require('./util').parseOperator.call(this, this.match, 'AdditiveOperator');
-  
+
 break;
 case 93:
     return require('./util').parseOperator.call(this, this.match, 'UnaryOperator');
-  
+
 break;
 case 94:
     return require('./util').parseOperator.call(this, this.match, 'MultiplicativeOperator');
-  
+
 break;
 case 95:
     return require('./util').parseOperator.call(this, this.match, 'MultiplicativeOperator');
-  
+
 break;
 case 96:
     return require('./util').parseOperator.call(this, this.match);
-  
+
 break;
 case 97:
     return require('./util').parseOperator.call(this, this.match, '=');
-  
+
 break;
 case 98:
     return require('./util').parseOperator.call(this, this.match);
-  
+
 break;
 case 99:
     return require('./util').parseOperator.call(this, this.match);
-  
+
 break;
 case 100:
     return require('./util').parseOperator.call(this, this.match);
-  
+
 break;
 case 101:
     return require('./util').parseOperator.call(this, this.match);
-  
+
 break;
 case 102:
     return require('./util').parseOperator.call(this, this.match);
-  
+
 break;
 case 103:
     return require('./util').parseOperator.call(this, this.match);
-  
+
 break;
 case 104:
     return require('./util').parseOperator.call(this, this.match);
-  
+
 break;
 case 105:
     return require('./util').parseOperator.call(this, this.match, 'BRACE_START');
-  
+
 break;
 case 106:
     return require('./util').parseOperator.call(this, this.match);
-  
+
 break;
 case 107:
     this.__temp__ = require('./util').parseOperator.call(this, this.match);
@@ -1726,57 +1731,57 @@ case 107:
       this.popState();
     }
     return this.__temp__;
-  
+
 break;
 case 108:
     return require('./util').parseOperator.call(this, this.match);
-  
+
 break;
 case 109:
     return require('./util').parseOperator.call(this, this.match);
-  
+
 break;
 case 110:
     return require('./util').parseKeyword.call(this, this.match, 'RelationalOperator');
-  
+
 break;
 case 111:
     return require('./util').parseKeyword.call(this, this.match, 'UnaryOperator');
-  
+
 break;
 case 112:
     return require('./util').parseKeyword.call(this, this.match, 'UnaryOperator');
-  
+
 break;
 case 113:
     return require('./util').parseKeyword.call(this, this.match, 'UnaryOperator');
-  
+
 break;
 case 114:
     return require('./util').parseKeyword.call(this, this.match);
-  
+
 break;
 case 115:
     return require('./util').parseKeyword.call(this, this.match);
-  
+
 break;
 case 116:
     this.begin('new_target');
     return require('./util').parseKeyword.call(this, this.match);
-  
+
 break;
 case 117:
     return 66;
-  
+
 break;
 case 118:
     this.popState();
     return 225;
-  
+
 break;
 case 119:
       return require('./util').parseKeyword.call(this, this.match);
-    
+
 break;
 case 120:
     {
@@ -1812,21 +1817,21 @@ case 120:
           return 66;
       }
     }
-  
+
 break;
 case 121:
     return 115;
-  
+
 break;
 case 122:
     this.begin('decimal_digit_start');
     return 113;
-  
+
 break;
 case 123:
     this.begin('decimal_digit_start');
     return 114;
-  
+
 break;
 case 124:
     if (!this.__unicode_counter) { this.__unicode_counter = 0; }
@@ -1839,15 +1844,15 @@ case 124:
       }
     }
     return 87;
-  
+
 break;
 case 125:
     return require('./util').parseIdentifier.call(this, this.match);
-  
+
 break;
 case 126:
     return require('./util').parseIdentifier.call(this, this.match);
-  
+
 break;
 case 127:
     if (this.topState() === 'identifier_start') {
@@ -1858,16 +1863,16 @@ case 127:
       this.begin('identifier_start_unicode');
       return 85;
     }
-  
+
 break;
 case 128:
     return 88;
-  
+
 break;
 case 129:
     this.begin('identifier_start');
     return 81;
-  
+
 break;
 }
 },
@@ -1901,4 +1906,4 @@ if (typeof module !== 'undefined' && require.main === module) {
   exports.main(process.argv.slice(1));
 }
 }
-  
+

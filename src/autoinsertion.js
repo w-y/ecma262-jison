@@ -15,6 +15,7 @@ const { ParseError } = require('./error');
 function reloadParser() {
   parser.parser.yy.autoInsertions = [];
   parser.parser.yy.autoInsertionCount = 0;
+  parser.parser.yy.autoInsertionOffset = null;
 }
 
 function canApplyRule(source, ex) {
@@ -104,6 +105,7 @@ function autoinsertion(source) {
       parser.parser.yy.autoInsertionOffset = test + 1;
 
       const newSrc = `${src.substring(0, test)};${src.substring(test)}`;
+      // console.log(newSrc);
       return newSrc;
     }
     return false;

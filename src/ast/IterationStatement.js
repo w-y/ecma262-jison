@@ -3,14 +3,17 @@ const BaseNode = require('./Base');
 const errorMsg = 'semicolon can\'t become one of the two semicolons in the header of a for statement';
 
 function checkForAutoSemicolonInsertion(
-  autoInsertionOffset, leftParenthesisRange, rightParenthesisRange, loc) {
-  if (leftParenthesisRange && rightParenthesisRange && autoInsertionOffset) {
+  yy, leftParenthesisRange, rightParenthesisRange, loc) {
+  if (leftParenthesisRange && rightParenthesisRange && yy.autoInsertions) {
     // semicolon can't become one of the two semicolons
     // in the header of a for statement
 
-    if (autoInsertionOffset > leftParenthesisRange[0] &&
-        autoInsertionOffset < rightParenthesisRange[1]) {
-      throw new (require('../error').ParseError)(errorMsg, { text: ';', token: ';', line: loc.first_line, loc, failedAutoSemicolon: true });
+    for (let i = 0; i < yy.autoInsertions.length; i++) {
+      const autoInsertionOffset = yy.autoInsertions[i];
+      if (autoInsertionOffset > leftParenthesisRange[0] &&
+          autoInsertionOffset < rightParenthesisRange[1]) {
+        throw new (require('../error').ParseError)(errorMsg, { text: ';', token: ';', line: loc.first_line, loc, failedAutoSemicolon: true });
+      }
     }
   }
 }
