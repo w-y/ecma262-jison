@@ -215,8 +215,12 @@ describe('expression', function() {
         assert.equal(true, ex instanceof Error);
       }
 
-      const tempAst = parser.parse('for (let a = (b in c); false;);');
-      assert.equal('ForStatement', tempAst.body[0].type);
+      try {
+        const tempAst = parser.parse('for (let a = (b in c); false;);');
+        assert.equal('ForStatement', tempAst.body[0].type);
+      } catch(ex) {
+        assert.equal(true, false);
+      }
 
       done();
     });
@@ -384,7 +388,7 @@ describe('expression', function() {
       assert.equal('ReturnStatement', ast.body[36].body[0].type);
       assert.equal('ObjectLiteral', ast.body[36].body[0].params.type);
       assert.equal(1, ast.body[36].body[0].params.properties.length);
-      assert.equal('name', ast.body[36].body[0].params.properties[0].key);
+      assert.equal('name', ast.body[36].body[0].params.properties[0].key.name);
       assert.equal('test', ast.body[36].body[0].params.properties[0].value.value);
       done();
     });

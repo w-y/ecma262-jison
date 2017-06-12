@@ -1,7 +1,16 @@
-const parser = require('./parser');
 const { isWhiteSpace, isLineTerminator } = require('./util');
 
 const { ParseError } = require('./error');
+const parser = require('./parser');
+
+/**
+ * "
+ *  The JS Interpreter finds an error,
+ *  adds a semicolon,
+ *  and runs the whole thing again."
+ *                                -- Doug Crockford
+ * when parse again, we need to reset all the flags
+ */
 
 function canApplyRule(source, ex) {
   // lexical error
@@ -20,7 +29,7 @@ function canApplyRule(source, ex) {
   }
   // NOTICE: the end of the input stream of tokens
   if (token === 1) {
-    return tokenOffset;
+    return tokenOffset - 1;
   }
   // The offending token is }
   if (token === '}') {
@@ -59,8 +68,11 @@ function canApplyRule(source, ex) {
 function autoinsertion(source) {
   let res = null;
   let src = source;
+
+  // enable range info in loc
   parser.parser.lexer.options.ranges = true;
 
+  // custom error handler
   parser.Parser.prototype.parseError = function (str, hash) {
     if (hash.recoverable) {
       this.trace(str);
@@ -69,11 +81,29 @@ function autoinsertion(source) {
     }
   };
 
+  function reloadParser() {
+    parser.parser.yy.autoInsertions = [];
+    parser.parser.yy.autoInsertionCount = 0;
+    parser.parser.yy.autoInsertionOffset = 0;
+    parser.parser.yy.originEx = null;
+  }
+
   function applyRule(s, ex) {
-    parser.parser.yy.autoInsertionOffset = null;
     const test = canApplyRule(s, ex);
+
+    // make sure this will end
+    if (test === parser.parser.yy.autoInsertionOffset) {
+      return false;
+    }
+
     if (test > 0) {
-      // range should ajust by subtracting number of inserted semicolons
+      // NOTICE: range should be ajusted by subtracting number of inserted semicolons
+      // range is [a, b) (>=a && < b), so plus one to compare with range[1]
+      // test + 1 is range upper boundery
+      // test is semicolon self
+      // test - 1 is the char before insertion
+      parser.parser.yy.autoInsertionOffset = test;
+
       if (!parser.parser.yy.autoInsertionCount) {
         parser.parser.yy.autoInsertionCount = 1;
         parser.parser.yy.autoInsertions = [test + 1];
@@ -81,7 +111,6 @@ function autoinsertion(source) {
         parser.parser.yy.autoInsertionCount += 1;
         parser.parser.yy.autoInsertions.push(test + 1);
       }
-      parser.parser.yy.autoInsertionOffset = test + 1;
 
       const newSrc = `${src.substring(0, test)};${src.substring(test)}`;
       return newSrc;
@@ -92,6 +121,7 @@ function autoinsertion(source) {
     try {
       res = parser.parse(src);
       if (res) {
+        reloadParser();
         return res;
       }
     } catch (ex) {
@@ -100,7 +130,9 @@ function autoinsertion(source) {
       }
       src = applyRule(src, ex);
       if (!src) {
-        throw parser.parser.yy.originEx;
+        const originEx = parser.parser.yy.originEx;
+        reloadParser();
+        throw originEx;
       }
     }
   }

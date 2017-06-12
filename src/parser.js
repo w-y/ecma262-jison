@@ -129,7 +129,7 @@ case 1:
       return this.$;
     
 break;
-case 2: case 5: case 7: case 8: case 9: case 10: case 11: case 12: case 13: case 14: case 15: case 16: case 17: case 18: case 19: case 22: case 27: case 33: case 35: case 37: case 39: case 50: case 58: case 59: case 69: case 70: case 71: case 72: case 73: case 74: case 75: case 77: case 79: case 80: case 81: case 82: case 85: case 86: case 87: case 88: case 89: case 90: case 100: case 102: case 104: case 105: case 108: case 110: case 115: case 116: case 118: case 120: case 193: case 194: case 195: case 196: case 197: case 198: case 199: case 200: case 201: case 202: case 203: case 204: case 205: case 206: case 207: case 208: case 215: case 219: case 220: case 221: case 226: case 228: case 232: case 233: case 271: case 277: case 279: case 281: case 283: case 295: case 333: case 334: case 357:
+case 2: case 5: case 7: case 8: case 9: case 10: case 11: case 12: case 13: case 14: case 15: case 16: case 17: case 18: case 19: case 22: case 27: case 33: case 35: case 37: case 39: case 50: case 58: case 59: case 69: case 70: case 71: case 72: case 73: case 74: case 75: case 76: case 79: case 80: case 81: case 82: case 100: case 102: case 104: case 105: case 108: case 110: case 115: case 116: case 118: case 120: case 193: case 194: case 195: case 196: case 197: case 198: case 199: case 200: case 201: case 202: case 203: case 204: case 205: case 206: case 207: case 208: case 215: case 219: case 220: case 221: case 226: case 228: case 232: case 233: case 271: case 277: case 279: case 281: case 283: case 295: case 333: case 334: case 357:
 this.$ = $$[$0];
 break;
 case 3: case 227: case 230: case 287:
@@ -143,14 +143,19 @@ this.$ = $$[$0]
 break;
 case 20:
 
-      if (yy.autoInsertionOffset && yy.autoInsertionOffset === yy.lexer.offset) {
-        throw new (require('./error').ParseError)('a semicolon is never inserted automatically if the semicolon would then be parsed as an empty statement', {
-          text: $$[$0],
-          token: $$[$0],
-          line: yy.lexer.yylloc.first_line,
-          loc: yy.lexer.yylloc,
-          failedAutoSemicolon: true,
-        });
+      if (yy.autoInsertions) {
+        for (let i = 0; i < yy.autoInsertions.length; i++) {
+          const autoInsertionOffset = yy.autoInsertions[i];
+          if (autoInsertionOffset && autoInsertionOffset === this._$.range[1]) {
+            throw new (require('./error').ParseError)('a semicolon is never inserted automatically if the semicolon would then be parsed as an empty statement', {
+              text: this.$[$$[$0-1]],
+              token: this.$[$$[$0-1]],
+              line: yy.lexer.yylloc.first_line,
+              loc: yy.lexer.yylloc,
+              failedAutoSemicolon: true,
+            });
+          }
+        }
       }
       this.$ = new (require('./ast/EmptyStatement').EmptyStatementNode)({
         loc: this._$,
@@ -220,7 +225,7 @@ this.$ = new (require('./ast/LeftHandSideExpression').MemberExpressionNode)($$[$
 break;
 case 64:
 
-      this.$ = new (require('./ast/LeftHandSideExpression').MemberExpressionNode)($$[$0-2], (new (require('./ast/Identifier').IdentifierNode)($$[$0], { yy })), false, { loc: this._$, yy });
+      this.$ = new (require('./ast/LeftHandSideExpression').MemberExpressionNode)($$[$0-2], $$[$0], false, { loc: this._$, yy });
     
 break;
 case 67:
@@ -229,17 +234,31 @@ break;
 case 68:
 this.$ = new (require('./ast/ThisExpressionNode'))({ loc: this._$, yy });
 break;
-case 76:
-this.$ = new (require('./ast/Identifier').IdentifierNode)($$[$0], { loc: this._$, yy });
+case 77:
+this.$ = new (require('./ast/Identifier').IdentifierNode)($$[$0], { loc: this._$, yy })
 break;
-case 78: case 98: case 99: case 101: case 103: case 109: case 111: case 112: case 114: case 117: case 119: case 121:
-this.$ = $$[$0-1] + $$[$0];
+case 78:
+
+      // NOTICE: adjust loc and last column
+      // since identifier must in the same line
+      // we don't need to modify line and first column
+      // TODO: encapsulate method in Node
+
+      $$[$0-1].name += $$[$0].value;
+      $$[$0-1].range[1] = $$[$0].loc.range[1];
+      $$[$0-1].lastColumn = $$[$0].loc.last_column;
+      $$[$0-1].lastLine = $$[$0].loc.last_line;
+      this.$ = $$[$0-1];
+    
 break;
 case 83: case 91:
 this.$ = String.fromCodePoint($$[$0]);
 break;
 case 84:
 this.$ = require('./util').getMVHexDigits($$[$0-3], $$[$0-2], $$[$0-1], $$[$0]);
+break;
+case 85: case 86: case 87: case 88: case 89: case 90:
+this.$ = { value: $$[$0], loc: this._$ }
 break;
 case 92:
 this.$ = new (require('./ast/Literal').NullLiteralNode)($$[$0], { raw: $$[$0], loc: this._$, yy })
@@ -255,6 +274,9 @@ this.$ = new (require('./ast/Literal').DecimalLiteralNode)($$[$0], { raw: $$[$0]
 break;
 case 96: case 97: case 113:
 this.$ = $$[$0-2] + $$[$0-1] + $$[$0];
+break;
+case 98: case 99: case 101: case 103: case 109: case 111: case 112: case 114: case 117: case 119: case 121:
+this.$ = $$[$0-1] + $$[$0];
 break;
 case 106:
 this.$ = String.fromCodePoint(require('./constants').STRING_SINGLE_CHARACTER_ESCAPE_SEQUENCES[$$[$0]]);
@@ -432,13 +454,13 @@ this.$ = new (require('./ast/IterationStatement').WhileStatementNode)($$[$0-2], 
 break;
 case 240: case 366:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)($$[$0-5], $$[$0-4], $$[$0-2], $$[$0], { loc: this._$, yy })
     
 break;
 case 241: case 367:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-8].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-8].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)(
         // NOTICE:
         // we need to merge the VAR's loc and VariableDeclarator's to get VaribleStatement's range
@@ -457,19 +479,19 @@ case 241: case 367:
 break;
 case 242: case 243: case 368: case 369:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForInStatementNode)($$[$0-4], $$[$0-2], $$[$0], { loc: this._$, yy })
     
 break;
 case 244: case 246: case 370: case 372:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForOfStatementNode)($$[$0-4], $$[$0-2], $$[$0], { loc: this._$, yy })
     
 break;
 case 245:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForOfStatementNode)(
         // NOTICE:
         // we need to merge the VAR's loc and VariableDeclarator's to get VaribleStatement's range
@@ -485,55 +507,55 @@ case 245:
 break;
 case 247: case 373:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-7].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-7].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)($$[$0-6], $$[$0-4], $$[$0-2], $$[$0], { loc: this._$, yy })
     
 break;
 case 248: case 374:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)($$[$0-5], null, $$[$0-2], $$[$0], { loc: this._$, yy })
     
 break;
 case 249: case 375:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)($$[$0-4], null, null, $$[$0], { loc: this._$, yy })
     
 break;
 case 250: case 376:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)($$[$0-5], $$[$0-3], null, $$[$0], { loc: this._$, yy })
     
 break;
 case 251: case 377:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)(null, $$[$0-4], $$[$0-2], $$[$0], { loc: this._$, yy })
     
 break;
 case 252: case 378:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)(null, null, $$[$0-2], $$[$0], { loc: this._$, yy })
     
 break;
 case 253: case 379:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-4].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-4].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)(null, null, null, $$[$0], { loc: this._$, yy })
     
 break;
 case 254: case 380:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)(null, $$[$0-3], null, $$[$0], { loc: this._$, yy })
     
 break;
 case 255: case 381:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-7].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-7].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)(
         new (require('./ast/VariableStatement').VariableStatementNode)($$[$0-5], { loc: {
           first_line: $$[$0-6].first_line,
@@ -546,7 +568,7 @@ case 255: case 381:
 break;
 case 256: case 382:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-7].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-7].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)(
         new (require('./ast/VariableStatement').VariableStatementNode)($$[$0-5], { loc: {
           first_line: $$[$0-6].first_line,
@@ -559,7 +581,7 @@ case 256: case 382:
 break;
 case 257: case 383:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)(
         new (require('./ast/VariableStatement').VariableStatementNode)($$[$0-4], { loc: {
           first_line: $$[$0-5].first_line,
@@ -572,19 +594,19 @@ case 257: case 383:
 break;
 case 258: case 384:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)($$[$0-4], null, $$[$0-2], $$[$0], { loc: this._$, yy })
     
 break;
 case 259: case 385:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-5].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)($$[$0-4], $$[$0-3], null, $$[$0], { loc: this._$, yy })
     
 break;
 case 260: case 386:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-4].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-4].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForStatementNode)($$[$0-3], null, null, $$[$0], { loc: this._$, yy })
     
 break;
@@ -597,11 +619,11 @@ break;
 case 292:
 this.$ = new (require('./ast/LexicalDeclaration').LexicalDeclarationNode)($$[$0-1], [$$[$0]], { loc: this._$, yy })
 break;
-case 297: case 298:
-this.$ = yy.lexer.yylloc
-break;
-case 299:
+case 297: case 299:
 this.$ = this._$
+break;
+case 298:
+this.$ = yy.lexer.yylloc
 break;
 case 300: case 387:
 this.$ = new (require('./ast/SwitchStatement').SwitchStatementNode)($$[$0-2], $$[$0], { loc: this._$, yy })
@@ -758,7 +780,7 @@ this.$ = new (require('./ast/LeftHandSideExpression').SuperCallExpressionNode)($
 break;
 case 371:
 
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $$[$0-6].range, $$[$0-1].range, yy.lexer.yylloc);
       this.$ = new (require('./ast/IterationStatement').ForOfStatementNode)(
         // NOTICE:
         // we need to merge the VAR's loc and VariableDeclarator's to get VaribleStatement's range

@@ -14,7 +14,7 @@ module.exports = {
     '$$ = $1',
     '$$ = new (require(\'./ast/LeftHandSideExpression\').MemberExpressionNode)($1, $3, true, { loc: this._$, yy })',
     `
-      $$ = new (require('./ast/LeftHandSideExpression').MemberExpressionNode)($1, (new (require('./ast/Identifier').IdentifierNode)($3, { yy })), false, { loc: this._$, yy });
+      $$ = new (require('./ast/LeftHandSideExpression').MemberExpressionNode)($1, $3, false, { loc: this._$, yy });
     `,
     '$$ = $1',
     '$$ = $1',

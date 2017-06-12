@@ -10,12 +10,12 @@ module.exports = {
     'ZWJ',
   ],
   handlers: [
-    '$$ = $1;',
-    '$$ = $1;',
-    '$$ = $1;',
-    '$$ = $1;',
-    '$$ = $1;',
-    '$$ = $1;',
+    '$$ = { value: $1. loc: this._$ }',
+    '$$ = { value: $1. loc: this._$ }',
+    '$$ = { value: $1. loc: this._$ }',
+    '$$ = { value: $1. loc: this._$ }',
+    '$$ = { value: $1. loc: this._$ }',
+    '$$ = { value: $1. loc: this._$ }',
   ],
   subRules: [
     require('./UnicodeEscapeSequenceContinue'),

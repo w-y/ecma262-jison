@@ -3,7 +3,7 @@ const parser = require('../src/index');
 
 const { createFileHelper } = require('../src/test/helpers');
 
-describe('iteral', function() {
+describe('literal', function() {
   let ast = null;
 
   before(function(done) {
@@ -210,7 +210,7 @@ describe('iteral', function() {
     });
     it('({a_:1.2})', function(done) {
       assert.equal('ObjectLiteral', ast.body[26].expression.expressions[0].type);
-      assert.equal('a_', ast.body[26].expression.expressions[0].properties[0].key);
+      assert.equal('a_', ast.body[26].expression.expressions[0].properties[0].key.name);
       assert.equal('1.2', ast.body[26].expression.expressions[0].properties[0].value.value);
       done();
     });

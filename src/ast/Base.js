@@ -1,3 +1,5 @@
+const { isLineTerminator } = require('../util');
+
 function BaseNode({
   type,
   raw,
@@ -18,25 +20,41 @@ function BaseNode({
       last_column: lastColumn,
     } = loc;
 
-
+    // NOTICE: need to fix range after auto semicolon insertion
     // subtract insertion offset
-    let rangeStart = range[0];
-    let rangeEnd = range[1];
+    const rangeStart = range[0];
+    const rangeEnd = range[1];
+    let countStart = 0;
+    let countEnd = 0;
 
     if (yy.autoInsertions) {
       for (let i = 0; i < yy.autoInsertions.length; i++) {
         if (yy.autoInsertions[i]) {
+          // NOTICE: each insertion make next insertion's offset plus 1
+
           if (yy.autoInsertions[i] <= rangeStart) {
-            rangeStart--;
+            countStart++;
           }
           if (yy.autoInsertions[i] <= rangeEnd) {
-            rangeEnd--;
+            countEnd++;
+          }
+          if (yy.autoInsertions[i] === rangeEnd) {
+            // NOTICE: [rangeStart, ... 'INSERT SEMICOLON', rangeEnd]
+            // here we neet to jump over the LF,
+            // rangeEnd - 1 is the offset where we insert semicolon,
+            // rangeEnd - 2 is the character before insertion
+
+            let ptr = rangeEnd - 2;
+            while (ptr >= rangeStart && isLineTerminator(yy.lexer.matched[ptr])) {
+              countEnd++;
+              ptr--;
+            }
           }
         }
       }
     }
 
-    this.range = [rangeStart, rangeEnd];
+    this.range = [rangeStart - countStart, rangeEnd - countEnd];
 
     this.firstLine = firstLine;
     this.firstColumn = firstColumn;
