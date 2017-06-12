@@ -215,8 +215,12 @@ describe('expression', function() {
         assert.equal(true, ex instanceof Error);
       }
 
-      const tempAst = parser.parse('for (let a = (b in c); false;);');
-      assert.equal('ForStatement', tempAst.body[0].type);
+      try {
+        const tempAst = parser.parse('for (let a = (b in c); false;);');
+        assert.equal('ForStatement', tempAst.body[0].type);
+      } catch(ex) {
+        assert.equal(true, false);
+      }
 
       done();
     });

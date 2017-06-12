@@ -1,4 +1,4 @@
-const parser = require('./parser');
+const parser = require('./parser3');
 const { isWhiteSpace, isLineTerminator } = require('./util');
 
 const { ParseError } = require('./error');
@@ -12,11 +12,6 @@ const { ParseError } = require('./error');
  *                                -- Doug Crockford
  * when parse again, we need to reset all the flags
  */
-function reloadParser() {
-  parser.parser.yy.autoInsertions = [];
-  parser.parser.yy.autoInsertionCount = 0;
-  parser.parser.yy.autoInsertionOffset = null;
-}
 
 function canApplyRule(source, ex) {
   // lexical error
@@ -74,8 +69,11 @@ function canApplyRule(source, ex) {
 function autoinsertion(source) {
   let res = null;
   let src = source;
+
+  // enable range info in loc
   parser.parser.lexer.options.ranges = true;
 
+  // custom error handler
   parser.Parser.prototype.parseError = function (str, hash) {
     if (hash.recoverable) {
       this.trace(str);
@@ -84,8 +82,13 @@ function autoinsertion(source) {
     }
   };
 
+  function reloadParser() {
+    parser.parser.yy.autoInsertions = [];
+    parser.parser.yy.autoInsertionCount = 0;
+    parser.parser.yy.originEx = null;
+  }
+
   function applyRule(s, ex) {
-    parser.parser.yy.autoInsertionOffset = null;
     const test = canApplyRule(s, ex);
 
     if (test > 0) {
@@ -102,10 +105,8 @@ function autoinsertion(source) {
         parser.parser.yy.autoInsertionCount += 1;
         parser.parser.yy.autoInsertions.push(test + 1);
       }
-      parser.parser.yy.autoInsertionOffset = test + 1;
 
       const newSrc = `${src.substring(0, test)};${src.substring(test)}`;
-      // console.log(newSrc);
       return newSrc;
     }
     return false;
@@ -123,8 +124,9 @@ function autoinsertion(source) {
       }
       src = applyRule(src, ex);
       if (!src) {
+        const originEx = parser.parser.yy.originEx;
         reloadParser();
-        throw parser.parser.yy.originEx;
+        throw originEx;
       }
     }
   }

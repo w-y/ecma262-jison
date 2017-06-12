@@ -609,7 +609,7 @@ case 292:
 this.$ = new (require('./ast/LexicalDeclaration').LexicalDeclarationNode)($$[$0-1], [$$[$0]], { loc: this._$, yy })
 break;
 case 297: case 298:
-this.$ = yy.lexer.yylloc
+this.$ = this._$;//yy.lexer.yylloc
 break;
 case 299:
 this.$ = this._$

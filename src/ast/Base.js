@@ -44,9 +44,10 @@ function BaseNode({
             // rangeEnd - 1 is the offset where we insert semicolon,
             // rangeEnd - 2 is the character before insertion
 
-            const ptr = rangeEnd - 2;
-            if (ptr >= rangeStart && isLineTerminator(yy.lexer.matched[ptr])) {
+            let ptr = rangeEnd - 2;
+            while (ptr >= rangeStart && isLineTerminator(yy.lexer.matched[ptr])) {
               countEnd++;
+              ptr--;
             }
           }
         }

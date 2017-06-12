@@ -50,7 +50,7 @@ describe('automatic semicolon insertion', function() {
 
     it(`for (a; b\n)`, function(done) {
       try {
-        const ast = parser.parse('for (a; b\n)');
+        const ast = parser.parse('for (a; b\n)\n');
         assert.equal(true, false);
       } catch(ex) {
         assert.equal(true, ex instanceof Error);
@@ -149,22 +149,53 @@ describe('automatic semicolon insertion', function() {
       assert.equal(25, ast.body[0].range[1]);
 
       assert.equal('AssignmentExpression', ast.body[0].expression.type);
+      assert.equal(0, ast.body[0].expression.range[0]);
+      assert.equal(25, ast.body[0].expression.range[1]);
+
+      assert.equal(0, ast.body[0].expression.left.range[0]);
+      assert.equal(1, ast.body[0].expression.left.range[1]);
       assert.equal('Identifier', ast.body[0].expression.left.type);
       assert.equal('a', ast.body[0].expression.left.name);
+
+      assert.equal(4, ast.body[0].expression.right.range[0]);
+      assert.equal(25, ast.body[0].expression.right.range[1]);
       assert.equal('AdditiveExpression', ast.body[0].expression.right.type);
       assert.equal('+', ast.body[0].expression.right.operator);
+
+      assert.equal(4, ast.body[0].expression.right.left.range[0]);
+      assert.equal(5, ast.body[0].expression.right.left.range[1]);
       assert.equal('b', ast.body[0].expression.right.left.name);
+
+      assert.equal(8, ast.body[0].expression.right.right.range[0]);
+      assert.equal(25, ast.body[0].expression.right.right.range[1]);
       assert.equal('CallExpression', ast.body[0].expression.right.right.type);
 
       assert.equal('MemberExpression', ast.body[0].expression.right.right.callee.type);
+
+      assert.equal(8, ast.body[0].expression.right.right.callee.range[0]);
+      assert.equal(23, ast.body[0].expression.right.right.callee.range[1]);
       assert.equal('CallExpression', ast.body[0].expression.right.right.callee.element.type);
+
+      assert.equal(8, ast.body[0].expression.right.right.callee.element.callee.range[0]);
+      assert.equal(9, ast.body[0].expression.right.right.callee.element.callee.range[1]);
       assert.equal('c', ast.body[0].expression.right.right.callee.element.callee.name);
+
       assert.equal(1, ast.body[0].expression.right.right.callee.element.params.length);
+      assert.equal(11, ast.body[0].expression.right.right.callee.element.params[0].range[0]);
+      assert.equal(16, ast.body[0].expression.right.right.callee.element.params[0].range[1]);
       assert.equal('AdditiveExpression', ast.body[0].expression.right.right.callee.element.params[0].type);
       assert.equal('+', ast.body[0].expression.right.right.callee.element.params[0].operator);
+
+      assert.equal(11, ast.body[0].expression.right.right.callee.element.params[0].left.range[0]);
+      assert.equal(12, ast.body[0].expression.right.right.callee.element.params[0].left.range[1]);
       assert.equal('d', ast.body[0].expression.right.right.callee.element.params[0].left.name);
+
+      assert.equal(15, ast.body[0].expression.right.right.callee.element.params[0].right.range[0]);
+      assert.equal(16, ast.body[0].expression.right.right.callee.element.params[0].right.range[1]);
       assert.equal('e', ast.body[0].expression.right.right.callee.element.params[0].right.name);
 
+      assert.equal(18, ast.body[0].expression.right.right.callee.property.range[0]);
+      assert.equal(23, ast.body[0].expression.right.right.callee.property.range[1]);
       assert.equal('Identifier', ast.body[0].expression.right.right.callee.property.type);
       assert.equal('print', ast.body[0].expression.right.right.callee.property.name);
       done();
