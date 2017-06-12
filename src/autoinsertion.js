@@ -1,8 +1,7 @@
-const parser = require('./parser');
 const { isWhiteSpace, isLineTerminator } = require('./util');
 
 const { ParseError } = require('./error');
-
+const parser = require('./parser');
 
 /**
  * "
@@ -85,11 +84,17 @@ function autoinsertion(source) {
   function reloadParser() {
     parser.parser.yy.autoInsertions = [];
     parser.parser.yy.autoInsertionCount = 0;
+    parser.parser.yy.autoInsertionOffset = 0;
     parser.parser.yy.originEx = null;
   }
 
   function applyRule(s, ex) {
     const test = canApplyRule(s, ex);
+
+    // make sure this will end
+    if (test === parser.parser.yy.autoInsertionOffset) {
+      return false;
+    }
 
     if (test > 0) {
       // NOTICE: range should be ajusted by subtracting number of inserted semicolons
@@ -97,6 +102,7 @@ function autoinsertion(source) {
       // test + 1 is range upper boundery
       // test is semicolon self
       // test - 1 is the char before insertion
+      parser.parser.yy.autoInsertionOffset = test;
 
       if (!parser.parser.yy.autoInsertionCount) {
         parser.parser.yy.autoInsertionCount = 1;
