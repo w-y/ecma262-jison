@@ -53,6 +53,14 @@ exports.lessThanOrEqual = {
   `,
 };
 
+exports.arrow = {
+  conditions: ['*'],
+  rule: '=>',
+  handler: `
+    return require('./util').parseOperator.call(this, this.match);
+  `,
+};
+
 exports.greaterThan = {
   conditions: ['*'],
   rule: '>',

@@ -36,6 +36,9 @@ const {
   bitwiseORAssignment,      // |=
   greaterThanOrEqual,       // >=
   lessThanOrEqual,          // <=
+
+  arrow,                    // =>
+  
   exponentiation,           // **
 
   and,                      // &&
@@ -143,6 +146,7 @@ exports.grammar = {
       bitwiseORAssignment,
       greaterThanOrEqual,
       lessThanOrEqual,
+      arrow,
       exponentiation,
       and,
       or,
