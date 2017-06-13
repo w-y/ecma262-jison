@@ -3,11 +3,11 @@ module.exports = {
   name: 'ConciseBody',
   rules: [
     'AssignmentExpression',
-    '{ FunctionBody }',
+    'LEFT_ARROW_BRACE FunctionBody RIGHT_ARROW_BRACE',
   ],
   handlers: [
     '$$ = $1',
-    '$$ = $1',
+    '$$ = $2',
   ],
   subRules: [
     require('./AssignmentExpression'),

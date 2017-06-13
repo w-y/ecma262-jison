@@ -3,14 +3,14 @@ module.exports = {
   name: 'ArrowFunction',
   rules: [
     'ArrowParameters => ConciseBody',
-    'ArrowParameters ARROW_LF ConciseBody',
+    'ArrowParameters LF_ARROW ConciseBody',
   ],
   handlers: [
-    '$$ = new (require(\'./ast/ArrowFunctionNode\'))(null, { loc: this._$, yy })',
+    '$$ = new (require(\'./ast/ArrowFunctionNode\'))($1, $3, { loc: this._$, yy })',
     `
       throw new (require('./error').NoLineTerminatorError)('no line terminator', {
         text: $1,
-        token: 'ArrowParameters_LF',
+        token: 'ArrowFunction_LF',
         line: yy.lexer.yylloc.first_line,
         loc: yy.lexer.yylloc,
         offset: yy.lexer.offset,

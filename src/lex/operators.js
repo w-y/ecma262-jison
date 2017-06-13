@@ -53,13 +53,22 @@ exports.lessThanOrEqual = {
   `,
 };
 
-exports.arrow = {
-  conditions: ['*'],
-  rule: '=>',
-  handler: `
-    return require('./util').parseOperator.call(this, this.match);
-  `,
-};
+exports.arrow = [
+  {
+    conditions: ['*'],
+    rule: '[\\u000A]+[\\u0009|\\u0020]*=>',
+    handler: `
+      return require('./util').parseOperator.call(this, this.match, 'LF_ARROW');
+    `,
+  },
+  {
+    conditions: ['*'],
+    rule: '=>',
+    handler: `
+      return require('./util').parseOperator.call(this, this.match);
+    `,
+  },
+];
 
 exports.greaterThan = {
   conditions: ['*'],
