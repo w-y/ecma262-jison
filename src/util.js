@@ -128,7 +128,7 @@ function parseOperator(operator, alias) {
   let i = this.matches.index + this.match.length;
   const input = this.matches.input;
 
-  while (i < input.length && isWhiteSpace(input[i])) { i++; }
+  while (i < input.length && (isWhiteSpace(input[i]) || isLineTerminator(input[i]))) { i++; }
   let res = '';
 
   switch (this.topState()) {
@@ -171,8 +171,16 @@ function parseOperator(operator, alias) {
     }
   } else if (this.match === ')') {
 
+  } else if (this.match === '=>') {
+    // Arrow Function look ahread {
+    if (/^{/.test(input.substring(i))) {
+      this.begin('arrow_brace_start');
+    }
   } else if (this.match === '}') {
-
+    if (this.topState() === 'arrow_brace_start') {
+      this.popState();
+      return 'RIGHT_ARROW_BRACE';
+    }
   } else if (this.match === ';') {
 
   } else if (isWhiteSpace(this.match) || isLineTerminator(this.match)) {
@@ -275,6 +283,11 @@ function parseToken(token, alias) {
       this.popState();
       break;
     default:
+      // () => {}
+      // look behind 
+      if (isLineTerminator(token)) {
+
+      }
       break;
   }
   return alias || '';

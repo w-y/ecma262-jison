@@ -2,13 +2,13 @@ module.exports = {
   conditions: [''],
   name: 'PrimaryExpression',
   rules: [
-    'this',
+    // 'this',
     'IdentifierReference',
-    'Literal',
-    'ArrayLiteral',
-    'ObjectLiteral',
+    // 'Literal',
+    // 'ArrayLiteral',
+    // 'ObjectLiteral',
     'CoverParenthesizedExpressionAndArrowParameterList',
-    'FunctionExpression',
+    // 'FunctionExpression',
   ],
   handlers: [
     '$$ = new (require(\'./ast/ThisExpressionNode\'))({ loc: this._$, yy });',

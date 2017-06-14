@@ -3,7 +3,7 @@ module.exports = {
   name: 'ConciseBody',
   rules: [
     'AssignmentExpression',
-    'LEFT_ARROW_BRACE FunctionBody RIGHT_ARROW_BRACE',
+    'LEFT_ARROW_BRACE FunctionBody }',
   ],
   handlers: [
     '$$ = $1',
