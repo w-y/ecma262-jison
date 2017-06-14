@@ -275,6 +275,29 @@ function parseToken(token, alias) {
       this.popState();
       break;
     default:
+      if (isLineTerminator(this.match)) {
+        // jump white space and line terminator
+        while (i < input.length && (isWhiteSpace(input[i]) || isLineTerminator(input[i]))) { i++; }
+        // look after for =>
+        if (/=>/.test(input.substring(i))) {
+          throw new (require('./error').NoLineTerminatorError)('no line terminator', {
+            text: this.yytext,
+            token: 'ArrowFunction',
+            line: this.yylloc.first_line,
+            loc: {
+              first_line: this.yylloc.first_line,
+              last_line: this.yylloc.last_line,
+              first_column: this.yylloc.first_column,
+              last_column: this.yylloc.last_column,
+              range: [
+                this.yylloc.range[0],
+                this.yylloc.range[1] - 2,
+              ],
+            },
+            offset: this.offset - 2,
+          });
+        }
+      }
       break;
   }
   return alias || '';
