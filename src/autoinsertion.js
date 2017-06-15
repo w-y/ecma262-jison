@@ -1,7 +1,7 @@
 const { isWhiteSpace, isLineTerminator } = require('./util');
 
 const { ParseError } = require('./error');
-const parser = require('./parser');
+const parser = require('./parser4');
 
 /**
  * "
@@ -117,6 +117,7 @@ function autoinsertion(source) {
     }
     return false;
   }
+  let i = 0;
   while (true) {
     try {
       res = parser.parse(src);
@@ -125,6 +126,7 @@ function autoinsertion(source) {
         return res;
       }
     } catch (ex) {
+      console.log(ex);
       if (!parser.parser.yy.originEx) {
         parser.parser.yy.originEx = ex;
       }

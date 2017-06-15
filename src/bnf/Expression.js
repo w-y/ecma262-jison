@@ -7,7 +7,7 @@ module.exports = {
   ],
   handlers: [
     '$$ = $1;',
-    '$$ = (require(\'../ast/SequenceExpressionNode\'))([$1].concat([$3]), { loc: this._$, yy })',
+    '$$ = (require(\'./ast/SequenceExpressionNode\'))([$1].concat([$3]), { loc: this._$, yy })',
   ],
   subRules: [
     require('./AssignmentExpression'),
