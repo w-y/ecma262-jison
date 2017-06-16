@@ -38,7 +38,7 @@ const {
   lessThanOrEqual,          // <=
 
   arrow,                    // =>
-  
+
   exponentiation,           // **
 
   and,                      // &&

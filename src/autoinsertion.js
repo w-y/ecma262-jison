@@ -118,7 +118,6 @@ function autoinsertion(source) {
     }
     return false;
   }
-  let i = 0;
   while (true) {
     try {
       res = parser.parse(src);

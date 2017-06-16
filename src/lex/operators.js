@@ -419,7 +419,7 @@ exports.leftBrace = [
       return require('./util').parseOperator.call(this, this.match);
     `,
   },
-]
+];
 
 exports.rightBrace = {
   conditions: ['*'],
