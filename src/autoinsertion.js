@@ -1,7 +1,7 @@
 const { isWhiteSpace, isLineTerminator } = require('./util');
 
 const { ParseError } = require('./error');
-const parser = require('./parser4');
+const parser = require('./parser');
 
 /**
  * "
@@ -113,6 +113,7 @@ function autoinsertion(source) {
       }
 
       const newSrc = `${src.substring(0, test)};${src.substring(test)}`;
+      console.log(newSrc);
       return newSrc;
     }
     return false;

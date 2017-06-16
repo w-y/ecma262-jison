@@ -86,9 +86,6 @@ function parseKeyword(keyword, alias) {
 exports.parseKeyword = parseKeyword;
 
 function parseOperator(operator, alias) {
-    console.log('============')
-    console.log(this.matched);
-    console.log('============')
    // NOTICE: restrict line terminator for update express
   if (alias === 'UpdateOperator') {
     let start = this.matched.length - 3;
@@ -161,9 +158,6 @@ function parseOperator(operator, alias) {
     case 'arrow_brace_start':
       this.popState();
       res = alias || operator;
-      console.log('vvvvvvvvvvvvv');
-      console.log(res);
-      console.log('vvvvvvvvvvvvv');
       break;
     default:
       res = alias || operator;
@@ -298,7 +292,7 @@ function parseToken(token, alias) {
         // ArrowFunction[In, Yield] :
         //     ArrowParameters[?Yield] [no LineTerminator here] => ConciseBody[?In]
 
-        if (/=>/.test(input.substring(i))) {
+        if (/^=>/.test(input.substring(i))) {
           throw new (require('./error').NoLineTerminatorError)('no line terminator', {
             text: this.yytext,
             token: 'ArrowFunction',
