@@ -113,7 +113,6 @@ function autoinsertion(source) {
       }
 
       const newSrc = `${src.substring(0, test)};${src.substring(test)}`;
-      console.log(newSrc);
       return newSrc;
     }
     return false;
@@ -126,7 +125,6 @@ function autoinsertion(source) {
         return res;
       }
     } catch (ex) {
-      console.log(ex);
       if (!parser.parser.yy.originEx) {
         parser.parser.yy.originEx = ex;
       }

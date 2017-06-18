@@ -285,7 +285,7 @@ function parseToken(token, alias) {
         let i = 0;
 
         // jump white space and line terminator
-        while (i < input.length && (isWhiteSpace(input[i]))) { i++; }
+        while (i < input.length && (isWhiteSpace(input[i]) || isLineTerminator(input[i]))) { i++; }
 
         // () => {}
         // look behind =>
