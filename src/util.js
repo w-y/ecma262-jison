@@ -332,17 +332,17 @@ function parseTemplateCharacters(ch) {
   }
 
   const input = this.matches.input;
-  const curr = this.matches.index + this.match.length;
+  const nextCh = input[this.matches.index + this.match.length];
 
   if (ch === '$') {
-    if (curr === '{') {
+    if (nextCh === '{') {
       return '$';
     }
     return 'TemplateCharacter';
   }
 
   if (ch === '\\') {
-    if (isLineTerminator(ch)) {
+    if (isLineTerminator(nextCh)) {
       return 'TemplateCharacter';
     }
     return '\\';
@@ -394,9 +394,9 @@ function mergeLoc(fromLoc, toLoc) {
     first_line: fromLoc.first_line,
     last_line: toLoc.lastLine,
     first_column: fromLoc.firts_column,
-    last_column:  toLoc.lastColumn,
+    last_column: toLoc.lastColumn,
     range: [fromLoc.range[0], toLoc.range[1]],
-  }
+  };
 }
 
 exports.mergeLoc = mergeLoc;
