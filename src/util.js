@@ -327,6 +327,12 @@ exports.parseToken = parseToken;
  *  SourceCharacterbut not one of ` or \ or $ or LineTerminator
  */
 function parseTemplateCharacters(ch) {
+
+  // prev is $ and look ahead is {
+  if (this.topState() === 'template_string_head_start') {
+    return 'LEFT_TEMPLATE_BRACE';
+  }
+
   if (isLineTerminator(ch)) {
     return 'TemplateCharacter';
   }
@@ -336,6 +342,7 @@ function parseTemplateCharacters(ch) {
 
   if (ch === '$') {
     if (nextCh === '{') {
+      this.begin('template_string_head_start');
       return '$';
     }
     return 'TemplateCharacter';
