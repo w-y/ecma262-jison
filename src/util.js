@@ -318,6 +318,42 @@ function parseToken(token, alias) {
 
 exports.parseToken = parseToken;
 
+/**
+ * TemplateCharacter ::
+ *  $ [lookahead ≠ {]
+ *  \ EscapeSequence
+ *  LinheContinuation
+ *  LineTerminatorSequence
+ *  SourceCharacterbut not one of ` or \ or $ or LineTerminator
+ */
+function parseTemplateCharacters(ch) {
+  if (isLineTerminator(ch)) {
+    return 'TemplateCharacter';
+  }
+
+  const input = this.matches.input;
+  const curr = this.matches.index + this.match.length;
+
+  if (ch === '$') {
+    if (curr === '{') {
+      return '$';
+    }
+    return 'TemplateCharacter';
+  }
+
+  if (ch === '\\') {
+    if (isLineTerminator(ch)) {
+      return 'TemplateCharacter';
+    }
+    return '\\';
+  }
+
+  return 'TemplateCharacter';
+}
+
+exports.parseTemplateCharacters = parseTemplateCharacters;
+
+
 // mathematical value
 function getMVHexDigit(v1) {
   switch (v1) {
@@ -347,3 +383,20 @@ function getMVHexDigits(v1, v2, v3, v4) {
 }
 
 exports.getMVHexDigits = getMVHexDigits;
+
+// [[fromLine,formColumn]
+//                     ...
+//                                [toLine,toColumn]]
+// to calc loc and range for part of rule when reducing
+
+function mergeLoc(fromLoc, toLoc) {
+  return {
+    first_line: fromLoc.first_line,
+    last_line: toLoc.lastLine,
+    first_column: fromLoc.firts_column,
+    last_column:  toLoc.lastColumn,
+    range: [fromLoc.range[0], toLoc.range[1]],
+  }
+}
+
+exports.mergeLoc = mergeLoc;

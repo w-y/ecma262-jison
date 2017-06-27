@@ -2,23 +2,35 @@ module.exports = {
   conditions: [''],
   name: 'FunctionExpression',
   rules: [
-    'function ( ) { }',
-    'function BindingIdentifier ( ) { }',
+    'function ( ) LeftBrace RightBrace',
+    'function BindingIdentifier ( ) LeftBrace RightBrace',
     'function ( ) { FunctionBody }',
     'function BindingIdentifier ( ) { FunctionBody }',
 
-    'function ( FormalParameters ) { }',
-    'function BindingIdentifier ( FormalParameters ) { }',
+    'function ( FormalParameters ) LeftBrace RightBrace',
+    'function BindingIdentifier ( FormalParameters ) LeftBrace RightBrace',
     'function ( FormalParameters ) { FunctionBody }',
     'function BindingIdentifier ( FormalParameters ) { FunctionBody }',
   ],
   handlers: [
-    '$$ = new (require(\'./ast/FunctionExpression\').FunctionExpressionNode)(null, [], null, { loc: this._$, yy })',
-    '$$ = new (require(\'./ast/FunctionExpression\').FunctionExpressionNode)($2, [], null, { loc: this._$, yy })',
+    `
+      $$ = new (require('./ast/FunctionExpression').FunctionExpressionNode)(null, [],
+        new (require('./ast/BlockStatement').BlockStatementNode)([], { loc: (require('./util').mergeLoc($4, $5)), yy }), { loc: this._$, yy })
+    `,
+    `
+      $$ = new (require('./ast/FunctionExpression').FunctionExpressionNode)($2, [],
+        new (require('./ast/BlockStatement').BlockStatementNode)([], { loc: (require('./util').mergeLoc($5, $6)), yy }), { loc: this._$, yy })
+    `,
     '$$ = new (require(\'./ast/FunctionExpression\').FunctionExpressionNode)(null, [], $5, { loc: this._$, yy })',
     '$$ = new (require(\'./ast/FunctionExpression\').FunctionExpressionNode)($2, [], $6, { loc: this._$, yy })',
-    '$$ = new (require(\'./ast/FunctionExpression\').FunctionExpressionNode)(null, $3, null, { loc: this._$, yy })',
-    '$$ = new (require(\'./ast/FunctionExpression\').FunctionExpressionNode)($2, $4, null, { loc: this._$, yy })',
+    `
+      $$ = new (require('./ast/FunctionExpression').FunctionExpressionNode)(null, $3,
+        new (require('./ast/BlockStatement').BlockStatementNode)([], { loc: (require('./util').mergeLoc($5, $6)), yy }), { loc: this._$, yy })
+    `,
+    `
+      $$ = new (require('./ast/FunctionExpression').FunctionExpressionNode)($2, $4,
+        new (require('./ast/BlockStatement').BlockStatementNode)([], { loc: (require('./util').mergeLoc($6, $7)), yy }), { loc: this._$, yy })
+    `,
     '$$ = new (require(\'./ast/FunctionExpression\').FunctionExpressionNode)(null, $3, $6, { loc: this._$, yy })',
     '$$ = new (require(\'./ast/FunctionExpression\').FunctionExpressionNode)($2, $4, $7, { loc: this._$, yy })',
   ],
@@ -26,5 +38,7 @@ module.exports = {
     require('./BindingIdentifier'),
     require('./FunctionBody'),
     require('./FormalParameters'),
+    require('./LeftBrace'),
+    require('./RightBrace'),
   ],
 };
