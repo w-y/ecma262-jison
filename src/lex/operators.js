@@ -53,6 +53,14 @@ exports.lessThanOrEqual = {
   `,
 };
 
+exports.arrow = {
+  conditions: ['*'],
+  rule: '=>',
+  handler: `
+    return require('./util').parseOperator.call(this, this.match);
+  `,
+};
+
 exports.greaterThan = {
   conditions: ['*'],
   rule: '>',
@@ -389,21 +397,29 @@ exports.rightParenthesis = {
   `,
 };
 
-exports.leftBraceExp = {
-  conditions: ['brace_start'],
-  rule: '\\{',
-  handler: `
-    return require('./util').parseOperator.call(this, this.match, 'BRACE_START');
-  `,
-};
-
-exports.leftBrace = {
-  conditions: ['*'],
-  rule: '\\{',
-  handler: `
-    return require('./util').parseOperator.call(this, this.match);
-  `,
-};
+exports.leftBrace = [
+  {
+    conditions: ['brace_start'],
+    rule: '\\{',
+    handler: `
+      return require('./util').parseOperator.call(this, this.match, 'BRACE_START');
+    `,
+  },
+  {
+    conditions: ['arrow_brace_start'],
+    rule: '\\{',
+    handler: `
+      return require('./util').parseOperator.call(this, this.match, 'LEFT_ARROW_BRACE');
+    `,
+  },
+  {
+    conditions: ['*'],
+    rule: '\\{',
+    handler: `
+      return require('./util').parseOperator.call(this, this.match);
+    `,
+  },
+];
 
 exports.rightBrace = {
   conditions: ['*'],
@@ -411,6 +427,9 @@ exports.rightBrace = {
   handler: `
     this.__temp__ = require('./util').parseOperator.call(this, this.match);
     if (this.topState() === 'brace_start') {
+      this.popState();
+    }
+    if (this.topState() === 'arrow_brace_start') {
       this.popState();
     }
     return this.__temp__;

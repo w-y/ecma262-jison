@@ -1,8 +1,8 @@
 module.exports = {
   conditions: [''],
-  name: 'RightParenthesis',
+  name: 'RightBrace',
   rules: [
-    ')',
+    '}',
   ],
   handlers: [
     '$$ = this._$',

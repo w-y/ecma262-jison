@@ -128,7 +128,7 @@ function parseOperator(operator, alias) {
   let i = this.matches.index + this.match.length;
   const input = this.matches.input;
 
-  while (i < input.length && isWhiteSpace(input[i])) { i++; }
+  while (i < input.length && (isWhiteSpace(input[i]))) { i++; }
   let res = '';
 
   switch (this.topState()) {
@@ -155,6 +155,10 @@ function parseOperator(operator, alias) {
       this.popState();
       res = alias || operator;
       break;
+    case 'arrow_brace_start':
+      this.popState();
+      res = alias || operator;
+      break;
     default:
       res = alias || operator;
       break;
@@ -171,11 +175,12 @@ function parseOperator(operator, alias) {
     }
   } else if (this.match === ')') {
 
-  } else if (this.match === '}') {
-
+  } else if (this.match === '=>') {
+    // Arrow Function look ahread {
+    if (/^{/.test(input.substring(i))) {
+      this.begin('arrow_brace_start');
+    }
   } else if (this.match === ';') {
-
-  } else if (isWhiteSpace(this.match) || isLineTerminator(this.match)) {
 
   } else if (/^{/.test(input.substring(i))) {
     this.begin('brace_start');
@@ -275,12 +280,79 @@ function parseToken(token, alias) {
       this.popState();
       break;
     default:
+      if (isLineTerminator(this.match)) {
+        const input = this.matches.input;
+        let i = 0;
+
+        // jump white space and line terminator
+        while (i < input.length && (isWhiteSpace(input[i]) || isLineTerminator(input[i]))) { i++; }
+
+        // () => {}
+        // look behind =>
+        // ArrowFunction[In, Yield] :
+        //     ArrowParameters[?Yield] [no LineTerminator here] => ConciseBody[?In]
+
+        if (/^=>/.test(input.substring(i))) {
+          throw new (require('./error').NoLineTerminatorError)('no line terminator', {
+            text: this.yytext,
+            token: 'ArrowFunction',
+            line: this.yylloc.first_line,
+            loc: {
+              first_line: this.yylloc.first_line,
+              last_line: this.yylloc.last_line,
+              first_column: this.yylloc.first_column,
+              last_column: this.yylloc.last_column,
+              range: [
+                this.yylloc.range[0],
+                this.yylloc.range[1] - 2,
+              ],
+            },
+            offset: this.offset - 2,
+          });
+        }
+      }
       break;
   }
   return alias || '';
 }
 
 exports.parseToken = parseToken;
+
+/**
+ * TemplateCharacter ::
+ *  $ [lookahead ≠ {]
+ *  \ EscapeSequence
+ *  LinheContinuation
+ *  LineTerminatorSequence
+ *  SourceCharacterbut not one of ` or \ or $ or LineTerminator
+ */
+function parseTemplateCharacters(ch) {
+  if (isLineTerminator(ch)) {
+    return 'TemplateCharacter';
+  }
+
+  const input = this.matches.input;
+  const nextCh = input[this.matches.index + this.match.length];
+
+  if (ch === '$') {
+    if (nextCh === '{') {
+      return '$';
+    }
+    return 'TemplateCharacter';
+  }
+
+  if (ch === '\\') {
+    if (isLineTerminator(nextCh)) {
+      return 'TemplateCharacter';
+    }
+    return '\\';
+  }
+
+  return 'TemplateCharacter';
+}
+
+exports.parseTemplateCharacters = parseTemplateCharacters;
+
 
 // mathematical value
 function getMVHexDigit(v1) {
@@ -311,3 +383,20 @@ function getMVHexDigits(v1, v2, v3, v4) {
 }
 
 exports.getMVHexDigits = getMVHexDigits;
+
+// [[fromLine,formColumn]
+//                     ...
+//                                [toLine,toColumn]]
+// to calc loc and range for part of rule when reducing
+
+function mergeLoc(fromLoc, toLoc) {
+  return {
+    first_line: fromLoc.first_line,
+    last_line: toLoc.lastLine,
+    first_column: fromLoc.firts_column,
+    last_column: toLoc.lastColumn,
+    range: [fromLoc.range[0], toLoc.range[1]],
+  };
+}
+
+exports.mergeLoc = mergeLoc;

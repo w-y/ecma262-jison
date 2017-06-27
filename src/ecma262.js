@@ -36,6 +36,9 @@ const {
   bitwiseORAssignment,      // |=
   greaterThanOrEqual,       // >=
   lessThanOrEqual,          // <=
+
+  arrow,                    // =>
+
   exponentiation,           // **
 
   and,                      // &&
@@ -71,8 +74,7 @@ const {
   rightBracket,             // ]
   leftParenthesis,          // (
   rightParenthesis,         // )
-  leftBraceExp,             // {
-  leftBrace,                // }
+  leftBrace,                // {
   rightBrace,               // }
   spread,                   // ...
 } = require('./lex/operators');
@@ -108,6 +110,7 @@ exports.grammar = {
       function_start: 'function_start',
       brace_start: 'brace_start',
       case_start: 'case_start',
+      arrow_brace_start: 'arrow_brace_start',
       single_line_comment_start: 'single_line_comment_start',
       multi_line_comment_start: 'multi_line_comment_start',
       multi_line_comment_post_asterisk_start: 'multi_line_comment_post_asterisk_start',
@@ -143,6 +146,7 @@ exports.grammar = {
       bitwiseORAssignment,
       greaterThanOrEqual,
       lessThanOrEqual,
+      arrow,
       exponentiation,
       and,
       or,
@@ -172,7 +176,6 @@ exports.grammar = {
       leftParenthesis,
       rightParenthesis,
 
-      leftBraceExp,
       leftBrace,
       rightBrace,
 
