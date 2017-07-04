@@ -6,7 +6,7 @@ exports.idStart = idStartReg;
 exports.idContinue = idContinueReg;
 
 const unicodeIDStart = {
-  conditions: ['INITIAL', 'brace_start', 'case_start', 'arrow_brace_start'],
+  conditions: ['INITIAL', 'brace_start', 'case_start', 'arrow_brace_start', 'template_string_head_start'],
   rule: idStartReg,
   handler: `
     this.begin('identifier_start');

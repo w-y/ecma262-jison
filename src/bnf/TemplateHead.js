@@ -3,16 +3,13 @@ module.exports = {
   name: 'TemplateHead',
   rules: [
     '` $ LEFT_TEMPLATE_BRACE',
-    '` TemplateCharacters',
+    '` TemplateCharacters $ LEFT_TEMPLATE_BRACE',
   ],
   handlers: [
     '$$ = $1;',
-    '$$ = $1 + $2 + $3;',
+    '$$ = $1 + $2 + $3 + $4;',
   ],
   subRules: [
-    require('./NoSubstitutionTemplate'),
     require('./TemplateHead'),
-    require('./Expression_In'),
-    require('./TemplateSpans'),
   ],
 };

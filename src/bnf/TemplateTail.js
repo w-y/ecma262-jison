@@ -2,8 +2,8 @@ module.exports = {
   conditions: [''],
   name: 'TemplateTail',
   rules: [
-    '}',
-    '} TemplateCharacters',
+    'RIGHT_TEMPLATE_BRACE `',
+    'RIGHT_TEMPLATE_BRACE TemplateCharacters `',
   ],
   handlers: [
     '$$ = $1;',

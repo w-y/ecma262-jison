@@ -7,7 +7,7 @@ module.exports = {
   ],
   handlers: [
     '$$ = $1;',
-    '$$ = $1 + $2 + $3;',
+    '$$ = $1 + $2;',
   ],
   subRules: [
     require('./TemplateTail'),

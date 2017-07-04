@@ -4,7 +4,7 @@ module.exports = {
   name: 'ConditionalExpression_In',
   rules: [
     'LogicalORExpression_In',
-    'LogicalORExpression_In ? AssignmentExpression_In : AssignmentExpression_In',
+    // 'LogicalORExpression_In ? AssignmentExpression_In : AssignmentExpression_In',
   ],
   handlers: [
     '$$ = $1;',

@@ -15,7 +15,17 @@ const TemplateCharacterLineTerminator = {
   `,
 };
 
-exports.singleString = [
+const TemplateQuoteStart = {
+  conditions: ['INITIAL', 'case_start'],
+  rule: '`',
+  handler: `
+    this.begin('template_string_start');
+    return '\`';
+  `,
+};
+
+exports.template = [
   TemplateCharacter,
   TemplateCharacterLineTerminator,
+  TemplateQuoteStart,
 ];

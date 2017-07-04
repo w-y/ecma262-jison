@@ -37,6 +37,9 @@ function parseKeyword(keyword, alias) {
       case 'double_string_start':
         res = 'DoubleStringCharacter';
         break;
+      case 'template_string_start':
+        res = 'TemplateChar';
+        break;
       case 'identifier_start':
         res = 'UnicodeIDContinue';
         break;
@@ -138,6 +141,12 @@ function parseOperator(operator, alias) {
     case 'double_string_start':
       res = 'DoubleStringCharacter';
       break;
+    case 'template_string_start':
+      res = parseTemplateCharacters(operator);
+      break;
+    case 'template_string_head_start':
+      res = 'LEFT_TEMPLATE_BRACE';
+      break;
     case 'identifier_start':
       this.popState();
       res = alias || operator;
@@ -182,6 +191,15 @@ function parseOperator(operator, alias) {
     }
   } else if (this.match === ';') {
 
+  } else if (this.match === '}') {
+    // `${foo}`
+    if (this.topState() === 'template_string_head_start') {
+      this.popState();
+      return 'RIGHT_TEMPLATE_BRACE';
+    }
+    if (this.topState() === 'template_string_start') {
+      return 'TemplateChar';
+    }
   } else if (/^{/.test(input.substring(i))) {
     this.begin('brace_start');
   } else if (/^function/.test(input.substring(i))) {
@@ -200,6 +218,8 @@ function parseIdentifier() {
       return 'SingleStringCharacter';
     case 'double_string_start':
       return 'DoubleStringCharacter';
+    case 'template_string_start':
+      return 'TemplateChar';
     default:
       break;
   }
@@ -269,6 +289,8 @@ function parseToken(token, alias) {
       return 'SingleStringCharacter';
     case 'double_string_start':
       return 'DoubleStringCharacter';
+    case 'template_string_start':
+      return 'TemplateChar';
     case 'identifier_start':
       this.popState();
       break;
@@ -328,13 +350,13 @@ exports.parseToken = parseToken;
  */
 function parseTemplateCharacters(ch) {
 
-  // prev is $ and look ahead is {
-  if (this.topState() === 'template_string_head_start') {
-    return 'LEFT_TEMPLATE_BRACE';
+  if (ch === '`') {
+    this.popState();
+    return ch;
   }
 
   if (isLineTerminator(ch)) {
-    return 'TemplateCharacter';
+    return 'TemplateChar';
   }
 
   const input = this.matches.input;
@@ -345,17 +367,17 @@ function parseTemplateCharacters(ch) {
       this.begin('template_string_head_start');
       return '$';
     }
-    return 'TemplateCharacter';
+    return 'TemplateChar';
   }
 
   if (ch === '\\') {
     if (isLineTerminator(nextCh)) {
-      return 'TemplateCharacter';
+      return 'TemplateChar';
     }
-    return '\\';
+    return 'TemplateEscape';
   }
 
-  return 'TemplateCharacter';
+  return 'TemplateChar';
 }
 
 exports.parseTemplateCharacters = parseTemplateCharacters;
