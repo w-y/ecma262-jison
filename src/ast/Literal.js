@@ -44,9 +44,6 @@ function ObjectLiteralNode(properties, ...args) {
 }
 
 function TemplateLiteralNode(value, ...args) {
-  console.log('================');
-  console.log(value);
-  console.log('================');
   BaseNode.call(this, Object.assign({}, { type: 'TemplateLiteral' }, ...args));
 }
 
