@@ -6,8 +6,8 @@ module.exports = {
     'RIGHT_TEMPLATE_BRACE TemplateCharacters `',
   ],
   handlers: [
-    '$$ = $1;',
-    '$$ = $1 + $2;',
+    `$$ = new (require('./ast/Literal').TemplateElementNode)('', true)`,
+    `$$ = new (require('./ast/Literal').TemplateElementNode)($2, true)`,
   ],
   subRules: [
     require('./TemplateCharacters'),

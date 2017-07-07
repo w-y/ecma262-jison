@@ -6,8 +6,8 @@ module.exports = {
     'TemplateMiddleList TemplateMiddle Expression_In',
   ],
   handlers: [
-    '$$ = $1;',
-    '$$ = $1 + $2 + $3;',
+    `$$ = { quasis: [$1], expressions: [$2] }`,
+    `$$ = { quasis: $1.quasis.concat([$2]), expressions: $1.expressions.concat([$3]) }`,
   ],
   subRules: [
     require('./TemplateMiddle'),

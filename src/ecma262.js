@@ -117,6 +117,7 @@ exports.grammar = {
       multi_line_comment_post_asterisk_start: 'multi_line_comment_post_asterisk_start',
       template_string_start: 'template_string_start',
       template_string_head_start: 'template_string_head_start',
+      template_escape_string_start: 'template_escape_string_start',
     },
     rules: transLex([
       multiLineComment,

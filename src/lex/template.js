@@ -1,3 +1,13 @@
+const TemplateHeadStart = {
+  conditions: ['template_string_start'],
+  rule: '\\${',
+  handler: `
+    console.log('======================');
+    this.begin('template_string_head_start');
+    return 'LEFT_TEMPLATE_BRACE';
+  `,
+};
+
 const TemplateCharacter = {
   conditions: ['template_string_start'],
   rule: '.',
@@ -15,8 +25,16 @@ const TemplateCharacterLineTerminator = {
   `,
 };
 
+const TemplateCharacterEscape = {
+  conditions: ['template_escape_string_start'],
+  rule: '.',
+  handler: `
+    return require('./util').parseTemplateCharacterEscape.call(this, this.match);
+  `,
+};
+
 const TemplateQuoteStart = {
-  conditions: ['INITIAL', 'case_start'],
+  conditions: ['INITIAL', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'brace_start'],
   rule: '`',
   handler: `
     this.begin('template_string_start');
@@ -25,7 +43,9 @@ const TemplateQuoteStart = {
 };
 
 exports.template = [
+  TemplateHeadStart,
   TemplateCharacter,
+  TemplateCharacterEscape,
   TemplateCharacterLineTerminator,
   TemplateQuoteStart,
 ];

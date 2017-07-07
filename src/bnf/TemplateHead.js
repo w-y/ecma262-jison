@@ -2,12 +2,12 @@ module.exports = {
   conditions: [''],
   name: 'TemplateHead',
   rules: [
-    '` $ LEFT_TEMPLATE_BRACE',
-    '` TemplateCharacters $ LEFT_TEMPLATE_BRACE',
+    '` LEFT_TEMPLATE_BRACE',
+    '` TemplateCharacters LEFT_TEMPLATE_BRACE',
   ],
   handlers: [
-    '$$ = $1;',
-    '$$ = $1 + $2 + $3 + $4;',
+    `$$ = new (require('./ast/Literal').TemplateElementNode)('', false)`,
+    `$$ = new (require('./ast/Literal').TemplateElementNode)($2, false)`,
   ],
   subRules: [
     require('./TemplateHead'),

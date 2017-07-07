@@ -145,7 +145,12 @@ function parseOperator(operator, alias) {
       res = parseTemplateCharacters(operator);
       break;
     case 'template_string_head_start':
-      res = 'LEFT_TEMPLATE_BRACE';
+      // `${{}}` here { must be the prefix of an exression
+      if (this.match === '{') {
+        this.begin('brace_start');
+        return 'BRACE_START';
+      }
+      res = alias || operator;
       break;
     case 'identifier_start':
       this.popState();
@@ -161,7 +166,7 @@ function parseOperator(operator, alias) {
       res = alias || operator;
       break;
     case 'brace_start':
-      this.popState();
+      // this.popState();
       res = alias || operator;
       break;
     case 'arrow_brace_start':
@@ -363,6 +368,7 @@ function parseTemplateCharacters(ch) {
   const nextCh = input[this.matches.index + this.match.length];
 
   if (ch === '$') {
+    console.log('vvvvvvvvvvvvvvvvvvvvvvvvv');
     if (nextCh === '{') {
       this.begin('template_string_head_start');
       return '$';
@@ -374,6 +380,7 @@ function parseTemplateCharacters(ch) {
     if (isLineTerminator(nextCh)) {
       return 'TemplateChar';
     }
+    this.begin('template_escape_string_start');
     return 'TemplateEscape';
   }
 
@@ -382,6 +389,16 @@ function parseTemplateCharacters(ch) {
 
 exports.parseTemplateCharacters = parseTemplateCharacters;
 
+function parseTemplateCharacterEscape(ch) {
+  if (SINGLE_ESCAPE_CHARACTERS.indexOf(ch) !== -1) {
+    this.popState();
+    return 'SingleEscapeCharacter';
+  }
+  this.popState();
+  return 'NonEscapeCharacter';
+}
+
+exports.parseTemplateCharacterEscape = parseTemplateCharacterEscape;
 
 // mathematical value
 function getMVHexDigit(v1) {
