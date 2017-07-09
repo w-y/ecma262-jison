@@ -141,9 +141,6 @@ function parseOperator(operator, alias) {
     case 'double_string_start':
       res = 'DoubleStringCharacter';
       break;
-    case 'template_string_start':
-      res = parseTemplateCharacters(operator);
-      break;
     case 'template_string_head_start':
       // `${{}}` here { must be the prefix of an exression
       if (this.match === '{') {
@@ -354,7 +351,6 @@ exports.parseToken = parseToken;
  *  SourceCharacterbut not one of ` or \ or $ or LineTerminator
  */
 function parseTemplateCharacters(ch) {
-
   if (ch === '`') {
     this.popState();
     return ch;

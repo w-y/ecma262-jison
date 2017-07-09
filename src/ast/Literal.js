@@ -43,8 +43,10 @@ function ObjectLiteralNode(properties, ...args) {
   this.properties = properties;
 }
 
-function TemplateLiteralNode(value, ...args) {
+function TemplateLiteralNode(quasis, expressions, ...args) {
   BaseNode.call(this, Object.assign({}, { type: 'TemplateLiteral' }, ...args));
+  this.quasis = quasis;
+  this.expressions = expressions;
 }
 
 function TemplateElementNode(raw, isTail, ...args) {

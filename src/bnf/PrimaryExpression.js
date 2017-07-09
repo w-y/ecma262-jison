@@ -7,8 +7,8 @@ module.exports = {
     'Literal',
     'ArrayLiteral',
     'ObjectLiteral',
-    //'CoverParenthesizedExpressionAndArrowParameterList',
-    //'FunctionExpression',
+    // 'CoverParenthesizedExpressionAndArrowParameterList',
+    // 'FunctionExpression',
     'TemplateLiteral',
   ],
   handlers: [

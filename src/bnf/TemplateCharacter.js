@@ -6,8 +6,8 @@ module.exports = {
     'TemplateChar',
   ],
   handlers: [
-    `$$ = $1 + $2`,
-    `$$ = $1`,
+    '$$ = $1 + $2',
+    '$$ = $1',
   ],
   subRules: [
     require('./EscapeSequence'),
