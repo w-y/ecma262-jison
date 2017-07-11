@@ -2,7 +2,6 @@ const TemplateHeadStart = {
   conditions: ['template_string_start'],
   rule: '\\${',
   handler: `
-    console.log('======================');
     this.begin('template_string_head_start');
     return 'LEFT_TEMPLATE_BRACE';
   `,

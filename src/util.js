@@ -364,7 +364,6 @@ function parseTemplateCharacters(ch) {
   const nextCh = input[this.matches.index + this.match.length];
 
   if (ch === '$') {
-    console.log('vvvvvvvvvvvvvvvvvvvvvvvvv');
     if (nextCh === '{') {
       this.begin('template_string_head_start');
       return '$';
