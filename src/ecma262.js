@@ -118,6 +118,8 @@ exports.grammar = {
       template_string_start: 'template_string_start',
       template_string_head_start: 'template_string_head_start',
       template_escape_string_start: 'template_escape_string_start',
+      function_brace_start: 'function_brace_start',
+      block_brace_start: 'block_brace_start',
     },
     rules: transLex([
       multiLineComment,

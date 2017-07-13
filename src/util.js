@@ -27,6 +27,42 @@ exports.isWhiteSpace = isWhiteSpace;
 exports.isDecimalDigit = isDecimalDigit;
 exports.isLineTerminator = isLineTerminator;
 
+// look ahead from source
+function lookAhead(source, offset, ignoreWhitespace, ignoreLineTerminator) {
+  let curr = offset;
+  ch = source[curr];
+
+  const test = function(ch) {
+    const isWS = ignoreWhitespace && isWhiteSpace(ch);
+    const isLT = ignoreLineTerminator && isLineTerminator(ch);
+    return isWS || isLT;
+  };
+
+  while (curr < source.length && test(ch)) {
+    curr += 1;
+    ch = source[curr];
+  }
+  return ch;
+}
+
+// look behind target from source
+function lookBehind(source, offset, ignoreWhitespace, ignoreLineTerminator) {
+  let curr = source.length - offset - 1;
+  ch = source[curr];
+
+  const test = function(ch) {
+    const isWS = ignoreWhitespace && isWhiteSpace(ch);
+    const isLT = ignoreLineTerminator && isLineTerminator(ch);
+    return isWS || isLT;
+  };
+
+  while (curr >= 0 && test(ch)) {
+    curr -= 1;
+    ch = source[curr];
+  }
+  return ch;
+}
+
 function parseKeyword(keyword, alias) {
   {
     let res = '';
@@ -48,11 +84,11 @@ function parseKeyword(keyword, alias) {
         break;
     }
 
-    // look behind { 和 function
+    // look ahead { 和 function
     let i = this.matches.index + this.match.length;
     const input = this.matches.input;
 
-    // look behind for id_continue
+    // look ahead for id_continue
 
     if (this.topState() === 'INITIAL') {
       const idContinueReg = require('unicode-6.3.0/Binary_Property/ID_Continue/regex');
@@ -89,6 +125,7 @@ function parseKeyword(keyword, alias) {
 exports.parseKeyword = parseKeyword;
 
 function parseOperator(operator, alias) {
+
    // NOTICE: restrict line terminator for update express
   if (alias === 'UpdateOperator') {
     let start = this.matched.length - 3;
@@ -141,14 +178,6 @@ function parseOperator(operator, alias) {
     case 'double_string_start':
       res = 'DoubleStringCharacter';
       break;
-    case 'template_string_head_start':
-      // `${{}}` here { must be the prefix of an exression
-      if (this.match === '{') {
-        this.begin('brace_start');
-        return 'BRACE_START';
-      }
-      res = alias || operator;
-      break;
     case 'identifier_start':
       this.popState();
       res = alias || operator;
@@ -199,9 +228,33 @@ function parseOperator(operator, alias) {
       this.popState();
       return 'RIGHT_TEMPLATE_BRACE';
     }
+    if (this.topState() === 'function_brace_start') {
+      this.popState();
+      return '}';
+    }
     if (this.topState() === 'template_string_start') {
       return 'TemplateChar';
     }
+    if (this.topState() === 'block_brace_start') {
+      this.popState();
+      return '}';
+    }
+   } else if (this.match === '{') {
+    if (this.topState() === 'template_string_head_start') {
+      // look behind for ')'
+      const ch = lookBehind(this.matched, 1, true, true);
+      //`${function() {}}` the 2nd { should be the start of a block
+      if (ch === ')') {
+        this.begin('function_brace_start');
+        return '{';
+      } else {
+        // `${{}}` here { must be the prefix of an exression
+        this.begin('brace_start');
+        return 'BRACE_START';
+      }
+    }
+    // here { should be start of a block
+    this.begin('block_brace_start');
   } else if (/^{/.test(input.substring(i))) {
     this.begin('brace_start');
   } else if (/^function/.test(input.substring(i))) {
@@ -312,7 +365,7 @@ function parseToken(token, alias) {
         while (i < input.length && (isWhiteSpace(input[i]) || isLineTerminator(input[i]))) { i++; }
 
         // () => {}
-        // look behind =>
+        // look ahead =>
         // ArrowFunction[In, Yield] :
         //     ArrowParameters[?Yield] [no LineTerminator here] => ConciseBody[?In]
 
