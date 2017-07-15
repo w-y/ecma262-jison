@@ -1,6 +1,7 @@
 const { isWhiteSpace, isLineTerminator } = require('./util');
 const { ParseError } = require('./error');
 const parser = require('./parser');
+
 const EOF = 1;
 
 /**
@@ -136,7 +137,7 @@ function autoinsertion(source) {
       if (!src) {
         const originEx = parser.parser.yy.originEx;
         reloadParser();
-        // empty file 
+        // empty file
         if (isEOF(originEx)) {
           break;
         } else {
@@ -145,6 +146,7 @@ function autoinsertion(source) {
       }
     }
   }
+  return false;
 }
 
 module.exports = autoinsertion;

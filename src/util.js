@@ -30,13 +30,14 @@ exports.isLineTerminator = isLineTerminator;
 // look ahead from source
 function lookAhead(source, offset, ignoreWhitespace, ignoreLineTerminator) {
   let curr = offset;
-  ch = source[curr];
 
-  const test = function(ch) {
+  const test = function (ch) {
     const isWS = ignoreWhitespace && isWhiteSpace(ch);
     const isLT = ignoreLineTerminator && isLineTerminator(ch);
     return isWS || isLT;
   };
+
+  let ch = source[curr];
 
   while (curr < source.length && test(ch)) {
     curr += 1;
@@ -48,13 +49,14 @@ function lookAhead(source, offset, ignoreWhitespace, ignoreLineTerminator) {
 // look behind target from source
 function lookBehind(source, offset, ignoreWhitespace, ignoreLineTerminator) {
   let curr = source.length - offset - 1;
-  ch = source[curr];
 
-  const test = function(ch) {
+  const test = function (ch) {
     const isWS = ignoreWhitespace && isWhiteSpace(ch);
     const isLT = ignoreLineTerminator && isLineTerminator(ch);
     return isWS || isLT;
   };
+
+  let ch = source[curr];
 
   while (curr >= 0 && test(ch)) {
     curr -= 1;
@@ -125,7 +127,6 @@ function parseKeyword(keyword, alias) {
 exports.parseKeyword = parseKeyword;
 
 function parseOperator(operator, alias) {
-
    // NOTICE: restrict line terminator for update express
   if (alias === 'UpdateOperator') {
     let start = this.matched.length - 3;
@@ -239,19 +240,18 @@ function parseOperator(operator, alias) {
       this.popState();
       return '}';
     }
-   } else if (this.match === '{') {
+  } else if (this.match === '{') {
     if (this.topState() === 'template_string_head_start') {
       // look behind for ')'
       const ch = lookBehind(this.matched, 1, true, true);
-      //`${function() {}}` the 2nd { should be the start of a block
+      // `${function() {}}` the 2nd { should be the start of a block
       if (ch === ')') {
         this.begin('function_brace_start');
         return '{';
-      } else {
-        // `${{}}` here { must be the prefix of an exression
-        this.begin('brace_start');
-        return 'BRACE_START';
       }
+        // `${{}}` here { must be the prefix of an exression
+      this.begin('brace_start');
+      return 'BRACE_START';
     }
     // here { should be start of a block
     this.begin('block_brace_start');
