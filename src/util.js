@@ -27,6 +27,44 @@ exports.isWhiteSpace = isWhiteSpace;
 exports.isDecimalDigit = isDecimalDigit;
 exports.isLineTerminator = isLineTerminator;
 
+// look ahead from source
+function lookAhead(source, offset, ignoreWhitespace, ignoreLineTerminator) {
+  let curr = offset;
+
+  const test = function (ch) {
+    const isWS = ignoreWhitespace && isWhiteSpace(ch);
+    const isLT = ignoreLineTerminator && isLineTerminator(ch);
+    return isWS || isLT;
+  };
+
+  let ch = source[curr];
+
+  while (curr < source.length && test(ch)) {
+    curr += 1;
+    ch = source[curr];
+  }
+  return ch;
+}
+
+// look behind target from source
+function lookBehind(source, offset, ignoreWhitespace, ignoreLineTerminator) {
+  let curr = source.length - offset - 1;
+
+  const test = function (ch) {
+    const isWS = ignoreWhitespace && isWhiteSpace(ch);
+    const isLT = ignoreLineTerminator && isLineTerminator(ch);
+    return isWS || isLT;
+  };
+
+  let ch = source[curr];
+
+  while (curr >= 0 && test(ch)) {
+    curr -= 1;
+    ch = source[curr];
+  }
+  return ch;
+}
+
 function parseKeyword(keyword, alias) {
   {
     let res = '';
@@ -37,6 +75,9 @@ function parseKeyword(keyword, alias) {
       case 'double_string_start':
         res = 'DoubleStringCharacter';
         break;
+      case 'template_string_start':
+        res = 'TemplateChar';
+        break;
       case 'identifier_start':
         res = 'UnicodeIDContinue';
         break;
@@ -45,11 +86,11 @@ function parseKeyword(keyword, alias) {
         break;
     }
 
-    // look behind { 和 function
+    // look ahead { 和 function
     let i = this.matches.index + this.match.length;
     const input = this.matches.input;
 
-    // look behind for id_continue
+    // look ahead for id_continue
 
     if (this.topState() === 'INITIAL') {
       const idContinueReg = require('unicode-6.3.0/Binary_Property/ID_Continue/regex');
@@ -152,7 +193,7 @@ function parseOperator(operator, alias) {
       res = alias || operator;
       break;
     case 'brace_start':
-      this.popState();
+      // this.popState();
       res = alias || operator;
       break;
     case 'arrow_brace_start':
@@ -182,6 +223,38 @@ function parseOperator(operator, alias) {
     }
   } else if (this.match === ';') {
 
+  } else if (this.match === '}') {
+    // `${foo}`
+    if (this.topState() === 'template_string_head_start') {
+      this.popState();
+      return 'RIGHT_TEMPLATE_BRACE';
+    }
+    if (this.topState() === 'function_brace_start') {
+      this.popState();
+      return '}';
+    }
+    if (this.topState() === 'template_string_start') {
+      return 'TemplateChar';
+    }
+    if (this.topState() === 'block_brace_start') {
+      this.popState();
+      return '}';
+    }
+  } else if (this.match === '{') {
+    if (this.topState() === 'template_string_head_start') {
+      // look behind for ')'
+      const ch = lookBehind(this.matched, 1, true, true);
+      // `${function() {}}` the 2nd { should be the start of a block
+      if (ch === ')') {
+        this.begin('function_brace_start');
+        return '{';
+      }
+        // `${{}}` here { must be the prefix of an exression
+      this.begin('brace_start');
+      return 'BRACE_START';
+    }
+    // here { should be start of a block
+    this.begin('block_brace_start');
   } else if (/^{/.test(input.substring(i))) {
     this.begin('brace_start');
   } else if (/^function/.test(input.substring(i))) {
@@ -200,6 +273,8 @@ function parseIdentifier() {
       return 'SingleStringCharacter';
     case 'double_string_start':
       return 'DoubleStringCharacter';
+    case 'template_string_start':
+      return 'TemplateChar';
     default:
       break;
   }
@@ -269,6 +344,8 @@ function parseToken(token, alias) {
       return 'SingleStringCharacter';
     case 'double_string_start':
       return 'DoubleStringCharacter';
+    case 'template_string_start':
+      return 'TemplateChar';
     case 'identifier_start':
       this.popState();
       break;
@@ -288,7 +365,7 @@ function parseToken(token, alias) {
         while (i < input.length && (isWhiteSpace(input[i]) || isLineTerminator(input[i]))) { i++; }
 
         // () => {}
-        // look behind =>
+        // look ahead =>
         // ArrowFunction[In, Yield] :
         //     ArrowParameters[?Yield] [no LineTerminator here] => ConciseBody[?In]
 
@@ -327,8 +404,13 @@ exports.parseToken = parseToken;
  *  SourceCharacterbut not one of ` or \ or $ or LineTerminator
  */
 function parseTemplateCharacters(ch) {
+  if (ch === '`') {
+    this.popState();
+    return ch;
+  }
+
   if (isLineTerminator(ch)) {
-    return 'TemplateCharacter';
+    return 'TemplateChar';
   }
 
   const input = this.matches.input;
@@ -336,23 +418,35 @@ function parseTemplateCharacters(ch) {
 
   if (ch === '$') {
     if (nextCh === '{') {
+      this.begin('template_string_head_start');
       return '$';
     }
-    return 'TemplateCharacter';
+    return 'TemplateChar';
   }
 
   if (ch === '\\') {
     if (isLineTerminator(nextCh)) {
-      return 'TemplateCharacter';
+      return 'TemplateChar';
     }
-    return '\\';
+    this.begin('template_escape_string_start');
+    return 'TemplateEscape';
   }
 
-  return 'TemplateCharacter';
+  return 'TemplateChar';
 }
 
 exports.parseTemplateCharacters = parseTemplateCharacters;
 
+function parseTemplateCharacterEscape(ch) {
+  if (SINGLE_ESCAPE_CHARACTERS.indexOf(ch) !== -1) {
+    this.popState();
+    return 'SingleEscapeCharacter';
+  }
+  this.popState();
+  return 'NonEscapeCharacter';
+}
+
+exports.parseTemplateCharacterEscape = parseTemplateCharacterEscape;
 
 // mathematical value
 function getMVHexDigit(v1) {

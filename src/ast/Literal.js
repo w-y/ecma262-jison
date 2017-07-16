@@ -43,9 +43,22 @@ function ObjectLiteralNode(properties, ...args) {
   this.properties = properties;
 }
 
+function TemplateLiteralNode(quasis, expressions, ...args) {
+  BaseNode.call(this, Object.assign({}, { type: 'TemplateLiteral' }, ...args));
+  this.quasis = quasis;
+  this.expressions = expressions;
+}
+
+function TemplateElementNode(raw, isTail, ...args) {
+  LiteralNode.call(this, raw, Object.assign({}, { type: 'TemplateElement' }, ...args));
+  this.isTail = isTail;
+}
+
 exports.NullLiteralNode = NullLiteralNode;
 exports.BooleanLiteralNode = BooleanLiteralNode;
 exports.StringLiteralNode = StringLiteralNode;
 exports.DecimalLiteralNode = DecimalLiteralNode;
 exports.ArrayLiteralNode = ArrayLiteralNode;
 exports.ObjectLiteralNode = ObjectLiteralNode;
+exports.TemplateLiteralNode = TemplateLiteralNode;
+exports.TemplateElementNode = TemplateElementNode;

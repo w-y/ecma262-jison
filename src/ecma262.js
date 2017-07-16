@@ -9,6 +9,7 @@ const {
 const { decimal } = require('./lex/decimal');
 const { hexDigit } = require('./lex/hex');
 const { singleString, doubleString } = require('./lex/string');
+const { template } = require('./lex/template');
 const { keywords } = require('./lex/keywords');
 const { tokens } = require('./lex/tokens');
 const { identifier } = require('./lex/identifier');
@@ -114,12 +115,18 @@ exports.grammar = {
       single_line_comment_start: 'single_line_comment_start',
       multi_line_comment_start: 'multi_line_comment_start',
       multi_line_comment_post_asterisk_start: 'multi_line_comment_post_asterisk_start',
+      template_string_start: 'template_string_start',
+      template_string_head_start: 'template_string_head_start',
+      template_escape_string_start: 'template_escape_string_start',
+      function_brace_start: 'function_brace_start',
+      block_brace_start: 'block_brace_start',
     },
     rules: transLex([
       multiLineComment,
       singleLineComment,
       singleString,
       doubleString,
+      template,
       tokens,
       keywords,
 

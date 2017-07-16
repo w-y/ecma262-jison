@@ -1,7 +1,8 @@
 const { isWhiteSpace, isLineTerminator } = require('./util');
-
 const { ParseError } = require('./error');
 const parser = require('./parser');
+
+const EOF = 1;
 
 /**
  * "
@@ -28,7 +29,7 @@ function canApplyRule(source, ex) {
     return -1;
   }
   // NOTICE: the end of the input stream of tokens
-  if (token === 1) {
+  if (token === EOF) {
     return tokenOffset - 1;
   }
   // The offending token is }
@@ -63,6 +64,10 @@ function canApplyRule(source, ex) {
     return tokenOffset;
   }
   return -1;
+}
+
+function isEOF(ex) {
+  return ex.hash && ex.hash.token === EOF;
 }
 
 function autoinsertion(source) {
@@ -132,10 +137,16 @@ function autoinsertion(source) {
       if (!src) {
         const originEx = parser.parser.yy.originEx;
         reloadParser();
-        throw originEx;
+        // empty file
+        if (isEOF(originEx)) {
+          break;
+        } else {
+          throw originEx;
+        }
       }
     }
   }
+  return false;
 }
 
 module.exports = autoinsertion;

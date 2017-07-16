@@ -9,9 +9,11 @@ module.exports = {
     'ObjectLiteral',
     'CoverParenthesizedExpressionAndArrowParameterList',
     'FunctionExpression',
+    'TemplateLiteral',
   ],
   handlers: [
     '$$ = new (require(\'./ast/ThisExpressionNode\'))({ loc: this._$, yy });',
+    '$$ = $1;',
     '$$ = $1;',
     '$$ = $1;',
     '$$ = $1;',
@@ -26,5 +28,6 @@ module.exports = {
     require('./ObjectLiteral'),
     require('./CoverParenthesizedExpressionAndArrowParameterList'),
     require('./FunctionExpression'),
+    require('./TemplateLiteral'),
   ],
 };
