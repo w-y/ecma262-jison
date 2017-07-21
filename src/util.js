@@ -27,6 +27,52 @@ exports.isWhiteSpace = isWhiteSpace;
 exports.isDecimalDigit = isDecimalDigit;
 exports.isLineTerminator = isLineTerminator;
 
+// mathematical value
+function getMVHexDigit(v1) {
+  switch (v1) {
+    case 'a':
+      return 10;
+    case 'b':
+      return 11;
+    case 'c':
+      return 12;
+    case 'd':
+      return 13;
+    case 'e':
+      return 14;
+    case 'f':
+      return 15;
+    default:
+      break;
+  }
+  return parseInt(v1, 10);
+}
+
+function getMVHexDigits(v1, v2, v3, v4) {
+  return (4096 * getMVHexDigit(v1)) +
+    (256 * getMVHexDigit(v2)) +
+    (16 * getMVHexDigit(v3)) +
+    getMVHexDigit(v4);
+}
+
+exports.getMVHexDigits = getMVHexDigits;
+
+// [[fromLine,formColumn]
+//                     ...
+//                                [toLine,toColumn]]
+// to calc loc and range for part of rule when reducing
+function mergeLoc(fromLoc, toLoc) {
+  return {
+    first_line: fromLoc.first_line,
+    last_line: toLoc.lastLine,
+    first_column: fromLoc.firts_column,
+    last_column: toLoc.lastColumn,
+    range: [fromLoc.range[0], toLoc.range[1]],
+  };
+}
+
+exports.mergeLoc = mergeLoc;
+
 // look ahead from source
 function lookAhead(source, offset, ignoreWhitespace, ignoreLineTerminator) {
   let curr = offset;
@@ -79,6 +125,8 @@ function parseKeyword(keyword, alias) {
         res = 'TemplateChar';
         break;
       case 'identifier_start':
+        res = 'UnicodeIDContinue';
+      case 'regexp_flag_start':
         res = 'UnicodeIDContinue';
         break;
       default:
@@ -180,6 +228,10 @@ function parseOperator(operator, alias) {
       res = 'DoubleStringCharacter';
       break;
     case 'identifier_start':
+      this.popState();
+      res = alias || operator;
+      break;
+    case 'regexp_flag_start':
       this.popState();
       res = alias || operator;
       break;
@@ -356,6 +408,9 @@ function parseToken(token, alias) {
       this.popState();
       this.popState();
       break;
+    case 'regexp_flag_start':
+      this.popState();
+      break;
     default:
       if (isLineTerminator(this.match)) {
         const input = this.matches.input;
@@ -448,49 +503,45 @@ function parseTemplateCharacterEscape(ch) {
 
 exports.parseTemplateCharacterEscape = parseTemplateCharacterEscape;
 
-// mathematical value
-function getMVHexDigit(v1) {
-  switch (v1) {
-    case 'a':
-      return 10;
-    case 'b':
-      return 11;
-    case 'c':
-      return 12;
-    case 'd':
-      return 13;
-    case 'e':
-      return 14;
-    case 'f':
-      return 15;
-    default:
-      break;
+/**
+ * RegularExpressionLiteral :: / RegularExpressionBody /
+ *
+ * RegularExpressionNonTerminator
+ * RegularExpressionBackslashSequence :: \ RegularExpressionNonTerminator
+ * RegularExpressionClass :: [ RegularExpressionClassChars ]
+ */
+function parseRegexpCharacters(ch) {
+  if (ch === '/') {
+    this.popState();
+    this.begin('regexp_flag_start');
+    return 'RIGHT_REGEXP_DIV';
   }
-  return parseInt(v1, 10);
+
+  if (this.topState() === 'regexp_backslash_start') {
+    this.popState();
+    return 'RegularExpressionNonTerminator';
+  }
+
+  if (ch === '\\') {
+    this.begin('regexp_backslash_start');
+    return 'RegexpBackslash';
+  }
+
+  if (ch === '[') {
+    this.begin('regexp_class_start');
+    return 'LEFT_REGEXP_CLASS_BRACKET';
+  }
+  if (ch === ']') {
+    if (this.topState() === 'regexp_class_start') {
+      this.popState();
+      return 'RIGHT_REGEXP_CLASS_BRACKET';
+    }
+  }
+  if (this.topState() === 'regexp_class_start') {
+    return 'RegularExpressionClassChar';
+  }
+
+  return 'RegularExpressionNonTerminator';
 }
 
-function getMVHexDigits(v1, v2, v3, v4) {
-  return (4096 * getMVHexDigit(v1)) +
-    (256 * getMVHexDigit(v2)) +
-    (16 * getMVHexDigit(v3)) +
-    getMVHexDigit(v4);
-}
-
-exports.getMVHexDigits = getMVHexDigits;
-
-// [[fromLine,formColumn]
-//                     ...
-//                                [toLine,toColumn]]
-// to calc loc and range for part of rule when reducing
-
-function mergeLoc(fromLoc, toLoc) {
-  return {
-    first_line: fromLoc.first_line,
-    last_line: toLoc.lastLine,
-    first_column: fromLoc.firts_column,
-    last_column: toLoc.lastColumn,
-    range: [fromLoc.range[0], toLoc.range[1]],
-  };
-}
-
-exports.mergeLoc = mergeLoc;
+exports.parseRegexpCharacters = parseRegexpCharacters;

@@ -10,6 +10,7 @@ const { decimal } = require('./lex/decimal');
 const { hexDigit } = require('./lex/hex');
 const { singleString, doubleString } = require('./lex/string');
 const { template } = require('./lex/template');
+const { regexp } = require('./lex/regexp');
 const { keywords } = require('./lex/keywords');
 const { tokens } = require('./lex/tokens');
 const { identifier } = require('./lex/identifier');
@@ -120,6 +121,10 @@ exports.grammar = {
       template_escape_string_start: 'template_escape_string_start',
       function_brace_start: 'function_brace_start',
       block_brace_start: 'block_brace_start',
+      regexp_start: 'regexp_start',
+      regexp_class_start: 'regexp_class_start',
+      regexp_backslash_start: 'regexp_backslash_start',
+      regexp_flag_start: 'regexp_flag_start',
     },
     rules: transLex([
       multiLineComment,
@@ -127,6 +132,7 @@ exports.grammar = {
       singleString,
       doubleString,
       template,
+      regexp,
       tokens,
       keywords,
 

@@ -3,7 +3,7 @@ module.exports = {
   name: 'RelationalExpression',
   rules: [
     'ShiftExpression',
-    'RelationalExpression RelationalOperator ShiftExpression',
+    // 'RelationalExpression RelationalOperator ShiftExpression',
   ],
   handlers: [
     '$$ = $1',
