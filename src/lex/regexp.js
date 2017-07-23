@@ -18,7 +18,7 @@ const RegexpStart = {
 };
 
 const RegexpNoTerminatorCharacter = {
-  conditions: ['regexp_start'],
+  conditions: ['regexp_start', 'regexp_class_start', 'regexp_backslash_start'],
   rule: '.',
   handler: `
     return require('./util').parseRegexpCharacters.call(this, this.match);

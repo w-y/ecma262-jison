@@ -511,6 +511,9 @@ exports.parseTemplateCharacterEscape = parseTemplateCharacterEscape;
  * RegularExpressionClass :: [ RegularExpressionClassChars ]
  */
 function parseRegexpCharacters(ch) {
+  console.log('=========');
+  console.log(ch);
+  console.log('=========');
   if (ch === '/') {
     this.popState();
     this.begin('regexp_flag_start');
@@ -527,7 +530,7 @@ function parseRegexpCharacters(ch) {
     return 'RegexpBackslash';
   }
 
-  if (ch === '[') {
+  if (ch === '[' && this.topState() === 'regexp_start') {
     this.begin('regexp_class_start');
     return 'LEFT_REGEXP_CLASS_BRACKET';
   }
@@ -537,10 +540,6 @@ function parseRegexpCharacters(ch) {
       return 'RIGHT_REGEXP_CLASS_BRACKET';
     }
   }
-  if (this.topState() === 'regexp_class_start') {
-    return 'RegularExpressionClassChar';
-  }
-
   return 'RegularExpressionNonTerminator';
 }
 
