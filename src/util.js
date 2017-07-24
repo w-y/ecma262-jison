@@ -126,6 +126,7 @@ function parseKeyword(keyword, alias) {
         break;
       case 'identifier_start':
         res = 'UnicodeIDContinue';
+        break;
       case 'regexp_flag_start':
         res = 'UnicodeIDContinue';
         break;
@@ -511,9 +512,6 @@ exports.parseTemplateCharacterEscape = parseTemplateCharacterEscape;
  * RegularExpressionClass :: [ RegularExpressionClassChars ]
  */
 function parseRegexpCharacters(ch) {
-  console.log('=========');
-  console.log(ch);
-  console.log('=========');
   if (ch === '/' && this.topState() === 'regexp_start') {
     this.popState();
     this.begin('regexp_flag_start');
