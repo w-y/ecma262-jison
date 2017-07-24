@@ -6,8 +6,8 @@ module.exports = {
     'RegularExpressionFlags IdentifierPart',
   ],
   handlers: [
-    '$$ = $1;',
-    '$$ = $1 + $2;',
+    '$$ = $1.value;',
+    '$$ = $1 + $2.value;',
   ],
   subRules: [
     require('./IdentifierPart'),

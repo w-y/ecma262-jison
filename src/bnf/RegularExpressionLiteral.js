@@ -6,8 +6,8 @@ module.exports = {
     'LEFT_REGEXP_DIV RegularExpressionBody RIGHT_REGEXP_DIV RegularExpressionFlags',
   ],
   handlers: [
-    '$$ = $1 + $2 + $3',
-    '$$ = $1 + $2 + $3 + $4',
+    '$$ = new (require(\'./ast/Literal\').RegexpLiteralNode)($1 + $2 + $3, $2, \'\', { loc: this._$, yy })',
+    '$$ = new (require(\'./ast/Literal\').RegexpLiteralNode)($1 + $2 + $3, $2, $4, { loc: this._$, yy })',
   ],
   subRules: [
     require('./RegularExpressionBody'),

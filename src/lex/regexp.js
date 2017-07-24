@@ -8,7 +8,7 @@ const RegexpEnd = {
 };
 
 const RegexpStart = {
-  conditions: ['*'],
+  conditions: ['INITIAL'],
   rule: '/',
   handler: `
     this.begin('regexp_start');

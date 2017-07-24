@@ -514,7 +514,7 @@ function parseRegexpCharacters(ch) {
   console.log('=========');
   console.log(ch);
   console.log('=========');
-  if (ch === '/') {
+  if (ch === '/' && this.topState() === 'regexp_start') {
     this.popState();
     this.begin('regexp_flag_start');
     return 'RIGHT_REGEXP_DIV';
