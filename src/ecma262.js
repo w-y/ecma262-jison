@@ -125,6 +125,8 @@ exports.grammar = {
       regexp_class_start: 'regexp_class_start',
       regexp_backslash_start: 'regexp_backslash_start',
       regexp_flag_start: 'regexp_flag_start',
+      regexp_noflag: 'regexp_noflag',
+      div_start: 'div_start',
     },
     rules: transLex([
       multiLineComment,

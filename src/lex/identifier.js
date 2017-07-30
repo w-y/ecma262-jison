@@ -15,7 +15,7 @@ const unicodeIDStart = {
 };
 
 const unicodeIDContinue = {
-  conditions: ['identifier_start', 'regexp_flag_start'],
+  conditions: ['identifier_start'],
   rule: idContinueReg,
   handler: `
     return 'UnicodeIDContinue';
@@ -26,7 +26,7 @@ const unicodeEscapeSequenceStart = {
   conditions: ['INITIAL', 'identifier_start'],
   rule: '\\\\u|\\\\U',
   handler: `
-    if (this.topState() === 'identifier_start' || this.topState() === 'regexp_flag_start') {
+    if (this.topState() === 'identifier_start') {
       this.begin('identifier_start_unicode');
       return 'UnicodeEscapeSequenceContinueStart'
     } else {

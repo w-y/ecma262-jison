@@ -7,16 +7,21 @@ const RegexpEnd = {
 };
 
 const RegexpStart = {
-  conditions: ['INITIAL', 'template_string_head_start'],
+  conditions: ['*'],
   rule: '/',
   handler: `
-    this.begin('regexp_start');
-    return 'LEFT_REGEXP_DIV';
+    if (require('./util').isDivAhead.call(this, this.topState())) {
+      this.popState();
+      return 'MultiplicativeOperator';
+    } else {
+      this.begin('regexp_start');
+      return 'LEFT_REGEXP_DIV';
+    }
   `,
 };
 
 const RegexpNoTerminatorCharacter = {
-  conditions: ['regexp_start', 'regexp_class_start', 'regexp_backslash_start'],
+  conditions: ['regexp_start', 'regexp_class_start', 'regexp_backslash_start', 'regexp_flag_start'],
   rule: '.',
   handler: `
     return require('./util').parseRegexpCharacters.call(this, this.match);

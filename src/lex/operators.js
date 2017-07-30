@@ -254,9 +254,10 @@ exports.multiplication = {
 };
 
 exports.division = {
-  conditions: ['*'],
+  conditions: ['div_start'],
   rule: '/',
   handler: `
+    this.popState();
     return require('./util').parseOperator.call(this, this.match, 'MultiplicativeOperator');
   `,
 };
