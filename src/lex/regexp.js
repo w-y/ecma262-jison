@@ -14,6 +14,10 @@ const RegexpStart = {
       this.popState();
       return 'MultiplicativeOperator';
     } else {
+      if (this.topState() === 'regexp_backslash_start') {
+        this.popState();
+        return 'RegularExpressionNonTerminator';
+      }
       this.begin('regexp_start');
       return 'LEFT_REGEXP_DIV';
     }

@@ -3,7 +3,7 @@ module.exports = {
   name: 'BitwiseANDExpression',
   rules: [
     'EqualityExpression',
-    // 'BitwiseANDExpression & EqualityExpression',
+    'BitwiseANDExpression & EqualityExpression',
   ],
   handlers: [
     '$$ = $1;',

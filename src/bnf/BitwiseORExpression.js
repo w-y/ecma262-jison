@@ -3,7 +3,7 @@ module.exports = {
   name: 'BitwiseORExpression',
   rules: [
     'BitwiseXORExpression',
-    // 'BitwiseORExpression | BitwiseXORExpression',
+    'BitwiseORExpression | BitwiseXORExpression',
   ],
   handlers: [
     '$$ = $1;',

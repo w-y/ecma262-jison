@@ -320,10 +320,11 @@ function parseOperator(operator, alias) {
         res = 'BRACE_START';
       }
     } else if (this.topState() === 'brace_start') {
-      return 'BRACE_START';
+      res = 'BRACE_START';
+    } else {
+      // here { should be start of a block
+      this.begin('block_brace_start');
     }
-    // here { should be start of a block
-    this.begin('block_brace_start');
   } else if (/^{/.test(input.substring(i))) {
     this.begin('brace_start');
   } else if (/^function/.test(input.substring(i))) {
