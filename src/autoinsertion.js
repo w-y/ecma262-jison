@@ -1,6 +1,6 @@
 const { isWhiteSpace, isLineTerminator } = require('./util');
 const { ParseError } = require('./error');
-const parser = require('./parser16');
+const parser = require('./parser');
 
 const EOF = 1;
 
