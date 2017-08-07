@@ -31,6 +31,8 @@ module.exports = {
     'for LeftParenthesis LexicalDeclaration ; Expression_In RightParenthesis Statement',
     'for LeftParenthesis LexicalDeclaration Expression_In ; RightParenthesis Statement',
     'for LeftParenthesis LexicalDeclaration ; RightParenthesis Statement',
+
+    'for LeftParenthesis VAR ForBinding in Expression_In RightParenthesis Statement',
   ],
   handlers: [
     '$$ = new (require(\'./ast/IterationStatement\').DoWhileStatementNode)($5, $2, { loc: this._$, yy })',
@@ -166,6 +168,20 @@ module.exports = {
     `
       require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $5.range, yy.lexer.yylloc);
       $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, null, null, $6, { loc: this._$, yy })
+    `,
+    `
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $7.range, yy.lexer.yylloc);
+      $$ = new (require('./ast/IterationStatement').ForInStatementNode)(
+        // NOTICE:
+        // we need to merge the VAR's loc and VariableDeclarator's to get VaribleStatement's range
+        // $4 is a single VariableDeclarator
+        new (require('./ast/VariableStatement').VariableStatementNode)([$4], { loc: {
+          first_line: $3.first_line,
+          last_line: $4.lastLine,
+          first_column: $3.firts_column,
+          last_column:  $4.lastColumnu,
+          range: [$3.range[0], $4.range[1]],
+        }, yy }), $6, $8, { loc: this._$, yy });
     `,
   ],
   subRules: [

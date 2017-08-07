@@ -76,6 +76,9 @@ const Case = {
   conditions: ['*'],
   rule: 'case',
   handler: `
+    if (this.topState() === 'property_start') {
+      return require('./util').parseKeyword.call(this, this.match);
+    }
     this.begin('case_start');
     return require('./util').parseKeyword.call(this, this.match);
   `,
@@ -85,6 +88,9 @@ const Default = {
   conditions: ['*'],
   rule: 'default',
   handler: `
+    if (this.topState() === 'property_start') {
+      return require('./util').parseKeyword.call(this, this.match);
+    }
     this.begin('case_start');
     return require('./util').parseKeyword.call(this, this.match);
   `,

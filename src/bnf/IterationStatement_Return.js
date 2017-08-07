@@ -31,16 +31,18 @@ module.exports = {
     'for LeftParenthesis LexicalDeclaration ; Expression_In RightParenthesis Statement_Return',
     'for LeftParenthesis LexicalDeclaration Expression_In ; RightParenthesis Statement_Return',
     'for LeftParenthesis LexicalDeclaration ; RightParenthesis Statement_Return',
+
+    'for LeftParenthesis VAR ForBinding in Expression_In RightParenthesis Statement_Return',
   ],
   handlers: [
     '$$ = new (require(\'./ast/IterationStatement\').DoWhileStatementNode)($5, $2, { loc: this._$, yy })',
     '$$ = new (require(\'./ast/IterationStatement\').WhileStatementNode)($3, $5, { loc: this._$, yy })',
     `
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $7.range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $7.range, yy.lexer.yylloc);
       $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, $4, $6, $8, { loc: this._$, yy })
     `,
     `
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $9.range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $9.range, yy.lexer.yylloc);
       $$ = new (require('./ast/IterationStatement').ForStatementNode)(
         // NOTICE:
         // we need to merge the VAR's loc and VariableDeclarator's to get VaribleStatement's range
@@ -58,20 +60,20 @@ module.exports = {
     `,
 
     `
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $6.range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $6.range, yy.lexer.yylloc);
       $$ = new (require('./ast/IterationStatement').ForInStatementNode)($3, $5, $7, { loc: this._$, yy })
     `,
     `
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $6.range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $6.range, yy.lexer.yylloc);
       $$ = new (require('./ast/IterationStatement').ForInStatementNode)($3, $5, $7, { loc: this._$, yy })
     `,
 
     `
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $6.range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $6.range, yy.lexer.yylloc);
       $$ = new (require('./ast/IterationStatement').ForOfStatementNode)($3, $5, $7, { loc: this._$, yy })
     `,
     `
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $7.range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $7.range, yy.lexer.yylloc);
       $$ = new (require('./ast/IterationStatement').ForOfStatementNode)(
         // NOTICE:
         // we need to merge the VAR's loc and VariableDeclarator's to get VaribleStatement's range
@@ -85,45 +87,45 @@ module.exports = {
         }, yy }), $6, $8, { loc: this._$, yy });
     `,
     `
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $6.range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $6.range, yy.lexer.yylloc);
       $$ = new (require('./ast/IterationStatement').ForOfStatementNode)($3, $5, $7, { loc: this._$, yy })
     `,
 
     `
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $8.range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $8.range, yy.lexer.yylloc);
       $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, $5, $7, $9, { loc: this._$, yy })
     `,
     `
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $7.range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $7.range, yy.lexer.yylloc);
       $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, null, $6, $8, { loc: this._$, yy })
     `,
     `
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $6.range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $6.range, yy.lexer.yylloc);
       $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, null, null, $7, { loc: this._$, yy })
     `,
     `
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $7.range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $7.range, yy.lexer.yylloc);
       $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, $5, null, $8, { loc: this._$, yy })
     `,
 
     `
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $7.range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $7.range, yy.lexer.yylloc);
       $$ = new (require('./ast/IterationStatement').ForStatementNode)(null, $4, $6, $8, { loc: this._$, yy })
     `,
     `
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $6.range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $6.range, yy.lexer.yylloc);
       $$ = new (require('./ast/IterationStatement').ForStatementNode)(null, null, $5, $7, { loc: this._$, yy })
     `,
     `
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $5.range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $5.range, yy.lexer.yylloc);
       $$ = new (require('./ast/IterationStatement').ForStatementNode)(null, null, null, $6, { loc: this._$, yy })
     `,
     `
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $6.range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $6.range, yy.lexer.yylloc);
       $$ = new (require('./ast/IterationStatement').ForStatementNode)(null, $4, null, $7, { loc: this._$, yy })
     `,
     `
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $8.range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $8.range, yy.lexer.yylloc);
       $$ = new (require('./ast/IterationStatement').ForStatementNode)(
         new (require('./ast/VariableStatement').VariableStatementNode)($4, { loc: {
           first_line: $3.first_line,
@@ -134,7 +136,7 @@ module.exports = {
         }, yy }), null, $7, $9, { loc: this._$, yy });
     `,
     `
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $8.range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $8.range, yy.lexer.yylloc);
       $$ = new (require('./ast/IterationStatement').ForStatementNode)(
         new (require('./ast/VariableStatement').VariableStatementNode)($4, { loc: {
           first_line: $3.first_line,
@@ -145,7 +147,7 @@ module.exports = {
         }, yy }), $6, null, $9, { loc: this._$, yy });
     `,
     `
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $7.range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $7.range, yy.lexer.yylloc);
       $$ = new (require('./ast/IterationStatement').ForStatementNode)(
         new (require('./ast/VariableStatement').VariableStatementNode)($4, { loc: {
           first_line: $3.first_line,
@@ -156,16 +158,31 @@ module.exports = {
         }, yy }), null, null, $8, { loc: this._$, yy });
     `,
     `
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $6.range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $6.range, yy.lexer.yylloc);
       $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, null, $5, $7, { loc: this._$, yy })
     `,
     `
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $6.range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $6.range, yy.lexer.yylloc);
       $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, $4, null, $7, { loc: this._$, yy })
     `,
     `
-      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy.autoInsertionOffset, $2.range, $5.range, yy.lexer.yylloc);
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $5.range, yy.lexer.yylloc);
       $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, null, null, $6, { loc: this._$, yy })
+    `,
+
+    `
+      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $7.range, yy.lexer.yylloc);
+      $$ = new (require('./ast/IterationStatement').ForInStatementNode)(
+        // NOTICE:
+        // we need to merge the VAR's loc and VariableDeclarator's to get VaribleStatement's range
+        // $4 is a single VariableDeclarator
+        new (require('./ast/VariableStatement').VariableStatementNode)([$4], { loc: {
+          first_line: $3.first_line,
+          last_line: $4.lastLine,
+          first_column: $3.firts_column,
+          last_column:  $4.lastColumnu,
+          range: [$3.range[0], $4.range[1]],
+        }, yy }), $6, $8, { loc: this._$, yy });
     `,
   ],
   subRules: [

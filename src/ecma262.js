@@ -127,6 +127,7 @@ exports.grammar = {
       regexp_flag_start: 'regexp_flag_start',
       regexp_noflag: 'regexp_noflag',
       div_start: 'div_start',
+      property_start: 'property_start',
     },
     rules: transLex([
       multiLineComment,

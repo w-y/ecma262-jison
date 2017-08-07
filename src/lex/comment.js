@@ -17,6 +17,7 @@ exports.onCommentStart = (lexerRef, type, line, column, range) => {
 };
 
 exports.onCommentEnd = (lexerRef, type, line, column, range) => {
+  
   const lexer = lexerRef;
   if (!lexer.comments) {
     lexer.comments = [];
