@@ -17,7 +17,6 @@ exports.onCommentStart = (lexerRef, type, line, column, range) => {
 };
 
 exports.onCommentEnd = (lexerRef, type, line, column, range) => {
-  
   const lexer = lexerRef;
   if (!lexer.comments) {
     lexer.comments = [];
@@ -25,6 +24,7 @@ exports.onCommentEnd = (lexerRef, type, line, column, range) => {
   lexer.comment.loc.push([line, column]);
   lexer.comment.range.push(range);
   lexer.comments.push(lexer.comment);
+  
 };
 
 exports.onComment = (lexerRef, value) => {
@@ -36,7 +36,16 @@ const MultiLineCommentCharsStart = {
   conditions: ['*'],
   rule: '/\\*',
   handler: `
-    this.begin('multi_line_comment_start');
+    if (this.topState() === 'single_string_start') {
+      return 'SingleStringCharacter';
+    }
+    if (this.topState() === 'double_string_start') {
+      return 'DoubleStringCharacter';
+    }
+    if (this.topState() === 'multi_line_comment_start') {
+    } else {
+      this.begin('multi_line_comment_start');
+    }
     require('./lex/comment').onCommentStart(this, 'MultiLine', yylloc.first_line, yylloc.first_column, yylloc.range[0]);
     return '';
   `,
@@ -99,6 +108,12 @@ const SingleLineCommentCharsStart = {
     if (this.topState() !== 'single_line_comment_start') {
       this.begin('single_line_comment_start');
     }
+    if (this.topState() === 'single_string_start') {
+      return 'SingleStringCharacter';
+    }
+    if (this.topState() === 'double_string_start') {
+      return 'DoubleStringCharacter';
+    }
     require('./lex/comment').onCommentStart(this, 'SingleLine', yylloc.first_line, yylloc.first_column, yylloc.range[0]);
     return '';
   `,
@@ -129,6 +144,10 @@ exports.singleLineComment = [
   SingleLineCommentCharEnd,
   SingleLineCommentChar,
 ];
+
+exports.SingleLineCommentCharsStart = SingleLineCommentCharsStart;
+exports.SingleLineCommentCharEnd = SingleLineCommentCharEnd;
+exports.SingleLineCommentChar = SingleLineCommentChar;
 
 exports.multiLineComment = [
   MultiLineCommentCharsEnd,

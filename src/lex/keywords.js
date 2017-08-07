@@ -78,6 +78,8 @@ const Case = {
   handler: `
     if (this.topState() === 'property_start') {
       return require('./util').parseKeyword.call(this, this.match);
+    } else if (this.topState() === 'brace_start' || this.topState() === 'identifier_start') {
+      return require('./util').parseKeyword.call(this, this.match);
     }
     this.begin('case_start');
     return require('./util').parseKeyword.call(this, this.match);
@@ -89,6 +91,8 @@ const Default = {
   rule: 'default',
   handler: `
     if (this.topState() === 'property_start') {
+      return require('./util').parseKeyword.call(this, this.match);
+    } else if (this.topState() === 'brace_start' || this.topState() === 'identifier_start') {
       return require('./util').parseKeyword.call(this, this.match);
     }
     this.begin('case_start');

@@ -49,7 +49,6 @@ function getMVHexDigit(v1) {
 }
 
 function getMVHexDigits(v1, v2, v3, v4) {
-  console.log(v1 + ' ' + v2 + ' ' + v3 + ' ' + v4);
   return (4096 * getMVHexDigit(v1)) +
     (256 * getMVHexDigit(v2)) +
     (16 * getMVHexDigit(v3)) +
@@ -75,7 +74,7 @@ function mergeLoc(fromLoc, toLoc) {
 exports.mergeLoc = mergeLoc;
 
 // look ahead from source
-function lookAhead(source, offset, ignoreWhitespace, ignoreLineTerminator) {
+function lookAhead(source, offset, ignoreWhitespace, ignoreLineTerminator, state) {
   let curr = offset;
 
   const test = function (ch) {
@@ -90,7 +89,7 @@ function lookAhead(source, offset, ignoreWhitespace, ignoreLineTerminator) {
     curr += 1;
     ch = source[curr];
   }
-  
+
   // ignore all single line comments
   while (/^\/\//.test(source.substring(curr))) {
     // single line comment, find next line teminator
@@ -101,6 +100,20 @@ function lookAhead(source, offset, ignoreWhitespace, ignoreLineTerminator) {
       curr += 1;
     }
   }
+  // ignore all multi line comments
+  while (/^\/\*/.test(source.substring(curr))) {
+
+    while (curr < source.length && !/^\*\//.test(source.substring(curr))) {
+      curr += 1;
+    }
+    if (/^\*\//.test(source.substring(curr))) {
+      curr += 2;
+    }
+    while (curr < source.length && test(source[curr])) {
+      curr += 1;
+    }
+  }
+
   return { ch, index: curr };
 }
 
@@ -159,7 +172,7 @@ function parseKeyword(keyword, alias) {
 
   const curr = this.matches.index + this.match.length;
 
-  const { ch, index: next } = lookAhead(this.matches.input, curr, true, true);
+  const { ch, index: next } = lookAhead(this.matches.input, curr, true, true, this.topState());
   const input = this.matches.input;
   let isDiv = false;
   if (ch === '/') {
@@ -202,6 +215,15 @@ function parseKeyword(keyword, alias) {
       this.begin('brace_start');
     }
   }
+  // TODO: look ahead { is the start of expression
+  if (this.match === 'in' || this.match === 'of') {
+    if (/^{/.test(input.substring(next))) {
+      this.begin('brace_start');
+    }
+  }
+  if (this.topState() === 'brace_start' && ch === ':') {
+    res = 'UnicodeIDStart';
+  }
   if (isDiv) {
     this.begin('div_start');
   }
@@ -210,6 +232,9 @@ function parseKeyword(keyword, alias) {
 exports.parseKeyword = parseKeyword;
 
 function parseOperator(operator, alias) {
+
+  console.log(this.conditionStack);
+  // console.log(this.conditionStack + ' ' + operator);
    // NOTICE: restrict line terminator for update express
   if (alias === 'UpdateOperator') {
     let start = this.matched.length - 3;
@@ -251,7 +276,7 @@ function parseOperator(operator, alias) {
 
   let isDiv = false;
 
-  const { ch, index: i } = lookAhead(this.matches.input, this.matches.index + this.match.length, true, true);
+  const { ch, index: i } = lookAhead(this.matches.input, this.matches.index + this.match.length, true, true, this.topState());
   const input = this.matches.input;
 
   if (ch === '/') {
@@ -296,6 +321,9 @@ function parseOperator(operator, alias) {
     case 'div_start':
       this.popState();
       res = alias || operator;
+    case 'property_start':
+      this.popState();
+      res = alias || operator;
     default:
       res = alias || operator;
       break;
@@ -314,13 +342,11 @@ function parseOperator(operator, alias) {
       this.begin('function_start');
     }
   } else if (this.match === '?') {
-    console.log('????????????????????????????');
-    console.log(input.substring(i));
-    console.log(/^function/.test(input.substring(i)));
-    console.log('????????????????????????????');
     // NOTICE: '? function' here must be an function expression
     if (/^function/.test(input.substring(i))) {
       this.begin('function_start');
+    } else if (/^{/.test(input.substring(i))) {
+      this.begin('brace_start');
     }
   } else if (this.match === ')') {
 
@@ -337,12 +363,13 @@ function parseOperator(operator, alias) {
       this.popState();
       res = 'RIGHT_TEMPLATE_BRACE';
     } else if (this.topState() === 'function_brace_start') {
-      this.popState();
       res = '}';
     } else if (this.topState() === 'template_string_start') {
       res = 'TemplateChar';
     } else if (this.topState() === 'block_brace_start') {
-      this.popState();
+      // this.popState();
+      res = '}';
+    } else if (this.topState() === 'identifier_start') {
       res = '}';
     }
   } else if (this.match === '{') {
@@ -355,12 +382,18 @@ function parseOperator(operator, alias) {
         res =  '{';
       } else {
           // `${{}}` here { must be the prefix of an exression
-        this.begin('brace_start');
+          this.begin('brace_start');
+          res = 'BRACE_START';
+      }
+    } else if (this.topState() === 'brace_start') {
+      const ch = lookBehind(this.matched, 1, true, true);
+      if (ch === ')') {
+        this.begin('function_brace_start');
+        res =  '{';
+      } else {
         res = 'BRACE_START';
       }
-    } /*else if (this.topState() === 'brace_start') {
-      res = 'BRACE_START';
-    } */else {
+    } else {
       // here { should be start of a block
       this.begin('block_brace_start');
     }
@@ -368,7 +401,7 @@ function parseOperator(operator, alias) {
     this.begin('brace_start');
   } else if (/^function/.test(input.substring(i))) {
     this.begin('function_start');
-  } 
+  }
   if (isDiv) {
     this.begin('div_start');
   }
@@ -389,6 +422,11 @@ function parseIdentifier() {
       return 'TemplateChar';
     default:
       break;
+  }
+  if (this.topState() === 'property_start') {
+    this.popState();
+    this.begin('identifier_start');
+    return 'UnicodeIDStart';
   }
   if (this.topState() === 'identifier_start') {
     return 'UnicodeIDContinue';
@@ -452,7 +490,6 @@ exports.parseEscapeStringCharacter = parseEscapeStringCharacter;
 
 // check if next '/' is a div operator or start of a regular expression
 function isDivAhead(state, match) {
-  console.log(state + ' ' + match);
   if (match === ';' ||
       match === ',' ||
       match === ':' ||
@@ -464,6 +501,7 @@ function isDivAhead(state, match) {
   }
   if (match === '/' ||
       match === ']' ||
+      match === ')' ||
       match === '}') {
     return true;
   }
@@ -483,13 +521,10 @@ function parseToken(token, alias) {
 
   let isDiv = false;
 
-  const { ch, index } = lookAhead(this.matches.input, this.matches.index + this.match.length, true, true);
+  const { ch, index } = lookAhead(this.matches.input, this.matches.index + this.match.length, true, true, this.topState());
 
   if (ch === '/') {
     isDiv = isDivAhead(this.topState(), this.match);
-    console.log('==============');
-    console.log(this.topState() + ' ' + this.match + ' ' + isDiv); 
-    console.log('==============');
   }
 
   switch (this.topState()) {
@@ -647,7 +682,7 @@ function isRegexpFlag(ch) {
 function parseRegexpCharacters(ch) {
   if (ch === '/' && this.topState() === 'regexp_start') {
     this.popState();
-    const { ch: nextCh } = lookAhead(this.matches.input, this.matches.index + this.match.length, false, false);
+    const { ch: nextCh } = lookAhead(this.matches.input, this.matches.index + this.match.length, false, false, this.topState());
 
     if (isRegexpFlag(nextCh)) {
       this.begin('regexp_flag_start');
@@ -659,8 +694,8 @@ function parseRegexpCharacters(ch) {
 
   if (this.topState() === 'regexp_flag_start') {
     // look ahead for char with an id_continue of false to end
-    const { ch: nextCh } = lookAhead(this.matches.input, this.matches.index + this.match.length, false, false);
-    const { ch: nextChNonWS } = lookAhead(this.matches.input, this.matches.index + this.match.length, true, false);
+    const { ch: nextCh } = lookAhead(this.matches.input, this.matches.index + this.match.length, false, false, this.topState());
+    const { ch: nextChNonWS } = lookAhead(this.matches.input, this.matches.index + this.match.length, true, false, this.topState());
 
     let isDiv = false;
 

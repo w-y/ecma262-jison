@@ -266,7 +266,7 @@ exports.remainder = {
   conditions: ['*'],
   rule: '%',
   handler: `
-    return require('./util').parseOperator.call(this, this.match);
+    return require('./util').parseOperator.call(this, this.match, 'MultiplicativeOperator');
   `,
 };
 
@@ -429,8 +429,13 @@ exports.rightBrace = {
     this.__temp__ = require('./util').parseOperator.call(this, this.match);
     if (this.topState() === 'brace_start') {
       this.popState();
-    }
-    if (this.topState() === 'arrow_brace_start') {
+    } else if (this.topState() === 'arrow_brace_start') {
+      this.popState();
+    } else if (this.topState() === 'function_brace_start') {
+      this.popState();
+    } else if (this.topState() === 'block_brace_start') {
+      this.popState();
+    } else if (this.topState() === 'identifier_start') {
       this.popState();
     }
     return this.__temp__;

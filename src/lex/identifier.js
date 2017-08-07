@@ -31,6 +31,10 @@ const unicodeEscapeSequenceStart = {
   conditions: ['INITIAL', 'identifier_start', 'property_start'],
   rule: '\\\\u|\\\\U',
   handler: `
+    if (this.topState() === 'property_start') {
+      this.popState();
+    }
+
     if (this.topState() === 'identifier_start') {
       this.begin('identifier_start_unicode');
       return 'UnicodeEscapeSequenceContinueStart'
@@ -46,6 +50,10 @@ const dollar = {
   conditions: ['INITIAL', 'identifier_start', 'property_start', 'brace_start', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'function_brace_start', 'block_brace_start', 'property_start'],
   rule: '\\$',
   handler: `
+    if (this.topState() === 'property_start') {
+      this.popState();
+    }
+
     return require('./util').parseIdentifier.call(this, this.match);
   `,
 };
@@ -54,6 +62,9 @@ const underscore = {
   conditions: ['INITIAL', 'identifier_start', 'property_start', 'brace_start', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'function_brace_start', 'block_brace_start', 'property_start'],
   rule: '_',
   handler: `
+    if (this.topState() === 'property_start') {
+      this.popState();
+    }
     return require('./util').parseIdentifier.call(this, this.match);
   `,
 };
