@@ -135,8 +135,10 @@ function lookBehind(source, offset, ignoreWhitespace, ignoreLineTerminator) {
     curr -= 1;
     ch = source[curr];
   }
-  return ch;
+  return { ch, index: curr };
 }
+
+exports.lookBehind = lookBehind;
 
 function parseKeyword(keyword, alias) {
   let res = '';
@@ -234,9 +236,11 @@ exports.parseKeyword = parseKeyword;
 function parseOperator(operator, alias) {
 
   console.log(this.conditionStack);
+  console.log(alias);
   // console.log(this.conditionStack + ' ' + operator);
-   // NOTICE: restrict line terminator for update express
-  if (alias === 'UpdateOperator') {
+  // NOTICE: restrict line terminator for update express
+
+  /*if (alias === 'UpdateOperator_LF') {
     let start = this.matched.length - 3;
     let hasLF = false;
     let hasSemiColon = false;
@@ -272,7 +276,7 @@ function parseOperator(operator, alias) {
         offset: this.offset - 2,
       });
     }
-  }
+  }*/
 
   let isDiv = false;
 
@@ -321,9 +325,19 @@ function parseOperator(operator, alias) {
     case 'div_start':
       this.popState();
       res = alias || operator;
+      break;
     case 'property_start':
       this.popState();
       res = alias || operator;
+      break;
+    case 'hex_start':
+      this.popState();
+      res = alias || operator;
+      break;
+    case 'exponent_start':
+      this.popState();
+      res = alias || operator;
+      break;
     default:
       res = alias || operator;
       break;
@@ -375,7 +389,7 @@ function parseOperator(operator, alias) {
   } else if (this.match === '{') {
     if (this.topState() === 'template_string_head_start') {
       // look behind for ')'
-      const ch = lookBehind(this.matched, 1, true, true);
+      const { ch } = lookBehind(this.matched, 1, true, true);
       // `${function() {}}` the 2nd { should be the start of a block
       if (ch === ')') {
         this.begin('function_brace_start');
@@ -386,7 +400,7 @@ function parseOperator(operator, alias) {
           res = 'BRACE_START';
       }
     } else if (this.topState() === 'brace_start') {
-      const ch = lookBehind(this.matched, 1, true, true);
+      const { ch } = lookBehind(this.matched, 1, true, true);
       if (ch === ')') {
         this.begin('function_brace_start');
         res =  '{';
@@ -550,6 +564,13 @@ function parseToken(token, alias) {
       break;
     case 'div_start':
       this.popState();
+      break;
+    case 'hex_start':
+      this.popState();
+      break;
+    case 'exponent_start':
+      this.popState();
+      break;
     default:
       if (isLineTerminator(this.match)) {
         const input = this.matches.input;

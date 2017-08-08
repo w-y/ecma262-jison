@@ -78,7 +78,6 @@ exports.lessThan = {
 };
 
 // UpdateOperator
-
 exports.increment = [
   {
     conditions: ['*'],

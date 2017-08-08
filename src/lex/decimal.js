@@ -53,7 +53,7 @@ const decimalPoint = {
 };
 
 const decimalDigit = {
-  conditions: ['decimal_digit_start', 'decimal_digit_dot_start'],
+  conditions: ['decimal_digit_start', 'decimal_digit_dot_start', 'exponent_start'],
   rule: '[0-9]',
   handler: `
     return 'DecimalDigit';
@@ -82,6 +82,7 @@ const decimalExponentPart = {
   conditions: ['decimal_digit_start', 'decimal_digit_dot_start'],
   rule: '[eE]',
   handler: `
+    this.begin('exponent_start');
     console.log('ExponentIndicator');
     return 'ExponentIndicator';
   `,

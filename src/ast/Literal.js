@@ -8,6 +8,10 @@ function getDecimalLiteralValue(raw) {
   return parseFloat(raw);
 }
 
+function getHexLiteralValue(raw) {
+  return parseInt(raw, 16);
+}
+
 function LiteralNode(value, ...args) {
   BaseNode.call(this, Object.assign({}, { type: 'Literal' }, ...args));
   this.value = value;
@@ -31,6 +35,10 @@ function StringLiteralNode(value, ...args) {
 
 function DecimalLiteralNode(value, ...args) {
   LiteralNode.call(this, getDecimalLiteralValue(value), ...args);
+}
+
+function HexIntegerLiteralNode(value, ...args) {
+  LiteralNode.call(this, getHexLiteralValue(value), ...args);
 }
 
 function ArrayLiteralNode(elements, ...args) {
@@ -64,6 +72,7 @@ exports.NullLiteralNode = NullLiteralNode;
 exports.BooleanLiteralNode = BooleanLiteralNode;
 exports.StringLiteralNode = StringLiteralNode;
 exports.DecimalLiteralNode = DecimalLiteralNode;
+exports.HexIntegerLiteralNode = HexIntegerLiteralNode;
 exports.ArrayLiteralNode = ArrayLiteralNode;
 exports.ObjectLiteralNode = ObjectLiteralNode;
 exports.TemplateLiteralNode = TemplateLiteralNode;

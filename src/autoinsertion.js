@@ -1,6 +1,7 @@
 const { isWhiteSpace, isLineTerminator } = require('./util');
 const { ParseError } = require('./error');
-const parser = require('./parser');
+const parser = require('./parser25');
+const { lookBehind } = require('./util');
 
 const EOF = 1;
 
@@ -61,6 +62,13 @@ function canApplyRule(source, ex) {
 
   // The offending token is separated from the previous token by at least one LineTerminator.
   if (isLineTerminator(source[prevPtr])) {
+
+    const { ch, index } = lookBehind(source.substring(0, tokenOffset), 0, true, true);
+
+    if (/^\+\+/.test(source.substring(index - 1)) || /^--/.test(source.substring(index - 1))) {
+      return lookBehind(source.substring(0, index), 0, true, true).index;
+    }
+
     return tokenOffset;
   }
   return -1;
@@ -119,6 +127,9 @@ function autoinsertion(source) {
       }
 
       const newSrc = `${src.substring(0, test)};${src.substring(test)}`;
+      console.log('xxxxxxxxxxxxxxxxxxxxxxxx');
+      console.log(newSrc);
+      console.log('xxxxxxxxxxxxxxxxxxxxxxxx');
       return newSrc;
     }
     return false;
@@ -131,12 +142,14 @@ function autoinsertion(source) {
         return res;
       }
     } catch (ex) {
+      console.log(ex);
       if (!parser.parser.yy.originEx) {
         parser.parser.yy.originEx = ex;
       }
       src = applyRule(src, ex);
       if (!src) {
         const originEx = parser.parser.yy.originEx;
+        console.log(originEx);
         reloadParser();
         // empty file
         if (isEOF(originEx)) {

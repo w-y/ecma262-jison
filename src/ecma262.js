@@ -140,6 +140,7 @@ exports.grammar = {
       div_start: 'div_start',
       property_start: 'property_start',
       hex_start: 'hex_start',
+      exponent_start: 'exponent_start',
     },
     rules: transLex([
       singleString,
@@ -163,6 +164,11 @@ exports.grammar = {
 
       // singleLineComment,
       template,
+
+      // NOTICE: [no LineTerminator here] ++/--
+      // increment,
+      // decrement,
+
       tokens,
       keywords,
 
