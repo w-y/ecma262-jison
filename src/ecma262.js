@@ -4,13 +4,24 @@ const { transLex, transBnf } = require('./transform');
 const {
   singleLineComment,
   multiLineComment,
+  SingleLineCommentCharsStart,
+  SingleLineCommentCharEnd,
+  SingleLineCommentChar,
 } = require('./lex/comment');
 
 const { decimal } = require('./lex/decimal');
 const { hexDigit } = require('./lex/hex');
 const { singleString, doubleString } = require('./lex/string');
 const { template } = require('./lex/template');
-const { regexp } = require('./lex/regexp');
+
+const {
+  regexp,
+  RegexpStart,
+  RegexpEnd,
+  RegexpNoTerminatorCharacter,
+  RegexForwardSlash,
+} = require('./lex/regexp');
+
 const { keywords } = require('./lex/keywords');
 const { tokens } = require('./lex/tokens');
 const { identifier } = require('./lex/identifier');
@@ -128,14 +139,30 @@ exports.grammar = {
       regexp_noflag: 'regexp_noflag',
       div_start: 'div_start',
       property_start: 'property_start',
+      hex_start: 'hex_start',
     },
     rules: transLex([
-      multiLineComment,
-      singleLineComment,
       singleString,
       doubleString,
+
+      // NOTICE: /\/*/ here /* is not comment
+      RegexForwardSlash,
+
+      multiLineComment,
+
+      RegexpEnd,
+
+      SingleLineCommentCharsStart,
+
+      RegexpStart,
+      RegexpNoTerminatorCharacter,
+
+      divisionAssignment,
+      SingleLineCommentCharEnd,
+      SingleLineCommentChar,
+
+      // singleLineComment,
       template,
-      regexp,
       tokens,
       keywords,
 
@@ -155,7 +182,6 @@ exports.grammar = {
       additionAssignment,
       subtractionAssignment,
       multiplicationAssignment,
-      divisionAssignment,
       remainderAssignment,
       bitwiseANDAssignment,
       bitwiseXORAssignment,
@@ -206,8 +232,8 @@ exports.grammar = {
       Of,
       New,
 
-      decimal,
       hexDigit,
+      decimal,
       identifier,
     ]),
   },

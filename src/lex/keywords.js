@@ -81,8 +81,17 @@ const Case = {
     } else if (this.topState() === 'brace_start' || this.topState() === 'identifier_start') {
       return require('./util').parseKeyword.call(this, this.match);
     }
-    this.begin('case_start');
-    return require('./util').parseKeyword.call(this, this.match);
+    {
+      const utils = require('./util');
+      const { ch } = utils.lookAhead(this.matches.input, this.matches.index + this.match.length, false, false);
+
+      if (utils.isWhiteSpace(ch) || utils.isLineTerminator(ch) || ch === ':') {
+        this.begin('case_start');
+        return require('./util').parseKeyword.call(this, this.match);
+      } else {
+        return require('./util').parseKeyword.call(this, this.match);
+      }
+    }
   `,
 };
 
@@ -95,8 +104,17 @@ const Default = {
     } else if (this.topState() === 'brace_start' || this.topState() === 'identifier_start') {
       return require('./util').parseKeyword.call(this, this.match);
     }
-    this.begin('case_start');
-    return require('./util').parseKeyword.call(this, this.match);
+    {
+      const utils = require('./util');
+      const { ch } = utils.lookAhead(this.matches.input, this.matches.index + this.match.length, false, false);
+
+      if (utils.isWhiteSpace(ch) || utils.isLineTerminator(ch) || ch === ':') {
+        this.begin('case_start');
+        return require('./util').parseKeyword.call(this, this.match);
+      } else {
+        return require('./util').parseKeyword.call(this, this.match);
+      }
+    }
   `,
 };
 

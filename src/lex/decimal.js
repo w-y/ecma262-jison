@@ -78,9 +78,19 @@ const decimalNonZero = {
   `,
 };
 
+const decimalExponentPart = {
+  conditions: ['decimal_digit_start', 'decimal_digit_dot_start'],
+  rule: '[eE]',
+  handler: `
+    console.log('ExponentIndicator');
+    return 'ExponentIndicator';
+  `,
+};
+
 exports.decimalPoint = decimalPoint;
 exports.decimalDigit = decimalDigit;
 exports.decimalZero = decimalZero;
 exports.decimalNonZero = decimalNonZero;
+exports.decimalExponentPart = decimalExponentPart;
 
-exports.decimal = [decimalPoint, decimalDigit, decimalZero, decimalNonZero];
+exports.decimal = [decimalPoint, decimalDigit, decimalZero, decimalNonZero, decimalExponentPart];
