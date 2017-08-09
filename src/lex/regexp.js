@@ -35,7 +35,7 @@ const RegexpStart = {
         return 'RegularExpressionNonTerminator';
       }
       if (this.topState() === 'single_line_comment_start') {
-        require('./lex/comment').onCommentStart(this, 'SingleLine', yylloc.first_line, yylloc.first_column, yylloc.range[0]);
+        require('./lex/comment').onComment(this, this.match);
         return '';
       }
       this.begin('regexp_start');

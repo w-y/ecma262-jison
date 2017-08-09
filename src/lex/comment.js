@@ -52,7 +52,7 @@ const MultiLineCommentCharsStart = {
 };
 
 const MultiLineCommentCharsEnd = {
-  conditions: ['multi_line_comment_start'],
+  conditions: ['multi_line_comment_start', 'multi_line_comment_post_asterisk_start'],
   rule: '\\*/',
   handler: `
     this.popState();
