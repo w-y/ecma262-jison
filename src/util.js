@@ -184,6 +184,7 @@ function parseKeyword(keyword, alias) {
 
   if (this.topState() === 'INITIAL' ||
       this.topState() === 'case_start' ||
+      this.topState() === 'condition_start' ||
       this.topState() === 'arrow_brace_start' ||
       this.topState() === 'template_string_head_start' ||
       this.topState() === 'brace_start' ||
@@ -221,6 +222,11 @@ function parseKeyword(keyword, alias) {
   if (this.match === 'in' || this.match === 'of') {
     if (/^{/.test(input.substring(next))) {
       this.begin('brace_start');
+    }
+  }
+  if (this.match === 'new') {
+    if (/^function/.test(input.substring(next))) {
+      this.begin('function_start');
     }
   }
   if (this.topState() === 'brace_start' && ch === ':') {
@@ -292,6 +298,12 @@ function parseOperator(operator, alias) {
       break;
     case 'exponent_start':
       this.popState();
+      if (this.topState() === 'decimal_digit_dot_start') {
+        this.popState();
+      }
+      if (this.topState() === 'decimal_digit_start') {
+        this.popState();
+      }
       res = alias || operator;
       break;
     default:
@@ -306,12 +318,26 @@ function parseOperator(operator, alias) {
   if (this.match === ':') {
     if (this.topState() === 'case_start') {
       this.popState();
-    } else if (/^{/.test(input.substring(i))) {
-      this.begin('brace_start');
+    } else if (this.topState() === 'condition_start' || this.topState() === 'brace_start') {
+      if (this.topState() === 'condition_start') {
+        this.popState();
+      }
+      if (/^{/.test(input.substring(i))) {
+        this.begin('brace_start');
+      }
+      if (/^function/.test(input.substring(i))) {
+        this.begin('function_start');
+      }
+    // } else if (/^{/.test(input.substring(i))) {
+    // this.begin('brace_start');
     } else if (/^function/.test(input.substring(i))) {
+      // NOTICE: { a : function() {} }
       this.begin('function_start');
     }
   } else if (this.match === '?') {
+    if (this.topState() !== 'condition_start') {
+      this.begin('condition_start');
+    }
     // NOTICE: '? function' here must be an function expression
     if (/^function/.test(input.substring(i))) {
       this.begin('function_start');
@@ -326,7 +352,6 @@ function parseOperator(operator, alias) {
       this.begin('arrow_brace_start');
     }
   } else if (this.match === ';') {
-
   } else if (this.match === '}') {
     // `${foo}`
     if (this.topState() === 'template_string_head_start') {
@@ -361,11 +386,23 @@ function parseOperator(operator, alias) {
         this.begin('function_brace_start');
         res =  '{';
       } else {
+        // NOTICE
         res = 'BRACE_START';
       }
     } else {
-      // here { should be start of a block
-      this.begin('block_brace_start');
+      if (this.topState() === 'condition_start') {
+        const { ch } = lookBehind(this.matched, 1, true, true);
+        if (ch === ')') {
+          this.begin('function_brace_start');
+          res =  '{';
+        } else {
+          this.begin('brace_start');
+          res = 'BRACE_START';
+        }
+      } else {
+        // here { should be start of a block
+        this.begin('block_brace_start');
+      }
     }
   } else if (/^{/.test(input.substring(i))) {
     this.begin('brace_start');
@@ -466,18 +503,27 @@ function isDivAhead(state, match) {
   if (match === ';' ||
       match === ',' ||
       match === ':' ||
-      match === '(') {
+      match === '(' ) {
+      // match === '=') {
     return false;
   }
   if (state === 'block_brace_start' && match === '}') {
     return false;
   }
-  if (match === '/' ||
-      match === ']' ||
+  if (match === ']' ||
       match === ')' ||
       match === '}') {
     return true;
   }
+  if (state === 'identifier_start') {
+    const idContinueReg = require('unicode-6.3.0/Binary_Property/ID_Continue/regex');
+    if (idContinueReg.test(match) || match === '$' || match === '_' || isWhiteSpace(match) || isLineTerminator(match)) {
+      return true; 
+    } else {
+      return false;
+    }
+  }
+
   if (state === 'identifier_start' ||
       state === 'decimal_digit_start' ||
       state === 'decimal_digit_dot_start' ||

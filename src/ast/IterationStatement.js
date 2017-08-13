@@ -10,9 +10,9 @@ function checkForAutoSemicolonInsertion(
 
     for (let i = 0; i < yy.autoInsertions.length; i++) {
       const autoInsertionOffset = yy.autoInsertions[i];
-      if (autoInsertionOffset > leftParenthesisRange[0] &&
-          autoInsertionOffset < rightParenthesisRange[1]) {
-        throw new (require('../error').ParseError)(errorMsg, { text: ';', token: ';', line: loc.first_line, loc, failedAutoSemicolon: true });
+
+      if (autoInsertionOffset > leftParenthesisRange[0] && autoInsertionOffset < rightParenthesisRange[1]) {
+        // throw new (require('../error').ParseError)(errorMsg, { text: ';', token: ';', line: loc.first_line, loc, failedAutoSemicolon: true });
       }
     }
   }

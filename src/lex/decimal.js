@@ -36,6 +36,7 @@ const decimalPoint = {
           }
           if (this.topState() === 'INITIAL' ||
             this.topState() === 'case_start' ||
+            this.topState() === 'condition_start' ||
             this.topState() === 'arrow_brace_start' ||
             this.topState() === 'template_string_head_start' ||
             this.topState() === 'brace_start' ||
@@ -61,7 +62,7 @@ const decimalDigit = {
 };
 
 const decimalZero = {
-  conditions: ['INITIAL', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'brace_start', 'function_brace_start', 'block_brace_start'],
+  conditions: ['INITIAL', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'brace_start', 'function_brace_start', 'block_brace_start', 'condition_start'],
   rule: '0',
   handler: `
     this.begin('decimal_digit_start');
@@ -70,7 +71,7 @@ const decimalZero = {
 };
 
 const decimalNonZero = {
-  conditions: ['INITIAL', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'brace_start', 'function_brace_start', 'block_brace_start'],
+  conditions: ['INITIAL', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'brace_start', 'function_brace_start', 'block_brace_start', 'condition_start'],
   rule: '[1-9]',
   handler: `
     this.begin('decimal_digit_start');

@@ -6,7 +6,7 @@ exports.idStart = idStartReg;
 exports.idContinue = idContinueReg;
 
 const unicodeIDStart = {
-  conditions: ['INITIAL', 'brace_start', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'function_brace_start', 'block_brace_start', 'property_start'],
+  conditions: ['INITIAL', 'brace_start', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'function_brace_start', 'block_brace_start', 'property_start', 'condition_start'],
   rule: idStartReg,
   handler: `
     console.log('unicode id start');
@@ -47,7 +47,7 @@ const unicodeEscapeSequenceStart = {
 };
 
 const dollar = {
-  conditions: ['INITIAL', 'identifier_start', 'property_start', 'brace_start', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'function_brace_start', 'block_brace_start', 'property_start'],
+  conditions: ['INITIAL', 'identifier_start', 'property_start', 'brace_start', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'function_brace_start', 'block_brace_start', 'property_start', 'condition_start'],
   rule: '\\$',
   handler: `
     if (this.topState() === 'property_start') {
@@ -59,7 +59,7 @@ const dollar = {
 };
 
 const underscore = {
-  conditions: ['INITIAL', 'identifier_start', 'property_start', 'brace_start', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'function_brace_start', 'block_brace_start', 'property_start'],
+  conditions: ['INITIAL', 'identifier_start', 'property_start', 'brace_start', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'function_brace_start', 'block_brace_start', 'property_start', 'condition_start'],
   rule: '_',
   handler: `
     if (this.topState() === 'property_start') {

@@ -141,6 +141,7 @@ exports.grammar = {
       property_start: 'property_start',
       hex_start: 'hex_start',
       exponent_start: 'exponent_start',
+      condition_start: 'condition_start',
     },
     rules: transLex([
       singleString,
@@ -151,6 +152,7 @@ exports.grammar = {
 
       multiLineComment,
 
+      divisionAssignment,
       RegexpEnd,
 
       SingleLineCommentCharsStart,
@@ -158,7 +160,6 @@ exports.grammar = {
       RegexpStart,
       RegexpNoTerminatorCharacter,
 
-      divisionAssignment,
       SingleLineCommentCharEnd,
       SingleLineCommentChar,
 
