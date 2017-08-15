@@ -1432,6 +1432,9 @@ case 10:
   
 break;
 case 11:
+    if (this.topState() === 'multi_line_comment_post_asterisk_start') {
+      this.popState();
+    }
     this.popState();
     require('./lex/comment').onCommentEnd(this, 'MultiLine', yy_.yylloc.last_line, yy_.yylloc.last_column, yy_.yylloc.range[1]);
     return '';
