@@ -24,7 +24,6 @@ exports.onCommentEnd = (lexerRef, type, line, column, range) => {
   lexer.comment.loc.push([line, column]);
   lexer.comment.range.push(range);
   lexer.comments.push(lexer.comment);
-  
 };
 
 exports.onComment = (lexerRef, value) => {

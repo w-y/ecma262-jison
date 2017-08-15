@@ -7,7 +7,6 @@ module.exports.parse = function (src, opts) {
 
   if (src[src.length - 1] === '\n') {
     return autoinsertion(src, opts);
-  } else {
-    return autoinsertion(`${src}\n`, opts);
   }
+  return autoinsertion(`${src}\n`, opts);
 };

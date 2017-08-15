@@ -18,15 +18,14 @@ module.exports = {
     '$$ = $1 + $2;',
     '$$ = $1;',
 
-    'console.log(\'DecimalIntegerLiteral DecimalPoint DecimalDigits ExponentPart\');$$ = $1 + $2 + $3 + $4;',
-    'console.log(\'DecimalIntegerLiteral DecimalPoint ExponentPart\');$$ = $1 + $2 + $3;',
-    'console.log(\'DecimalPoint DecimalDigits ExponentPart\');$$ = $1 + $2 + $3;',
-    'console.log(\'DecimalIntegerLiteral ExponentPart\');$$ = $1 + $2;',
+    '$$ = $1 + $2 + $3 + $4;',
+    '$$ = $1 + $2 + $3;',
+    '$$ = $1 + $2 + $3;',
+    '$$ = $1 + $2;',
   ],
   subRules: [
     require('./DecimalIntegerLiteral'),
     require('./DecimalDigits'),
-
     require('./ExponentPart'),
   ],
 };

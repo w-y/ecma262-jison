@@ -288,25 +288,25 @@ case 113:
 this.$ = '\\' + $$[$0];
 break;
 case 122:
-console.log('DecimalIntegerLiteral DecimalPoint DecimalDigits ExponentPart');this.$ = $$[$0-3] + $$[$0-2] + $$[$0-1] + $$[$0];
+this.$ = $$[$0-3] + $$[$0-2] + $$[$0-1] + $$[$0];
 break;
 case 123:
-console.log('DecimalIntegerLiteral DecimalPoint ExponentPart');this.$ = $$[$0-2] + $$[$0-1] + $$[$0];
+this.$ = $$[$0-2] + $$[$0-1] + $$[$0];
 break;
 case 124:
-console.log('DecimalPoint DecimalDigits ExponentPart');this.$ = $$[$0-2] + $$[$0-1] + $$[$0];
+this.$ = $$[$0-2] + $$[$0-1] + $$[$0];
 break;
 case 125:
-console.log('DecimalIntegerLiteral ExponentPart');this.$ = $$[$0-1] + $$[$0];
+this.$ = $$[$0-1] + $$[$0];
 break;
 case 132:
-console.log('ExponentIndicator SignedInteger');this.$ = $$[$0-1] + $$[$0];
+this.$ = $$[$0-1] + $$[$0];
 break;
 case 133:
-console.log('DecimalDigits ');this.$ = $$[$0];
+this.$ = $$[$0];
 break;
 case 134:
-console.log('+/- DecimalDigits ');this.$ = $$[$0-1] + $$[$0];
+this.$ = $$[$0-1] + $$[$0];
 break;
 case 138: case 380: case 381: case 396: case 400: case 404: case 408:
 this.$ = $$[$0-1] + $$[$0]
@@ -2046,7 +2046,6 @@ case 133:
   
 break;
 case 134:
-    // console.log('HexDigit');
     return 92; 
   
 break;
@@ -2117,7 +2116,6 @@ case 138:
 break;
 case 139:
     this.begin('exponent_start');
-    // console.log('ExponentIndicator');
     return 123;
   
 break;
@@ -2152,12 +2150,10 @@ case 142:
   
 break;
 case 143:
-    // console.log('unicode id continue');
     return 93;
   
 break;
 case 144:
-    // console.log('unicode id start');
     if (this.topState() === 'property_start') {
       this.popState();
     }

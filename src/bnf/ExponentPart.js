@@ -5,7 +5,7 @@ module.exports = {
     'ExponentIndicator SignedInteger',
   ],
   handlers: [
-    'console.log(\'ExponentIndicator SignedInteger\');$$ = $1 + $2;',
+    '$$ = $1 + $2;',
   ],
   subRules: [
     require('./SignedInteger'),

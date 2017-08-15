@@ -74,7 +74,7 @@ function mergeLoc(fromLoc, toLoc) {
 exports.mergeLoc = mergeLoc;
 
 // look ahead from source
-function lookAhead(source, offset, ignoreWhitespace, ignoreLineTerminator, state) {
+function lookAhead(source, offset, ignoreWhitespace, ignoreLineTerminator) {
   let curr = offset;
 
   const test = function (ch) {
@@ -102,7 +102,6 @@ function lookAhead(source, offset, ignoreWhitespace, ignoreLineTerminator, state
   }
   // ignore all multi line comments
   while (/^\/\*/.test(source.substring(curr))) {
-
     while (curr < source.length && !/^\*\//.test(source.substring(curr))) {
       curr += 1;
     }
@@ -139,6 +138,46 @@ function lookBehind(source, offset, ignoreWhitespace, ignoreLineTerminator) {
 }
 
 exports.lookBehind = lookBehind;
+
+// check if next '/' is a div operator or start of a regular expression
+function isDivAhead(state, match) {
+  if (state === 'single_line_comment_start' || state === 'multi_line_comment_start') {
+    return false;
+  }
+  if (match === ';' ||
+      match === ',' ||
+      match === ':' ||
+      match === '(') {
+      // match === '=') {
+    return false;
+  }
+  if (state === 'block_brace_start' && match === '}') {
+    return false;
+  }
+  if (match === ']' ||
+      match === ')' ||
+      match === '}') {
+    return true;
+  }
+  if (state === 'identifier_start') {
+    const idContinueReg = require('unicode-6.3.0/Binary_Property/ID_Continue/regex');
+    if (idContinueReg.test(match) || match === '$' || match === '_' || isWhiteSpace(match) || isLineTerminator(match)) {
+      return true;
+    }
+    return false;
+  }
+
+  if (state === 'identifier_start' ||
+      state === 'decimal_digit_start' ||
+      state === 'decimal_digit_dot_start' ||
+      state === 'regexp_flag_start' ||
+      state === 'regexp_noflag' ||
+      state === 'div_start') {
+    return true;
+  }
+  return false;
+}
+exports.isDivAhead = isDivAhead;
 
 function parseKeyword(keyword, alias) {
   let res = '';
@@ -190,7 +229,6 @@ function parseKeyword(keyword, alias) {
       this.topState() === 'brace_start' ||
       this.topState() === 'function_brace_start' ||
       this.topState() === 'block_brace_start') {
-
     const idContinueReg = require('unicode-6.3.0/Binary_Property/ID_Continue/regex');
     if (idContinueReg.test(input[curr])) {
       this.begin('identifier_start');
@@ -242,7 +280,9 @@ exports.parseKeyword = parseKeyword;
 function parseOperator(operator, alias) {
   let isDiv = false;
 
-  const { ch, index: i } = lookAhead(this.matches.input, this.matches.index + this.match.length, true, true, this.topState());
+  const { ch, index: i } = lookAhead(this.matches.input,
+    this.matches.index + this.match.length, true, true, this.topState());
+
   const input = this.matches.input;
 
   if (ch === '/') {
@@ -370,39 +410,37 @@ function parseOperator(operator, alias) {
   } else if (this.match === '{') {
     if (this.topState() === 'template_string_head_start') {
       // look behind for ')'
-      const { ch } = lookBehind(this.matched, 1, true, true);
+      const { ch: nextCh } = lookBehind(this.matched, 1, true, true);
       // `${function() {}}` the 2nd { should be the start of a block
-      if (ch === ')') {
+      if (nextCh === ')') {
         this.begin('function_brace_start');
-        res =  '{';
+        res = '{';
       } else {
           // `${{}}` here { must be the prefix of an exression
-          this.begin('brace_start');
-          res = 'BRACE_START';
+        this.begin('brace_start');
+        res = 'BRACE_START';
       }
     } else if (this.topState() === 'brace_start') {
-      const { ch } = lookBehind(this.matched, 1, true, true);
-      if (ch === ')') {
+      const { ch: nextCh } = lookBehind(this.matched, 1, true, true);
+      if (nextCh === ')') {
         this.begin('function_brace_start');
-        res =  '{';
+        res = '{';
       } else {
         // NOTICE
         res = 'BRACE_START';
       }
-    } else {
-      if (this.topState() === 'condition_start') {
-        const { ch } = lookBehind(this.matched, 1, true, true);
-        if (ch === ')') {
-          this.begin('function_brace_start');
-          res =  '{';
-        } else {
-          this.begin('brace_start');
-          res = 'BRACE_START';
-        }
+    } else if (this.topState() === 'condition_start') {
+      const { ch: nextCh } = lookBehind(this.matched, 1, true, true);
+      if (nextCh === ')') {
+        this.begin('function_brace_start');
+        res = '{';
       } else {
-        // here { should be start of a block
-        this.begin('block_brace_start');
+        this.begin('brace_start');
+        res = 'BRACE_START';
       }
+    } else {
+        // here { should be start of a block
+      this.begin('block_brace_start');
     }
   } else if (/^{/.test(input.substring(i))) {
     this.begin('brace_start');
@@ -495,52 +533,11 @@ function parseEscapeStringCharacter() {
 
 exports.parseEscapeStringCharacter = parseEscapeStringCharacter;
 
-// check if next '/' is a div operator or start of a regular expression
-function isDivAhead(state, match) {
-  if (state === 'single_line_comment_start' || state === 'multi_line_comment_start') {
-    return false;
-  }
-  if (match === ';' ||
-      match === ',' ||
-      match === ':' ||
-      match === '(' ) {
-      // match === '=') {
-    return false;
-  }
-  if (state === 'block_brace_start' && match === '}') {
-    return false;
-  }
-  if (match === ']' ||
-      match === ')' ||
-      match === '}') {
-    return true;
-  }
-  if (state === 'identifier_start') {
-    const idContinueReg = require('unicode-6.3.0/Binary_Property/ID_Continue/regex');
-    if (idContinueReg.test(match) || match === '$' || match === '_' || isWhiteSpace(match) || isLineTerminator(match)) {
-      return true; 
-    } else {
-      return false;
-    }
-  }
-
-  if (state === 'identifier_start' ||
-      state === 'decimal_digit_start' ||
-      state === 'decimal_digit_dot_start' ||
-      state === 'regexp_flag_start' ||
-      state === 'regexp_noflag' ||
-      state === 'div_start') {
-    return true;
-  }
-  return false;
-}
-exports.isDivAhead = isDivAhead;
-
 function parseToken(token, alias) {
-
   let isDiv = false;
 
-  const { ch, index } = lookAhead(this.matches.input, this.matches.index + this.match.length, true, true, this.topState());
+  const { ch } = lookAhead(this.matches.input,
+    this.matches.index + this.match.length, true, true, this.topState());
 
   if (ch === '/') {
     isDiv = isDivAhead(this.topState(), this.match);
@@ -672,7 +669,7 @@ function parseTemplateCharacterEscape(ch) {
 exports.parseTemplateCharacterEscape = parseTemplateCharacterEscape;
 
 
-/***
+/** *
  * IdentifierParse ::
  *   UnicodeIDContinue
  *   UnicodeEscapeSequenceContinue
@@ -708,7 +705,8 @@ function isRegexpFlag(ch) {
 function parseRegexpCharacters(ch) {
   if (ch === '/' && this.topState() === 'regexp_start') {
     this.popState();
-    const { ch: nextCh } = lookAhead(this.matches.input, this.matches.index + this.match.length, false, false, this.topState());
+    const { ch: nextCh } = lookAhead(this.matches.input,
+      this.matches.index + this.match.length, false, false, this.topState());
 
     if (isRegexpFlag(nextCh)) {
       this.begin('regexp_flag_start');
@@ -720,8 +718,11 @@ function parseRegexpCharacters(ch) {
 
   if (this.topState() === 'regexp_flag_start') {
     // look ahead for char with an id_continue of false to end
-    const { ch: nextCh } = lookAhead(this.matches.input, this.matches.index + this.match.length, false, false, this.topState());
-    const { ch: nextChNonWS } = lookAhead(this.matches.input, this.matches.index + this.match.length, true, false, this.topState());
+    const { ch: nextCh } = lookAhead(this.matches.input,
+      this.matches.index + this.match.length, false, false, this.topState());
+
+    const { ch: nextChNonWS } = lookAhead(this.matches.input,
+      this.matches.index + this.match.length, true, false, this.topState());
 
     let isDiv = false;
 

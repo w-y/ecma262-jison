@@ -2,7 +2,6 @@ const Generator = require('jison/lib/jison').Generator;
 const { transLex, transBnf } = require('./transform');
 
 const {
-  singleLineComment,
   multiLineComment,
   SingleLineCommentCharsStart,
   SingleLineCommentCharEnd,
@@ -15,7 +14,6 @@ const { singleString, doubleString } = require('./lex/string');
 const { template } = require('./lex/template');
 
 const {
-  regexp,
   RegexpStart,
   RegexpEnd,
   RegexpNoTerminatorCharacter,

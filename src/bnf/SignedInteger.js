@@ -6,8 +6,8 @@ module.exports = {
     'AdditiveOperator DecimalDigits',
   ],
   handlers: [
-    'console.log(\'DecimalDigits \');$$ = $1;',
-    'console.log(\'+/- DecimalDigits \');$$ = $1 + $2;',
+    '$$ = $1;',
+    '$$ = $1 + $2;',
   ],
   subRules: [
     require('./DecimalDigits'),

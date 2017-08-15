@@ -28,7 +28,6 @@ const hexDigit = {
   conditions: ['hex_start'],
   rule: '[0123456789abcdefABCDEF]',
   handler: `
-    console.log('HexDigit');
     return 'HexDigit'; 
   `,
 };

@@ -84,7 +84,6 @@ const decimalExponentPart = {
   rule: '[eE]',
   handler: `
     this.begin('exponent_start');
-    console.log('ExponentIndicator');
     return 'ExponentIndicator';
   `,
 };

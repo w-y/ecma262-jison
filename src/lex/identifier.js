@@ -9,7 +9,6 @@ const unicodeIDStart = {
   conditions: ['INITIAL', 'brace_start', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'function_brace_start', 'block_brace_start', 'property_start', 'condition_start'],
   rule: idStartReg,
   handler: `
-    console.log('unicode id start');
     if (this.topState() === 'property_start') {
       this.popState();
     }
@@ -22,7 +21,6 @@ const unicodeIDContinue = {
   conditions: ['identifier_start'],
   rule: idContinueReg,
   handler: `
-    console.log('unicode id continue');
     return 'UnicodeIDContinue';
   `,
 };
