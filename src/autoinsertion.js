@@ -30,7 +30,7 @@ function canApplyRule(source, ex) {
   }
   // NOTICE: the end of the input stream of tokens
   if (token === EOF) {
-    return tokenOffset - 1;
+    return tokenOffset;
   }
   // The offending token is }
   if (token === '}') {
@@ -97,7 +97,8 @@ function autoinsertion(source) {
     const test = canApplyRule(s, ex);
 
     // make sure this will end
-    if (test === parser.parser.yy.autoInsertionOffset) {
+    if (test === parser.parser.yy.autoInsertionOffset || 
+        test === parser.parser.yy.autoInsertionOffset + 1) {
       return false;
     }
 

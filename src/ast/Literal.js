@@ -54,6 +54,12 @@ function TemplateElementNode(raw, isTail, ...args) {
   this.isTail = isTail;
 }
 
+function RegexpLiteralNode(raw, pattern, flags, ...args) {
+  LiteralNode.call(this, raw, Object.assign({}, { type: 'RegexpLiteral' }, ...args));
+  this.pattern = pattern;
+  this.flags = flags;
+}
+
 exports.NullLiteralNode = NullLiteralNode;
 exports.BooleanLiteralNode = BooleanLiteralNode;
 exports.StringLiteralNode = StringLiteralNode;
@@ -62,3 +68,4 @@ exports.ArrayLiteralNode = ArrayLiteralNode;
 exports.ObjectLiteralNode = ObjectLiteralNode;
 exports.TemplateLiteralNode = TemplateLiteralNode;
 exports.TemplateElementNode = TemplateElementNode;
+exports.RegexpLiteralNode = RegexpLiteralNode;

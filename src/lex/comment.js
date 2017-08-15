@@ -32,7 +32,7 @@ exports.onComment = (lexerRef, value) => {
 };
 
 const MultiLineCommentCharsStart = {
-  conditions: ['INITIAL'],
+  conditions: ['*'],
   rule: '/\\*',
   handler: `
     this.begin('multi_line_comment_start');
@@ -91,10 +91,13 @@ const PostAsteriskCommentChars = {
 };
 
 const SingleLineCommentCharsStart = {
-  conditions: ['INITIAL'],
+  conditions: ['*'],
   rule: '//',
   handler: `
-    this.begin('single_line_comment_start');
+    // //// will not begin new state
+    if (this.topState() !== 'single_line_comment_start') {
+      this.begin('single_line_comment_start');
+    }
     require('./lex/comment').onCommentStart(this, 'SingleLine', yylloc.first_line, yylloc.first_column, yylloc.range[0]);
     return '';
   `,
@@ -104,10 +107,9 @@ const SingleLineCommentCharEnd = {
   conditions: ['single_line_comment_start'],
   rule: LINE_TERMINATORS,
   handler: `
-    // SourceCharacterbut not LineTerminator
     this.popState();
+    // SourceCharacterbut not LineTerminator
     require('./lex/comment').onCommentEnd(this, 'SingleLine', yylloc.first_line, yylloc.first_column, yylloc.range[0]);
-
     return '';
   `,
 };
