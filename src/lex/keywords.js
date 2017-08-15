@@ -76,8 +76,22 @@ const Case = {
   conditions: ['*'],
   rule: 'case',
   handler: `
-    this.begin('case_start');
-    return require('./util').parseKeyword.call(this, this.match);
+    if (this.topState() === 'property_start') {
+      return require('./util').parseKeyword.call(this, this.match);
+    } else if (this.topState() === 'brace_start' || this.topState() === 'identifier_start') {
+      return require('./util').parseKeyword.call(this, this.match);
+    }
+    {
+      const utils = require('./util');
+      const { ch } = utils.lookAhead(this.matches.input, this.matches.index + this.match.length, false, false);
+
+      if (utils.isWhiteSpace(ch) || utils.isLineTerminator(ch) || ch === ':') {
+        this.begin('case_start');
+        return require('./util').parseKeyword.call(this, this.match);
+      } else {
+        return require('./util').parseKeyword.call(this, this.match);
+      }
+    }
   `,
 };
 
@@ -85,8 +99,22 @@ const Default = {
   conditions: ['*'],
   rule: 'default',
   handler: `
-    this.begin('case_start');
-    return require('./util').parseKeyword.call(this, this.match);
+    if (this.topState() === 'property_start') {
+      return require('./util').parseKeyword.call(this, this.match);
+    } else if (this.topState() === 'brace_start' || this.topState() === 'identifier_start') {
+      return require('./util').parseKeyword.call(this, this.match);
+    }
+    {
+      const utils = require('./util');
+      const { ch } = utils.lookAhead(this.matches.input, this.matches.index + this.match.length, false, false);
+
+      if (utils.isWhiteSpace(ch) || utils.isLineTerminator(ch) || ch === ':') {
+        this.begin('case_start');
+        return require('./util').parseKeyword.call(this, this.match);
+      } else {
+        return require('./util').parseKeyword.call(this, this.match);
+      }
+    }
   `,
 };
 

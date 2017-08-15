@@ -35,14 +35,23 @@ const MultiLineCommentCharsStart = {
   conditions: ['*'],
   rule: '/\\*',
   handler: `
-    this.begin('multi_line_comment_start');
+    if (this.topState() === 'single_string_start') {
+      return 'SingleStringCharacter';
+    }
+    if (this.topState() === 'double_string_start') {
+      return 'DoubleStringCharacter';
+    }
+    if (this.topState() === 'multi_line_comment_start') {
+    } else {
+      this.begin('multi_line_comment_start');
+    }
     require('./lex/comment').onCommentStart(this, 'MultiLine', yylloc.first_line, yylloc.first_column, yylloc.range[0]);
     return '';
   `,
 };
 
 const MultiLineCommentCharsEnd = {
-  conditions: ['multi_line_comment_start'],
+  conditions: ['multi_line_comment_start', 'multi_line_comment_post_asterisk_start'],
   rule: '\\*/',
   handler: `
     this.popState();
@@ -98,6 +107,12 @@ const SingleLineCommentCharsStart = {
     if (this.topState() !== 'single_line_comment_start') {
       this.begin('single_line_comment_start');
     }
+    if (this.topState() === 'single_string_start') {
+      return 'SingleStringCharacter';
+    }
+    if (this.topState() === 'double_string_start') {
+      return 'DoubleStringCharacter';
+    }
     require('./lex/comment').onCommentStart(this, 'SingleLine', yylloc.first_line, yylloc.first_column, yylloc.range[0]);
     return '';
   `,
@@ -128,6 +143,10 @@ exports.singleLineComment = [
   SingleLineCommentCharEnd,
   SingleLineCommentChar,
 ];
+
+exports.SingleLineCommentCharsStart = SingleLineCommentCharsStart;
+exports.SingleLineCommentCharEnd = SingleLineCommentCharEnd;
+exports.SingleLineCommentChar = SingleLineCommentChar;
 
 exports.multiLineComment = [
   MultiLineCommentCharsEnd,

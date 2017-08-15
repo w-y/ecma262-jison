@@ -9,7 +9,7 @@ module.exports = {
     'LabelledStatement',
     'IfStatement_Return',
     'BreakableStatement_Return',
-    'ContinueStatement_Return',
+    'ContinueStatement',
     'BreakStatement',
     'WithStatement_Return',
     'ThrowStatement',

@@ -6,6 +6,16 @@ const RegexpEnd = {
   `,
 };
 
+const RegexForwardSlash = {
+  conditions: ['regexp_backslash_start'],
+  rule: '/',
+  handler: `
+    this.popState();
+    return 'RegularExpressionNonTerminator';
+    // return require('./util').parseRegexpCharacters.call(this, this.match);
+  `,
+};
+
 const RegexpStart = {
   conditions: ['*'],
   rule: '/',
@@ -14,9 +24,19 @@ const RegexpStart = {
       this.popState();
       return 'MultiplicativeOperator';
     } else {
+      if (this.topState() === 'template_string_start') {
+        return 'TemplateChar';
+      }
       if (this.topState() === 'regexp_backslash_start') {
         this.popState();
         return 'RegularExpressionNonTerminator';
+      }
+      if (this.topState() === 'regexp_class_start') {
+        return 'RegularExpressionNonTerminator';
+      }
+      if (this.topState() === 'single_line_comment_start') {
+        require('./lex/comment').onComment(this, this.match);
+        return '';
       }
       this.begin('regexp_start');
       return 'LEFT_REGEXP_DIV';
@@ -37,3 +57,8 @@ exports.regexp = [
   RegexpStart,
   RegexpNoTerminatorCharacter,
 ];
+
+exports.RegexForwardSlash = RegexForwardSlash;
+exports.RegexpEnd = RegexpEnd;
+exports.RegexpStart = RegexpStart;
+exports.RegexpNoTerminatorCharacter = RegexpNoTerminatorCharacter;
