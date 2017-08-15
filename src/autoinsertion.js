@@ -1,6 +1,7 @@
 const { isWhiteSpace, isLineTerminator } = require('./util');
 const { ParseError } = require('./error');
 const parser = require('./parser');
+const { lookBehind, lookAhead } = require('./util');
 
 const EOF = 1;
 
@@ -22,12 +23,12 @@ function canApplyRule(source, ex) {
   const range = ex.hash.loc.range;
   let tokenOffset = range[1];
 
-  while (isWhiteSpace(source[tokenOffset]) || isLineTerminator(source[tokenOffset])) {
-    tokenOffset += 1;
-  }
   if (token === ';' && ex.hash.failedAutoSemicolon) {
     return -1;
   }
+
+  tokenOffset = lookAhead(source, tokenOffset, true, true).index;
+
   // NOTICE: the end of the input stream of tokens
   if (token === EOF) {
     return tokenOffset;
@@ -46,17 +47,20 @@ function canApplyRule(source, ex) {
     return tokenOffset + 1;
   }
 
-  let prevPtr = tokenOffset - 1;
+  const { index: prevPtr } = lookBehind(source.substring(0, tokenOffset), 0, true, false);
 
-  while (prevPtr >= 0 && isWhiteSpace(source[prevPtr])) {
-    prevPtr -= 1;
-  }
   // The previous token is )
   // the inserted semicolon would then be parsed as the terminating semicolon
   // of a do-while statement
   // TODO: only do-while
   if (source[prevPtr] === ')') {
     return tokenOffset;
+  }
+
+  const { index } = lookBehind(source.substring(0, tokenOffset), 0, true, true);
+
+  if (/^\+\+/.test(source.substring(index - 1)) || /^--/.test(source.substring(index - 1))) {
+    return lookBehind(source.substring(0, index), 0, true, true).index;
   }
 
   // The offending token is separated from the previous token by at least one LineTerminator.
@@ -97,7 +101,7 @@ function autoinsertion(source) {
     const test = canApplyRule(s, ex);
 
     // make sure this will end
-    if (test === parser.parser.yy.autoInsertionOffset || 
+    if (test === parser.parser.yy.autoInsertionOffset ||
         test === parser.parser.yy.autoInsertionOffset + 1) {
       return false;
     }
@@ -123,7 +127,11 @@ function autoinsertion(source) {
     }
     return false;
   }
+  let lastTime = Date.now();
+  let count = 0;
   while (true) {
+    lastTime = Date.now();
+    count += 1;
     try {
       res = parser.parse(src);
       if (res) {
@@ -135,8 +143,10 @@ function autoinsertion(source) {
         parser.parser.yy.originEx = ex;
       }
       src = applyRule(src, ex);
+      console.log(`retry ${count} times time parsed: ${Date.now() - lastTime}`);
       if (!src) {
         const originEx = parser.parser.yy.originEx;
+        console.log(originEx);
         reloadParser();
         // empty file
         if (isEOF(originEx)) {

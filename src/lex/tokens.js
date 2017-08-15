@@ -1,5 +1,13 @@
 const rules = ['*'];
 
+const TAB = {
+  conditions: rules,
+  rule: '\\u0009',
+  handler: `
+    return require('./util').parseToken.call(this, this.match);
+  `,
+};
+
 const LF = {
   conditions: rules,
   rule: '\\u000A',
@@ -81,6 +89,7 @@ const ZWNBSP = {
 };
 
 exports.tokens = [
+  TAB,
   LF,
   CR,
   LS,

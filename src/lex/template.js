@@ -33,7 +33,7 @@ const TemplateCharacterEscape = {
 };
 
 const TemplateQuoteStart = {
-  conditions: ['INITIAL', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'brace_start', 'function_brace_start', 'block_brace_start'],
+  conditions: ['INITIAL', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'brace_start', 'function_brace_start', 'block_brace_start', 'condition_start'],
   rule: '`',
   handler: `
     this.begin('template_string_start');

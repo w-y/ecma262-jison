@@ -1,21 +1,26 @@
 const BaseNode = require('./Base');
 
-const errorMsg = 'semicolon can\'t become one of the two semicolons in the header of a for statement';
+// const errorMsg =
+//  'semicolon can\'t become one of the two semicolons in the header of a for statement';
 
+// TODO: now check forstatement's range, but forstatement may contain function
+// need to check if autoInsertionOffset === forstatement's semicolon offset
 function checkForAutoSemicolonInsertion(
-  yy, leftParenthesisRange, rightParenthesisRange, loc) {
-  if (leftParenthesisRange && rightParenthesisRange && yy.autoInsertions) {
+  /* yy, leftParenthesisRange, rightParenthesisRange, loc */) {
+  /* if (leftParenthesisRange && rightParenthesisRange && yy.autoInsertions) {
     // semicolon can't become one of the two semicolons
     // in the header of a for statement
 
     for (let i = 0; i < yy.autoInsertions.length; i++) {
       const autoInsertionOffset = yy.autoInsertions[i];
-      if (autoInsertionOffset > leftParenthesisRange[0] &&
-          autoInsertionOffset < rightParenthesisRange[1]) {
-        throw new (require('../error').ParseError)(errorMsg, { text: ';', token: ';', line: loc.first_line, loc, failedAutoSemicolon: true });
-      }
+
+      // if (autoInsertionOffset > leftParenthesisRange[0]
+      //   && autoInsertionOffset < rightParenthesisRange[1]) {
+      //     throw new (require('../error').ParseError)(errorMsg,
+      //       { text: ';', token: ';', line: loc.first_line, loc, failedAutoSemicolon: true });
+      // }
     }
-  }
+  } */
 }
 
 function IterationStatementNode(type, test, body, ...args) {

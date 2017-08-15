@@ -4,13 +4,11 @@ const decimalPoint = {
   handler: `
     {
       let hasDigitBehind = false;
-      let i = this.matches.index + this.match.length;
       const utils = require('./util');
       const input = this.matches.input;
-      while(i < input.length && utils.isWhiteSpace(input[i])) {
-        i++;
-      }
-      if (i < input.length && utils.isDecimalDigit(input[i])) {
+      const { ch } = utils.lookAhead(this.matches.input, this.matches.index + this.match.length, true, true);
+
+      if (utils.isDecimalDigit(ch)) {
         hasDigitBehind = true;
       }
 
@@ -25,12 +23,29 @@ const decimalPoint = {
           return '.';
         case 'identifier_start':
           this.popState();
+          this.begin('property_start');
+          return '.';
+        case 'regexp_noflag':
+          this.popState();
           return '.';
         default:
           if (hasDigitBehind) {
             this.begin('decimal_digit_start');
             this.begin('decimal_digit_dot_start');
             return 'DecimalPoint';
+          }
+          if (this.topState() === 'INITIAL' ||
+            this.topState() === 'case_start' ||
+            this.topState() === 'condition_start' ||
+            this.topState() === 'arrow_brace_start' ||
+            this.topState() === 'template_string_head_start' ||
+            this.topState() === 'brace_start' ||
+            this.topState() === 'function_brace_start' ||
+            this.topState() === 'block_brace_start') {
+            const idStartReg = require('unicode-6.3.0/Binary_Property/ID_Start/regex');
+            if (idStartReg.test(ch)) {
+              this.begin('property_start');
+            }
           }
           return '.';
       }
@@ -39,7 +54,7 @@ const decimalPoint = {
 };
 
 const decimalDigit = {
-  conditions: ['decimal_digit_start', 'decimal_digit_dot_start'],
+  conditions: ['decimal_digit_start', 'decimal_digit_dot_start', 'exponent_start'],
   rule: '[0-9]',
   handler: `
     return 'DecimalDigit';
@@ -47,7 +62,7 @@ const decimalDigit = {
 };
 
 const decimalZero = {
-  conditions: ['INITIAL', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'brace_start', 'function_brace_start', 'block_brace_start'],
+  conditions: ['INITIAL', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'brace_start', 'function_brace_start', 'block_brace_start', 'condition_start'],
   rule: '0',
   handler: `
     this.begin('decimal_digit_start');
@@ -56,7 +71,7 @@ const decimalZero = {
 };
 
 const decimalNonZero = {
-  conditions: ['INITIAL', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'brace_start', 'function_brace_start', 'block_brace_start'],
+  conditions: ['INITIAL', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'brace_start', 'function_brace_start', 'block_brace_start', 'condition_start'],
   rule: '[1-9]',
   handler: `
     this.begin('decimal_digit_start');
@@ -64,9 +79,19 @@ const decimalNonZero = {
   `,
 };
 
+const decimalExponentPart = {
+  conditions: ['decimal_digit_start', 'decimal_digit_dot_start'],
+  rule: '[eE]',
+  handler: `
+    this.begin('exponent_start');
+    return 'ExponentIndicator';
+  `,
+};
+
 exports.decimalPoint = decimalPoint;
 exports.decimalDigit = decimalDigit;
 exports.decimalZero = decimalZero;
 exports.decimalNonZero = decimalNonZero;
+exports.decimalExponentPart = decimalExponentPart;
 
-exports.decimal = [decimalPoint, decimalDigit, decimalZero, decimalNonZero];
+exports.decimal = [decimalPoint, decimalDigit, decimalZero, decimalNonZero, decimalExponentPart];
