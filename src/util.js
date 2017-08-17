@@ -113,7 +113,7 @@ function lookAhead(source, offset, ignoreWhitespace, ignoreLineTerminator) {
     }
   }
 
-  return { ch, index: curr };
+  return { ch: source[curr], index: curr };
 }
 
 exports.lookAhead = lookAhead;
@@ -152,6 +152,9 @@ function isDivAhead(state, match) {
     return false;
   }
   if (state === 'block_brace_start' && match === '}') {
+    return false;
+  }
+  if (state === 'function_brace_start' && match === '}') {
     return false;
   }
   if (match === ']' ||
@@ -208,9 +211,6 @@ function parseKeyword(keyword, alias) {
   }
 
   // look ahead for { and function
-  // let i = this.matches.index + this.match.length;
-  // const input = this.matches.input;
-
   const curr = this.matches.index + this.match.length;
 
   const { ch, index: next } = lookAhead(this.matches.input, curr, true, true, this.topState());
@@ -228,7 +228,9 @@ function parseKeyword(keyword, alias) {
       this.topState() === 'template_string_head_start' ||
       this.topState() === 'brace_start' ||
       this.topState() === 'function_brace_start' ||
-      this.topState() === 'block_brace_start') {
+      this.topState() === 'block_brace_start' ||
+      this.topState() === 'parentheses_start' ||
+      this.topState() === 'function_parentheses_start') {
     const idContinueReg = require('unicode-6.3.0/Binary_Property/ID_Continue/regex');
     if (idContinueReg.test(input[curr])) {
       this.begin('identifier_start');
@@ -236,12 +238,8 @@ function parseKeyword(keyword, alias) {
     }
   }
 
-  // while (i < input.length && isWhiteSpace(input[i])) { i++; }
-
-  // throw 后面的{ 应该是表达式
-  // throw 后面的function应该是表达式
-  // return 后面的{ 应该是表达式
-  // return 后面的function应该是表达式
+  // "throw {" / "return {" here { is start of block
+  // "throw function" / "return function" here function is expression
   if (this.match === 'throw' || this.match === 'return') {
     if (/^{/.test(input.substring(next))) {
       this.begin('brace_start');
@@ -269,6 +267,13 @@ function parseKeyword(keyword, alias) {
   }
   if (this.topState() === 'brace_start' && ch === ':') {
     res = 'UnicodeIDStart';
+  }
+  // NOTICE:
+  // else {
+  // try {
+  // here { is the start of block
+  if ((this.match === 'else' || this.match === 'try' || this.match === 'finally') && ch === '{') {
+    this.begin('block_brace_start');
   }
   if (isDiv) {
     this.begin('div_start');
@@ -317,7 +322,6 @@ function parseOperator(operator, alias) {
       res = alias || operator;
       break;
     case 'brace_start':
-      // this.popState();
       res = alias || operator;
       break;
     case 'arrow_brace_start':
@@ -350,15 +354,21 @@ function parseOperator(operator, alias) {
       res = alias || operator;
       break;
   }
-  // TODO: 具体情况具体分析
-  // case : 后面的{ 应该是语句块而不是表达式的开头
-  // } 后面的{是语句块开头？
-  // ) 后面的{是语句块开头?
-  // test ? exp1 : function() {} function after ':' is an expression
-  if (this.match === ':') {
+
+  if (this.match === '(') {
+    if (this.topState() === 'function_parentheses_start') {
+    } else {
+      this.begin('parentheses_start');
+    }
+    if (/^function/.test(input.substring(i))) {
+      this.begin('function_start');
+    }
+  } else if (this.match === ':') {
+    // "case : {"  here { is start of block
     if (this.topState() === 'case_start') {
       this.popState();
     } else if (this.topState() === 'condition_start' || this.topState() === 'brace_start') {
+      // test ? exp1 : function() {} function after ':' is an expression
       if (this.topState() === 'condition_start') {
         this.popState();
       }
@@ -368,8 +378,6 @@ function parseOperator(operator, alias) {
       if (/^function/.test(input.substring(i))) {
         this.begin('function_start');
       }
-    // } else if (/^{/.test(input.substring(i))) {
-    // this.begin('brace_start');
     } else if (/^function/.test(input.substring(i))) {
       // NOTICE: { a : function() {} }
       this.begin('function_start');
@@ -385,7 +393,17 @@ function parseOperator(operator, alias) {
       this.begin('brace_start');
     }
   } else if (this.match === ')') {
-
+    if (this.topState() === 'function_parentheses_start') {
+      this.popState();
+      if (ch === '{') {
+        this.begin('function_brace_start');
+      }
+    } else {
+      this.popState();
+      if (ch === '{') {
+        this.begin('block_brace_start');
+      }
+    }
   } else if (this.match === '=>') {
     // Arrow Function look ahread {
     if (/^{/.test(input.substring(i))) {
@@ -398,48 +416,42 @@ function parseOperator(operator, alias) {
       this.popState();
       res = 'RIGHT_TEMPLATE_BRACE';
     } else if (this.topState() === 'function_brace_start') {
-      res = '}';
+      this.popState();
+      // res = '}';
     } else if (this.topState() === 'template_string_start') {
       res = 'TemplateChar';
     } else if (this.topState() === 'block_brace_start') {
-      // this.popState();
-      res = '}';
+      this.popState();
+      // res = '}';
     } else if (this.topState() === 'identifier_start') {
-      res = '}';
+      // res = '}';
+    } else if (this.topState() === 'brace_start') {
+      this.popState();
+      // res = '}';
     }
   } else if (this.match === '{') {
     if (this.topState() === 'template_string_head_start') {
       // look behind for ')'
-      const { ch: nextCh } = lookBehind(this.matched, 1, true, true);
+      const { ch: prevCh } = lookBehind(this.matched, 1, true, true);
       // `${function() {}}` the 2nd { should be the start of a block
-      if (nextCh === ')') {
+      if (prevCh === ')') {
         this.begin('function_brace_start');
-        res = '{';
+        // res = '{';
       } else {
-          // `${{}}` here { must be the prefix of an exression
+        // `${{}}` here { must be the prefix of an exression
         this.begin('brace_start');
         res = 'BRACE_START';
       }
     } else if (this.topState() === 'brace_start') {
-      const { ch: nextCh } = lookBehind(this.matched, 1, true, true);
-      if (nextCh === ')') {
-        this.begin('function_brace_start');
-        res = '{';
-      } else {
-        // NOTICE
-        res = 'BRACE_START';
-      }
+      res = 'BRACE_START';
+    } else if (this.topState() === 'function_brace_start') {
     } else if (this.topState() === 'condition_start') {
-      const { ch: nextCh } = lookBehind(this.matched, 1, true, true);
-      if (nextCh === ')') {
-        this.begin('function_brace_start');
-        res = '{';
-      } else {
-        this.begin('brace_start');
-        res = 'BRACE_START';
-      }
+    } else if (this.topState() === 'parentheses_start' || this.topState() === 'function_parentheses_start') {
+      this.begin('brace_start');
+      res = 'BRACE_START';
+    } else if (this.topState() === 'block_brace_start') {
     } else {
-        // here { should be start of a block
+      // here { should be start of a block
       this.begin('block_brace_start');
     }
   } else if (/^{/.test(input.substring(i))) {

@@ -32,6 +32,20 @@ describe('parsing real world\'s javascript code', function() {
       }
     });
   });
+  describe('react', function() {
+    it(`react-dom 15.6.1 dev`, function(done) {
+      try {
+        const fileHelper = createFileHelper('./mock/react-dom-15.6.1.js');
+        fileHelper.readFileAsync((err, data) => {
+          ast = parser.parse(data);
+          done();
+        })
+      } catch(ex) {
+        assert.equal(true, false);
+        done();
+      }
+    });
+  });
   describe('zepto', function() {
     it(`zepto 1.2.0 production`, function(done) {
       try {
@@ -45,5 +59,5 @@ describe('parsing real world\'s javascript code', function() {
         done();
       }
     });
-  });
+  }); 
 });
