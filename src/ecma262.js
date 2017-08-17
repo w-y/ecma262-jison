@@ -1,4 +1,8 @@
 const Generator = require('jison/lib/jison').Generator;
+
+const fs = require('fs');
+const path = require('path');
+
 const { transLex, transBnf } = require('./transform');
 
 const {
@@ -255,9 +259,7 @@ const options = { type: 'lr', moduleType: 'commonjs', moduleName: 'esparse' };
 
 exports.main = function main() {
   const code = new Generator(exports.grammar, options).generate();
-  console.log(`
-    ${code}
-  `);
+  fs.writeFileSync(`${path.dirname(__filename)}/parser.js`, code);
 };
 
 if (require.main === module) {

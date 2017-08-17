@@ -146,7 +146,6 @@ function autoinsertion(source) {
       console.log(`retry ${count} times time parsed: ${Date.now() - lastTime}`);
       if (!src) {
         const originEx = parser.parser.yy.originEx;
-        console.log(originEx);
         reloadParser();
         // empty file
         if (isEOF(originEx)) {

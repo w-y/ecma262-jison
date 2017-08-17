@@ -1,0 +1,2294 @@
+{
+  "Script": [
+    [
+      "ScriptBody",
+      "\n      $$ = new (require('./ast/ScriptNode'))($1, { loc: this._$, yy });\n      if (yy.lexer.comments) {\n        for (let i = 0; i < yy.lexer.comments.length; i++) {\n          const comments = yy.lexer.comments;\n          const comment = comments[i];\n          if (yy.lexer.comments[i].leadingLinkNode) {\n            yy.lexer.comments[i].leadingLinkNode.leadingComments.push({\n              type: comment.type,\n              value: comment.buffer.join(''),\n              range: [comment.range[0], comment.range[1]],\n            });\n            comment.hasLinked = true;\n          }\n          if (yy.lexer.comments[i].trailingLinkNode) {\n            yy.lexer.comments[i].trailingLinkNode.trailingComments.push({\n              type: comment.type,\n              value: comment.buffer.join(''),\n              range: [comment.range[0], comment.range[1]],\n            });\n            comment.hasLinked = true;\n          }\n        }\n        // NOTICE:\n        // still some comments will not link to the ast node\n        // (e.g, \"return /*comment*/ ;\", comments in the end)\n        // here simply put all these comments to the root node\n\n        for (let i = 0; i < yy.lexer.comments.length; i++) {\n          const comments = yy.lexer.comments;\n          const comment = comments[i];\n\n          if (!comment.hasLinked) {\n            $$.trailingComments.push({\n              type: comment.type,\n              value: comment.buffer.join(''),\n              range: [comment.range[0], comment.range[1]],\n            });\n          }\n        }\n      }\n      return $$;\n    "
+    ]
+  ],
+  "ScriptBody": [
+    [
+      "StatementList",
+      "$$ = $1;"
+    ]
+  ],
+  "StatementList": [
+    [
+      "StatementListItem",
+      "$$ = [$1];"
+    ],
+    [
+      "StatementList StatementListItem",
+      "$$ = $1.concat([$2]);"
+    ]
+  ],
+  "StatementListItem": [
+    [
+      "Statement",
+      "$$ = $1;"
+    ],
+    [
+      "Declaration",
+      "$$ = $1"
+    ]
+  ],
+  "Statement": [
+    [
+      "EmptyStatement",
+      "$$ = $1;"
+    ],
+    [
+      "ExpressionStatement",
+      "$$ = $1;"
+    ],
+    [
+      "VariableStatement",
+      "$$ = $1;"
+    ],
+    [
+      "BlockStatement",
+      "$$ = $1;"
+    ],
+    [
+      "LabelledStatement",
+      "$$ = $1;"
+    ],
+    [
+      "IfStatement",
+      "$$ = $1;"
+    ],
+    [
+      "BreakableStatement",
+      "$$ = $1;"
+    ],
+    [
+      "ContinueStatement",
+      "$$ = $1;"
+    ],
+    [
+      "BreakStatement",
+      "$$ = $1;"
+    ],
+    [
+      "WithStatement",
+      "$$ = $1;"
+    ],
+    [
+      "ThrowStatement",
+      "$$ = $1;"
+    ],
+    [
+      "DebuggerStatement",
+      "$$ = $1;"
+    ],
+    [
+      "TryStatement",
+      "$$ = $1;"
+    ]
+  ],
+  "EmptyStatement": [
+    [
+      ";",
+      "\n      if (yy.autoInsertions) {\n        for (let i = 0; i < yy.autoInsertions.length; i++) {\n          const autoInsertionOffset = yy.autoInsertions[i];\n          if (autoInsertionOffset && autoInsertionOffset === this._$.range[1]) {\n            throw new (require('./error').ParseError)('a semicolon is never inserted automatically if the semicolon would then be parsed as an empty statement', {\n              text: $$[$0],\n              token: $$[$0],\n              line: yy.lexer.yylloc.first_line,\n              loc: yy.lexer.yylloc,\n              failedAutoSemicolon: true,\n            });\n          }\n        }\n      }\n      $$ = new (require('./ast/EmptyStatement').EmptyStatementNode)({\n        loc: this._$,\n        yy,\n      });\n    "
+    ]
+  ],
+  "ExpressionStatement": [
+    [
+      "Expression_In ;",
+      "$$ = new (require('./ast/ExpressionStatement').ExpressionStatementNode)($1, { loc: this._$, yy })"
+    ]
+  ],
+  "Expression_In": [
+    [
+      "AssignmentExpression_In",
+      "$$ = $1;"
+    ],
+    [
+      "Expression_In , AssignmentExpression_In",
+      "$$ = new (require('./ast/SequenceExpressionNode'))([$1].concat([$3]), { loc: this._$, yy })"
+    ]
+  ],
+  "AssignmentExpression_In": [
+    [
+      "ConditionalExpression_In",
+      "$$ = $1"
+    ],
+    [
+      "LeftHandSideExpression AssignmentOperator AssignmentExpression_In",
+      "$$ = new (require('./ast/AssignmentExpression').AssignmentExpressionNode)($2, $1, $3, { loc: this._$, yy });"
+    ],
+    [
+      "LeftHandSideExpression = AssignmentExpression_In",
+      "$$ = new (require('./ast/AssignmentExpression').AssignmentExpressionNode)($2, $1, $3, { loc: this._$, yy });"
+    ],
+    [
+      "ArrowFunction_In",
+      "$$ = $1"
+    ]
+  ],
+  "ConditionalExpression_In": [
+    [
+      "LogicalORExpression_In",
+      "$$ = $1;"
+    ],
+    [
+      "LogicalORExpression_In ? AssignmentExpression_In : AssignmentExpression_In",
+      "$$ = new (require('./ast/ConditionalExpression')).ConditionalExpressionNode($1, $3, $5, { loc: this._$, yy });"
+    ]
+  ],
+  "LogicalORExpression_In": [
+    [
+      "LogicalANDExpression_In",
+      "$$ = $1"
+    ],
+    [
+      "LogicalORExpression_In || LogicalANDExpression_In",
+      "$$ = new (require('./ast/LogicalExpression').LogicalORExpressionNode)($2, $1, $3, { loc: this._$, yy })"
+    ]
+  ],
+  "LogicalANDExpression_In": [
+    [
+      "BitwiseORExpression_In",
+      "$$ = $1"
+    ],
+    [
+      "LogicalANDExpression_In && BitwiseORExpression_In",
+      "$$ = new (require('./ast/LogicalExpression').LogicalANDExpressionNode)($2, $1, $3, { loc: this._$, yy })"
+    ]
+  ],
+  "BitwiseORExpression_In": [
+    [
+      "BitwiseXORExpression_In",
+      "$$ = $1;"
+    ],
+    [
+      "BitwiseORExpression_In | BitwiseXORExpression_In",
+      "$$ = new (require('./ast/BitwiseExpression').BitwiseORExpressionNode)($2, $1, $3, { loc: this._$, yy })"
+    ]
+  ],
+  "BitwiseXORExpression_In": [
+    [
+      "BitwiseANDExpression_In",
+      "$$ = $1;"
+    ],
+    [
+      "BitwiseXORExpression_In ^ BitwiseANDExpression_In",
+      "$$ = new (require('./ast/BitwiseExpression').BitwiseXORExpressionNode)($2, $1, $3, { loc: this._$, yy })"
+    ]
+  ],
+  "BitwiseANDExpression_In": [
+    [
+      "EqualityExpression_In",
+      "$$ = $1;"
+    ],
+    [
+      "BitwiseANDExpression_In & EqualityExpression_In",
+      "$$ = new (require('./ast/BitwiseExpression').BitwiseANDExpressionNode)($2, $1, $3, { loc: this._$, yy })"
+    ]
+  ],
+  "EqualityExpression_In": [
+    [
+      "RelationalExpression_In",
+      "$$ = $1;"
+    ],
+    [
+      "EqualityExpression_In EqualityOperator RelationalExpression_In",
+      "$$ = new (require('./ast/EqualityExpression').EqualityExpressionNode)($2, $1, $3, { loc: this._$, yy })"
+    ]
+  ],
+  "RelationalExpression_In": [
+    [
+      "ShiftExpression",
+      "$$ = $1"
+    ],
+    [
+      "RelationalExpression_In RelationalOperator ShiftExpression",
+      "$$ = new (require('./ast/RelationalExpression').RelationalExpressionNode)($2, $1, $3, { loc: this._$, yy })"
+    ],
+    [
+      "RelationalExpression_In in ShiftExpression",
+      "$$ = new (require('./ast/RelationalExpression').RelationalExpressionNode)($2, $1, $3, { loc: this._$, yy })"
+    ],
+    [
+      "RelationalExpression_In instanceof ShiftExpression",
+      "$$ = new (require('./ast/RelationalExpression').RelationalExpressionNode)($2, $1, $3, { loc: this._$, yy })"
+    ]
+  ],
+  "ShiftExpression": [
+    [
+      "AdditiveExpression",
+      "$$ = $1"
+    ],
+    [
+      "ShiftExpression ShiftOperator AdditiveExpression",
+      "$$ = new (require('./ast/ShiftExpression').ShiftExpressionNode)($2, $1, $3, { loc: this._$, yy })"
+    ]
+  ],
+  "AdditiveExpression": [
+    [
+      "MultiplicativeExpression",
+      "$$ = $1"
+    ],
+    [
+      "AdditiveExpression AdditiveOperator MultiplicativeExpression",
+      "$$ = new (require('./ast/AdditiveExpression').AdditiveExpressionNode)($2, $1, $3, { loc: this._$, yy })"
+    ]
+  ],
+  "MultiplicativeExpression": [
+    [
+      "ExponentiationExpression",
+      "$$ = $1"
+    ],
+    [
+      "MultiplicativeExpression MultiplicativeOperator ExponentiationExpression",
+      "$$ = new (require('./ast/MultiplicativeExpression').MultiplicativeExpressionNode)($2, $1, $3, { loc: this._$, yy })"
+    ]
+  ],
+  "ExponentiationExpression": [
+    [
+      "UnaryExpression",
+      "$$ = $1;"
+    ],
+    [
+      "UpdateExpression ** ExponentiationExpression",
+      "$$ = new (require('./ast/ExponentiationExpression').ExponentiationExpressionNode)($2, $1, $3, { loc: this._$, yy })"
+    ]
+  ],
+  "UnaryExpression": [
+    [
+      "UpdateExpression",
+      "$$ = $1"
+    ],
+    [
+      "UnaryOperator UnaryExpression",
+      "$$ = new (require('./ast/UnaryExpression').UnaryExpressionNode)($1, $2, { loc: this._$, yy })"
+    ],
+    [
+      "AdditiveOperator UnaryExpression",
+      "$$ = new (require('./ast/UnaryExpression').UnaryExpressionNode)($1, $2, { loc: this._$, yy })"
+    ]
+  ],
+  "UpdateExpression": [
+    [
+      "LeftHandSideExpression",
+      "$$ = $1"
+    ],
+    [
+      "LeftHandSideExpression UpdateOperator",
+      "$$ = new (require('./ast/UpdateExpression').UpdateExpressionNode)($2, $1, false, { loc: this._$, yy })"
+    ],
+    [
+      "UpdateOperator LeftHandSideExpression",
+      "$$ = new (require('./ast/UpdateExpression').UpdateExpressionNode)($1, $2, true, { loc: this._$, yy })"
+    ]
+  ],
+  "LeftHandSideExpression": [
+    [
+      "NewExpression",
+      "$$ = $1;"
+    ],
+    [
+      "CallExpression",
+      "$$ = $1;"
+    ]
+  ],
+  "NewExpression": [
+    [
+      "MemberExpression",
+      "$$ = $1"
+    ],
+    [
+      "new NewExpression",
+      "$$ = new (require('./ast/LeftHandSideExpression').NewExpressionNode)($2, [], { loc: this._$, yy })"
+    ]
+  ],
+  "MemberExpression": [
+    [
+      "PrimaryExpression",
+      "$$ = $1"
+    ],
+    [
+      "MemberExpression [ Expression_In ]",
+      "$$ = new (require('./ast/LeftHandSideExpression').MemberExpressionNode)($1, $3, true, { loc: this._$, yy })"
+    ],
+    [
+      "MemberExpression . IdentifierName",
+      "\n      $$ = new (require('./ast/LeftHandSideExpression').MemberExpressionNode)($1, $3, false, { loc: this._$, yy });\n    "
+    ],
+    [
+      "SuperProperty",
+      "$$ = $1"
+    ],
+    [
+      "MetaProperty",
+      "$$ = $1"
+    ],
+    [
+      "new MemberExpression Arguments",
+      "$$ = new (require('./ast/LeftHandSideExpression').NewExpressionNode)($2, $3, { loc: this._$, yy })"
+    ]
+  ],
+  "PrimaryExpression": [
+    [
+      "this",
+      "$$ = new (require('./ast/ThisExpressionNode'))({ loc: this._$, yy });"
+    ],
+    [
+      "IdentifierReference",
+      "$$ = $1;"
+    ],
+    [
+      "Literal",
+      "$$ = $1;"
+    ],
+    [
+      "ArrayLiteral",
+      "$$ = $1;"
+    ],
+    [
+      "ObjectLiteral",
+      "$$ = $1;"
+    ],
+    [
+      "CoverParenthesizedExpressionAndArrowParameterList",
+      "$$ = $1;"
+    ],
+    [
+      "FunctionExpression",
+      "$$ = $1;"
+    ],
+    [
+      "TemplateLiteral",
+      "$$ = $1;"
+    ],
+    [
+      "RegularExpressionLiteral",
+      "$$ = $1;"
+    ]
+  ],
+  "IdentifierReference": [
+    [
+      "Identifier",
+      "$$ = $1;"
+    ],
+    [
+      "of",
+      "$$ = new (require('./ast/Identifier').IdentifierNode)($1, { loc: this._$, yy })"
+    ]
+  ],
+  "Identifier": [
+    [
+      "IdentifierName",
+      "$$ = $1;"
+    ]
+  ],
+  "IdentifierName": [
+    [
+      "IdentifierStart",
+      "$$ = new (require('./ast/Identifier').IdentifierNode)($1, { loc: this._$, yy })"
+    ],
+    [
+      "IdentifierName IdentifierPart",
+      "\n      // NOTICE: adjust loc and last column\n      // since identifier must in the same line\n      // we don't need to modify line and first column\n      // TODO: encapsulate method in Node\n\n      $1.name += $2.value;\n      $1.range[1] = $2.loc.range[1];\n      $1.lastColumn = $2.loc.last_column;\n      $1.lastLine = $2.loc.last_line;\n      $$ = $1;\n    "
+    ]
+  ],
+  "IdentifierStart": [
+    [
+      "UnicodeIDStart",
+      "$$ = $1;"
+    ],
+    [
+      "UnicodeEscapeSequence",
+      "$$ = $1;"
+    ],
+    [
+      "$",
+      "$$ = $1;"
+    ],
+    [
+      "_",
+      "$$ = $1;"
+    ]
+  ],
+  "UnicodeEscapeSequence": [
+    [
+      "UnicodeEscapeSequenceStart Hex4Digits",
+      "$$ = String.fromCodePoint($2);"
+    ]
+  ],
+  "Hex4Digits": [
+    [
+      "HexDigit HexDigit HexDigit HexDigit",
+      "$$ = require('./util').getMVHexDigits($1, $2, $3, $4);"
+    ]
+  ],
+  "IdentifierPart": [
+    [
+      "UnicodeIDContinue",
+      "$$ = { value: $1, loc: this._$ }"
+    ],
+    [
+      "UnicodeEscapeSequenceContinue",
+      "$$ = { value: $1, loc: this._$ }"
+    ],
+    [
+      "$",
+      "$$ = { value: $1, loc: this._$ }"
+    ],
+    [
+      "_",
+      "$$ = { value: $1, loc: this._$ }"
+    ],
+    [
+      "ZWNJ",
+      "$$ = { value: $1, loc: this._$ }"
+    ],
+    [
+      "ZWJ",
+      "$$ = { value: $1, loc: this._$ }"
+    ]
+  ],
+  "UnicodeEscapeSequenceContinue": [
+    [
+      "UnicodeEscapeSequenceContinueStart Hex4Digits",
+      "$$ = String.fromCodePoint($2);"
+    ]
+  ],
+  "Literal": [
+    [
+      "NullLiteral",
+      "$$ = new (require('./ast/Literal').NullLiteralNode)($1, { raw: $1, loc: this._$, yy })"
+    ],
+    [
+      "BooleanLiteral",
+      "$$ = new (require('./ast/Literal').BooleanLiteralNode)($1, { raw: $1, loc: this._$, yy });"
+    ],
+    [
+      "StringLiteral",
+      "$$ = new (require('./ast/Literal').StringLiteralNode)($1, { raw: $1, loc: this._$, yy });"
+    ],
+    [
+      "DecimalLiteral",
+      "$$ = new (require('./ast/Literal').DecimalLiteralNode)($1, { raw: $1, loc: this._$, yy });"
+    ],
+    [
+      "HexIntegerLiteral",
+      "$$ = new (require('./ast/Literal').HexIntegerLiteralNode)($1, { raw: $1, loc: this._$, yy });"
+    ]
+  ],
+  "StringLiteral": [
+    [
+      "SingleQuoteStart SingleStringCharacters SingleQuoteEnd",
+      "$$ = $1 + $2 + $3;"
+    ],
+    [
+      "DoubleQuoteStart DoubleStringCharacters DoubleQuoteEnd",
+      "$$ = $1 + $2 + $3;"
+    ],
+    [
+      "SingleQuoteStart SingleQuoteEnd",
+      "$$ = $1 + $2;"
+    ],
+    [
+      "DoubleQuoteStart DoubleQuoteEnd",
+      "$$ = $1 + $2;"
+    ]
+  ],
+  "SingleStringCharacters": [
+    [
+      "SingleStringCharacter",
+      "$$ = $1;"
+    ],
+    [
+      "SingleStringCharacter SingleStringCharacters",
+      "$$ = $1 + $2;"
+    ],
+    [
+      "EscapeSequenceStart EscapeSequence",
+      "$$ = $2;"
+    ],
+    [
+      "EscapeSequenceStart EscapeSequence SingleStringCharacters",
+      "$$ = $2 + $3;"
+    ]
+  ],
+  "EscapeSequence": [
+    [
+      "UnicodeEscapeSequence",
+      "$$ = $1;"
+    ],
+    [
+      "CharacterEscapeSequence",
+      "$$ = $1;"
+    ]
+  ],
+  "CharacterEscapeSequence": [
+    [
+      "SingleEscapeCharacter",
+      "$$ = String.fromCodePoint(require('./constants').STRING_SINGLE_CHARACTER_ESCAPE_SEQUENCES[$1]);"
+    ],
+    [
+      "NonEscapeCharacter",
+      "$$ = '\\\\' + $1;"
+    ]
+  ],
+  "DoubleStringCharacters": [
+    [
+      "DoubleStringCharacter",
+      "$$ = $1;"
+    ],
+    [
+      "DoubleStringCharacter DoubleStringCharacters",
+      "$$ = $1 + $2;"
+    ],
+    [
+      "EscapeSequenceStart EscapeSequence",
+      "$$ = $2;"
+    ],
+    [
+      "EscapeSequenceStart EscapeSequence DoubleStringCharacters",
+      "$$ = $2 + $3;"
+    ]
+  ],
+  "DecimalLiteral": [
+    [
+      "DecimalIntegerLiteral DecimalPoint",
+      "$$ = $1 + $2;"
+    ],
+    [
+      "DecimalIntegerLiteral DecimalPoint DecimalDigits",
+      "$$ = $1 + $2 + $3;"
+    ],
+    [
+      "DecimalPoint DecimalDigits",
+      "$$ = $1 + $2;"
+    ],
+    [
+      "DecimalIntegerLiteral",
+      "$$ = $1;"
+    ],
+    [
+      "DecimalIntegerLiteral DecimalPoint DecimalDigits ExponentPart",
+      "$$ = $1 + $2 + $3 + $4;"
+    ],
+    [
+      "DecimalIntegerLiteral DecimalPoint ExponentPart",
+      "$$ = $1 + $2 + $3;"
+    ],
+    [
+      "DecimalPoint DecimalDigits ExponentPart",
+      "$$ = $1 + $2 + $3;"
+    ],
+    [
+      "DecimalIntegerLiteral ExponentPart",
+      "$$ = $1 + $2;"
+    ]
+  ],
+  "DecimalIntegerLiteral": [
+    [
+      "0",
+      "$$ = $1;"
+    ],
+    [
+      "0 DecimalDigits",
+      "$$ = $1 + $2;"
+    ],
+    [
+      "NonZeroDigit",
+      "$$ = $1;"
+    ],
+    [
+      "NonZeroDigit DecimalDigits",
+      "$$ = $1 + $2;"
+    ]
+  ],
+  "DecimalDigits": [
+    [
+      "DecimalDigit",
+      "$$ = $1;"
+    ],
+    [
+      "DecimalDigits DecimalDigit",
+      "$$ = $1 + $2;"
+    ]
+  ],
+  "ExponentPart": [
+    [
+      "ExponentIndicator SignedInteger",
+      "$$ = $1 + $2;"
+    ]
+  ],
+  "SignedInteger": [
+    [
+      "DecimalDigits",
+      "$$ = $1;"
+    ],
+    [
+      "AdditiveOperator DecimalDigits",
+      "$$ = $1 + $2;"
+    ]
+  ],
+  "HexIntegerLiteral": [
+    [
+      "0x HexDigits",
+      "$$ = $2"
+    ],
+    [
+      "0X HexDigits",
+      "$$ = $2"
+    ]
+  ],
+  "HexDigits": [
+    [
+      "HexDigit",
+      "$$ = $1"
+    ],
+    [
+      "HexDigits HexDigit",
+      "$$ = $1 + $2"
+    ]
+  ],
+  "ArrayLiteral": [
+    [
+      "[ ]",
+      "$$ = new (require('./ast/Literal').ArrayLiteralNode)([], { loc: this._$, yy })"
+    ],
+    [
+      "[ Elision ]",
+      "$$ = new (require('./ast/Literal').ArrayLiteralNode)($2, { loc: this._$, yy })"
+    ],
+    [
+      "[ ElementList ]",
+      "$$ = new (require('./ast/Literal').ArrayLiteralNode)($2, { loc: this._$, yy })"
+    ],
+    [
+      "[ ElementList , Elision ]",
+      "$$ = new (require('./ast/Literal').ArrayLiteralNode)($2.concat($4), { loc: this._$, yy })"
+    ],
+    [
+      "[ ElementList , ]",
+      "$$ = new (require('./ast/Literal').ArrayLiteralNode)($2.concat([null]), { loc: this._$, yy })"
+    ]
+  ],
+  "Elision": [
+    [
+      ",",
+      "$$ = [,]"
+    ],
+    [
+      "Elision ,",
+      "$$ = $1.concat([null])"
+    ]
+  ],
+  "ElementList": [
+    [
+      "AssignmentExpression_In",
+      "$$ = [$1]"
+    ],
+    [
+      "Elision AssignmentExpression_In",
+      "$$ = $1.concat([$2])"
+    ],
+    [
+      "ElementList , AssignmentExpression_In",
+      "$$ = $1.concat([$3])"
+    ],
+    [
+      "ElementList , Elision AssignmentExpression_In",
+      "$$ = $1.concat($3).concat([$4])"
+    ]
+  ],
+  "ObjectLiteral": [
+    [
+      "BRACE_START }",
+      "$$ = new (require('./ast/Literal').ObjectLiteralNode)([], { loc: this._$, yy })"
+    ],
+    [
+      "BRACE_START PropertyDefinitionList }",
+      "$$ = new (require('./ast/Literal').ObjectLiteralNode)($2, { loc: this._$, yy })"
+    ],
+    [
+      "BRACE_START PropertyDefinitionList , }",
+      "$$ = new (require('./ast/Literal').ObjectLiteralNode)($2, { loc: this._$, yy })"
+    ]
+  ],
+  "PropertyDefinitionList": [
+    [
+      "PropertyDefinition",
+      "$$ = [$1]"
+    ],
+    [
+      "PropertyDefinitionList , PropertyDefinition",
+      "$$ = $1.concat([$3])"
+    ]
+  ],
+  "PropertyDefinition": [
+    [
+      "IdentifierReference",
+      "$$ = {key:$1, value:$1}"
+    ],
+    [
+      "CoverInitializedName",
+      "$$ = $1"
+    ],
+    [
+      "PropertyName : AssignmentExpression_In",
+      "$$ = {key:$1, value:$3}"
+    ]
+  ],
+  "CoverInitializedName": [
+    [
+      "IdentifierReference Initializer_In",
+      "throw new Error('Syntax Error');"
+    ]
+  ],
+  "Initializer_In": [
+    [
+      "= AssignmentExpression_In",
+      "$$ = $2"
+    ]
+  ],
+  "PropertyName": [
+    [
+      "LiteralPropertyName",
+      "$$ = $1"
+    ],
+    [
+      "ComputedPropertyName",
+      "$$ = $1"
+    ]
+  ],
+  "LiteralPropertyName": [
+    [
+      "IdentifierName",
+      "$$ = $1"
+    ],
+    [
+      "StringLiteral",
+      "$$ = new (require('./ast/Literal').StringLiteralNode)($1, { raw: $1, loc: this._$, yy });"
+    ],
+    [
+      "NumericLiteral",
+      "$$ = $1"
+    ]
+  ],
+  "NumericLiteral": [
+    [
+      "DecimalLiteral",
+      "$$ = $1"
+    ],
+    [
+      "HexIntegerLiteral",
+      "$$ = $1"
+    ]
+  ],
+  "ComputedPropertyName": [
+    [
+      "[ AssignmentExpression_In ]",
+      "$$ = $2"
+    ]
+  ],
+  "CoverParenthesizedExpressionAndArrowParameterList": [
+    [
+      "( Expression_In )",
+      "$$ = new (require('./ast/CoverParenthesizedExpressionNode'))([$2], { loc: this._$, yy })"
+    ],
+    [
+      "( )",
+      "$$ = new (require('./ast/CoverParenthesizedExpressionNode'))([], { loc: this._$, yy })"
+    ],
+    [
+      "( ... BindingIdentifier )",
+      "$$ = [new (require('./ast/BindingRestElement').BindingIdentifierNode)($3, { loc: this._$, yy })]"
+    ],
+    [
+      "( ... BindingPattern )",
+      "$$ = [new (require('./ast/BindingRestElement').BindingPatternNode)($3, { loc: this._$, yy })]"
+    ],
+    [
+      "( Expression_In , ... BindingIdentifier )",
+      "$$ = [$2].concat([new (require('./ast/BindingRestElement').BindingPatternNode)($5, { loc: this._$, yy })])"
+    ],
+    [
+      "( Expression_In , ... BindingPattern )",
+      "$$ = [$2].concat([new (require('./ast/BindingRestElement').BindingPatternNode)($5, { loc: this._$, yy })])"
+    ]
+  ],
+  "BindingIdentifier": [
+    [
+      "Identifier",
+      "$$ = $1"
+    ],
+    [
+      "of",
+      "$$ = new (require('./ast/Identifier').IdentifierNode)($1, { loc: this._$, yy })"
+    ]
+  ],
+  "BindingPattern": [
+    [
+      "ObjectBindingPattern",
+      "$$ = $1"
+    ],
+    [
+      "ArrayBindingPattern",
+      "$$ = $1"
+    ]
+  ],
+  "ObjectBindingPattern": [
+    [
+      "BRACE_START }",
+      "$$ = new (require('./ast/Literal').ObjectLiteralNode)([], { loc: this._$, yy })"
+    ],
+    [
+      "BRACE_START BindingPropertyList }",
+      "$$ = new (require('./ast/Literal').ObjectLiteralNode)($2, { loc: this._$, yy })"
+    ],
+    [
+      "BRACE_START BindingPropertyList , }",
+      "$$ = new (require('./ast/Literal').ObjectLiteralNode)($2, { loc: this._$, yy })"
+    ]
+  ],
+  "BindingPropertyList": [
+    [
+      "BindingProperty",
+      "$$ = [$1]"
+    ],
+    [
+      "BindingPropertyList , BindingProperty",
+      "$$ = $1.concat([$3])"
+    ]
+  ],
+  "BindingProperty": [
+    [
+      "SingleNameBinding",
+      "$$ = $1"
+    ],
+    [
+      "PropertyName : BindingElement",
+      "$$ = {key:$1, value:$3}"
+    ]
+  ],
+  "SingleNameBinding": [
+    [
+      "BindingIdentifier Initializer_In",
+      "$$ = {key: $1, value: $2}"
+    ],
+    [
+      "BindingIdentifier",
+      "$$ = {key: $1, value: $1}"
+    ]
+  ],
+  "BindingElement": [
+    [
+      "SingleNameBinding",
+      "$$ = $1"
+    ],
+    [
+      "BindingPattern Initializer_In",
+      "$$ = {key: $1, value: $2}"
+    ],
+    [
+      "BindingPattern",
+      "$$ = {key: $1, value: $1}"
+    ]
+  ],
+  "ArrayBindingPattern": [
+    [
+      "[ ]",
+      "$$ = new (require('./ast/ArrayBindingPatternNode'))([], { loc: this._$, yy })"
+    ],
+    [
+      "[ Elision ]",
+      "$$ = new (require('./ast/ArrayBindingPatternNode'))($2, { loc: this._$, yy })"
+    ],
+    [
+      "[ BindingRestElement ]",
+      "$$ = new (require('./ast/ArrayBindingPatternNode'))($2, { loc: this._$, yy })"
+    ],
+    [
+      "[ Elision BindingRestElement ]",
+      "$$ = new (require('./ast/ArrayBindingPatternNode'))($2.concat([$3]), { loc: this._$, yy })"
+    ],
+    [
+      "[ BindingElementList ]",
+      "$$ = new (require('./ast/ArrayBindingPatternNode'))($2, { loc: this._$, yy })"
+    ],
+    [
+      "[ BindingElementList , BindingRestElement ]",
+      "$$ = new (require('./ast/ArrayBindingPatternNode'))($2.concat([$3]), { loc: this._$, yy })"
+    ],
+    [
+      "[ BindingElementList , Elision BindingRestElement ]",
+      "$$ = new (require('./ast/ArrayBindingPatternNode'))($2.concat($4).concat([$5]), { loc: this._$, yy })"
+    ],
+    [
+      "[ BindingElementList , Elision ]",
+      "$$ = new (require('./ast/ArrayBindingPatternNode'))($2.concat($4), { loc: this._$, yy })"
+    ]
+  ],
+  "BindingRestElement": [
+    [
+      "... BindingIdentifier",
+      "$$ = new (require('./ast/BindingRestElement').BindingIdentifierNode)($2, { loc: this._$, yy })"
+    ],
+    [
+      "... BindingPattern",
+      "$$ = new (require('./ast/BindingRestElement').BindingPatternNode)($2, { loc: this._$, yy })"
+    ]
+  ],
+  "BindingElementList": [
+    [
+      "BindingElisionElement",
+      "$$ = [$1]"
+    ],
+    [
+      "BindingElementList , BindingElisionElement",
+      "$$ = $1.push([$3])"
+    ]
+  ],
+  "BindingElisionElement": [
+    [
+      "BindingElement",
+      "$$ = $1"
+    ],
+    [
+      "Elision BindingElement",
+      "$$ = $1.concat($2)"
+    ]
+  ],
+  "FunctionExpression": [
+    [
+      "function ( ) LeftBrace RightBrace",
+      "\n      $$ = new (require('./ast/FunctionExpression').FunctionExpressionNode)(null, [],\n        new (require('./ast/BlockStatement').BlockStatementNode)([], { loc: (require('./util').mergeLoc($4, $5)), yy }), { loc: this._$, yy })\n    "
+    ],
+    [
+      "function BindingIdentifier ( ) LeftBrace RightBrace",
+      "\n      $$ = new (require('./ast/FunctionExpression').FunctionExpressionNode)($2, [],\n        new (require('./ast/BlockStatement').BlockStatementNode)([], { loc: (require('./util').mergeLoc($5, $6)), yy }), { loc: this._$, yy })\n    "
+    ],
+    [
+      "function ( ) { FunctionBody }",
+      "$$ = new (require('./ast/FunctionExpression').FunctionExpressionNode)(null, [], $5, { loc: this._$, yy })"
+    ],
+    [
+      "function BindingIdentifier ( ) { FunctionBody }",
+      "$$ = new (require('./ast/FunctionExpression').FunctionExpressionNode)($2, [], $6, { loc: this._$, yy })"
+    ],
+    [
+      "function ( FormalParameters ) LeftBrace RightBrace",
+      "\n      $$ = new (require('./ast/FunctionExpression').FunctionExpressionNode)(null, $3,\n        new (require('./ast/BlockStatement').BlockStatementNode)([], { loc: (require('./util').mergeLoc($5, $6)), yy }), { loc: this._$, yy })\n    "
+    ],
+    [
+      "function BindingIdentifier ( FormalParameters ) LeftBrace RightBrace",
+      "\n      $$ = new (require('./ast/FunctionExpression').FunctionExpressionNode)($2, $4,\n        new (require('./ast/BlockStatement').BlockStatementNode)([], { loc: (require('./util').mergeLoc($6, $7)), yy }), { loc: this._$, yy })\n    "
+    ],
+    [
+      "function ( FormalParameters ) { FunctionBody }",
+      "$$ = new (require('./ast/FunctionExpression').FunctionExpressionNode)(null, $3, $6, { loc: this._$, yy })"
+    ],
+    [
+      "function BindingIdentifier ( FormalParameters ) { FunctionBody }",
+      "$$ = new (require('./ast/FunctionExpression').FunctionExpressionNode)($2, $4, $7, { loc: this._$, yy })"
+    ]
+  ],
+  "FunctionBody": [
+    [
+      "FunctionStatementList",
+      "$$ = $1"
+    ]
+  ],
+  "FunctionStatementList": [
+    [
+      "StatementList_Return",
+      "$$ = $1"
+    ]
+  ],
+  "StatementList_Return": [
+    [
+      "StatementListItem_Return",
+      "$$ = [$1]"
+    ],
+    [
+      "StatementList_Return StatementListItem_Return",
+      "$$ = $1.concat([$2])"
+    ]
+  ],
+  "StatementListItem_Return": [
+    [
+      "Statement_Return",
+      "$$ = $1;"
+    ],
+    [
+      "Declaration",
+      "$$ = $1;"
+    ]
+  ],
+  "Statement_Return": [
+    [
+      "EmptyStatement",
+      "$$ = $1;"
+    ],
+    [
+      "ExpressionStatement",
+      "$$ = $1;"
+    ],
+    [
+      "VariableStatement",
+      "$$ = $1;"
+    ],
+    [
+      "BlockStatement_Return",
+      "$$ = $1;"
+    ],
+    [
+      "LabelledStatement",
+      "$$ = $1;"
+    ],
+    [
+      "IfStatement_Return",
+      "$$ = $1;"
+    ],
+    [
+      "BreakableStatement_Return",
+      "$$ = $1;"
+    ],
+    [
+      "ContinueStatement",
+      "$$ = $1;"
+    ],
+    [
+      "BreakStatement",
+      "$$ = $1;"
+    ],
+    [
+      "WithStatement_Return",
+      "$$ = $1;"
+    ],
+    [
+      "ThrowStatement",
+      "$$ = $1;"
+    ],
+    [
+      "DebuggerStatement",
+      "$$ = $1;"
+    ],
+    [
+      "TryStatement_Return",
+      "$$ = $1;"
+    ],
+    [
+      "ReturnStatement",
+      "$$ = $1;"
+    ]
+  ],
+  "VariableStatement": [
+    [
+      "var VariableDeclarationList_In ;",
+      "$$ = new (require('./ast/VariableStatement').VariableStatementNode)($2, { loc: this._$, yy })"
+    ]
+  ],
+  "VariableDeclarationList_In": [
+    [
+      "VariableDeclaration_In",
+      "$$ = [$1]"
+    ],
+    [
+      "VariableDeclarationList_In , VariableDeclaration_In",
+      "$$ = $1.concat([$3])"
+    ]
+  ],
+  "VariableDeclaration_In": [
+    [
+      "BindingIdentifier",
+      "$$ = new (require('./ast/VariableDeclaratorNode'))($1, null, { loc: this._$, yy })"
+    ],
+    [
+      "BindingIdentifier Initializer_In",
+      "$$ = new (require('./ast/VariableDeclaratorNode'))($1, $2, { loc: this._$, yy })"
+    ],
+    [
+      "BindingPattern Initializer_In",
+      "$$ = new (require('./ast/VariableDeclaratorNode'))($1, $2, { loc: this._$, yy })"
+    ]
+  ],
+  "BlockStatement_Return": [
+    [
+      "Block_Return",
+      "$$ = $1;"
+    ]
+  ],
+  "Block_Return": [
+    [
+      "{ StatementList_Return }",
+      "$$ = new (require('./ast/BlockStatement').BlockStatementNode)($2, { loc: this._$, yy });"
+    ],
+    [
+      "{ }",
+      "$$ = new (require('./ast/BlockStatement').BlockStatementNode)([], { loc: this._$, yy });"
+    ]
+  ],
+  "LabelledStatement": [
+    [
+      "LabelIdentifier : LabelledItem",
+      "$$ = new (require('./ast/LabelledStatement').LabelledStatementNode)($1, $3, { loc: this._$, yy })"
+    ]
+  ],
+  "LabelIdentifier": [
+    [
+      "Identifier",
+      "$$ = $1;"
+    ]
+  ],
+  "LabelledItem": [
+    [
+      "Statement",
+      "$$ = $1;"
+    ],
+    [
+      "FunctionDeclaration",
+      "$$ = $1;"
+    ]
+  ],
+  "FunctionDeclaration": [
+    [
+      "FUNCTION BindingIdentifier ( ) { FunctionBody }",
+      "$$ = new (require('./ast/FunctionDeclaration').FunctionDeclarationNode)($2, [], $6, { loc: this._$, yy })"
+    ],
+    [
+      "FUNCTION BindingIdentifier ( ) { }",
+      "$$ = new (require('./ast/FunctionDeclaration').FunctionDeclarationNode)($2, [], null, { loc: this._$, yy })"
+    ],
+    [
+      "FUNCTION BindingIdentifier ( FormalParameters ) { FunctionBody }",
+      "$$ = new (require('./ast/FunctionDeclaration').FunctionDeclarationNode)($2, $4, $7, { loc: this._$, yy })"
+    ],
+    [
+      "FUNCTION BindingIdentifier ( FormalParameters ) { }",
+      "$$ = new (require('./ast/FunctionDeclaration').FunctionDeclarationNode)($2, $4, null, { loc: this._$, yy })"
+    ]
+  ],
+  "FormalParameters": [
+    [
+      "FormalParameterList",
+      "$$ = $1;"
+    ]
+  ],
+  "FormalParameterList": [
+    [
+      "FunctionRestParameter",
+      "$$ = [$1];"
+    ],
+    [
+      "FormalsList",
+      "$$ = $1;"
+    ],
+    [
+      "FormalsList , FunctionRestParameter",
+      "$$ = $1.concat([$3]);"
+    ]
+  ],
+  "FormalsList": [
+    [
+      "FormalParameter",
+      "$$ = [$1];"
+    ],
+    [
+      "FormalsList , FormalParameter",
+      "$$ = $1.concat([$3]);"
+    ]
+  ],
+  "FormalParameter": [
+    [
+      "BindingElement",
+      "$$ = $1;"
+    ]
+  ],
+  "FunctionRestParameter": [
+    [
+      "BindingRestElement",
+      "$$ = $1;"
+    ]
+  ],
+  "IfStatement_Return": [
+    [
+      "if ( Expression_In ) Statement_Return",
+      "$$ = new (require('./ast/IfStatement').IfStatementNode)($3, $5, null, { loc: this._$, yy })"
+    ],
+    [
+      "if ( Expression_In ) Statement_Return else Statement_Return",
+      "$$ = new (require('./ast/IfStatement').IfStatementNode)($3, $5, $7, { loc: this._$, yy })"
+    ]
+  ],
+  "BreakableStatement_Return": [
+    [
+      "IterationStatement_Return",
+      "$$ = $1"
+    ],
+    [
+      "SwitchStatement_Return",
+      "$$ = $1"
+    ]
+  ],
+  "IterationStatement_Return": [
+    [
+      "do Statement_Return while LeftParenthesis Expression_In RightParenthesis ;",
+      "$$ = new (require('./ast/IterationStatement').DoWhileStatementNode)($5, $2, { loc: this._$, yy })"
+    ],
+    [
+      "while LeftParenthesis Expression_In RightParenthesis Statement_Return",
+      "$$ = new (require('./ast/IterationStatement').WhileStatementNode)($3, $5, { loc: this._$, yy })"
+    ],
+    [
+      "for LeftParenthesis LexicalDeclaration Expression_In ; Expression_In RightParenthesis Statement_Return",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $7.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, $4, $6, $8, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis VAR VariableDeclarationList ; Expression_In ; Expression_In RightParenthesis Statement_Return",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $9.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)(\n        // NOTICE:\n        // we need to merge the VAR's loc and VariableDeclarator's to get VaribleStatement's range\n        // var a = 100\n        // VaribleStatement' range is [0, 9]\n        // VariableDeclarator's range is [4, 9]\n        // $4 is an array of VariableDeclarator, we need the last one's range\n        new (require('./ast/VariableStatement').VariableStatementNode)($4, { loc: {\n          first_line: $3.first_line,\n          last_line: $4[$4.length-1].lastLine,\n          first_column: $3.firts_column,\n          last_column:  $4[$4.length-1].lastColumnu,\n          range: [$3.range[0], $4[$4.length-1].range[1]],\n        }, yy }), $6, $8, $10, { loc: this._$, yy });\n    "
+    ],
+    [
+      "for LeftParenthesis LeftHandSideExpression in Expression_In RightParenthesis Statement_Return",
+      "\n      $$ = new (require('./ast/IterationStatement').ForInStatementNode)($3, $5, $7, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis ForDeclaration in Expression_In RightParenthesis Statement_Return",
+      "\n      $$ = new (require('./ast/IterationStatement').ForInStatementNode)($3, $5, $7, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis LeftHandSideExpression of AssignmentExpression_In RightParenthesis Statement_Return",
+      "\n      $$ = new (require('./ast/IterationStatement').ForOfStatementNode)($3, $5, $7, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis VAR ForBinding of AssignmentExpression_In RightParenthesis Statement_Return",
+      "\n      $$ = new (require('./ast/IterationStatement').ForOfStatementNode)(\n        // NOTICE:\n        // we need to merge the VAR's loc and VariableDeclarator's to get VaribleStatement's range\n        // $4 is a single VariableDeclarator\n        new (require('./ast/VariableStatement').VariableStatementNode)($4, { loc: {\n          first_line: $3.first_line,\n          last_line: $4.lastLine,\n          first_column: $3.firts_column,\n          last_column:  $4.lastColumnu,\n          range: [$3.range[0], $4.range[1]],\n        }, yy }), $6, $8, { loc: this._$, yy });\n    "
+    ],
+    [
+      "for LeftParenthesis ForDeclaration of AssignmentExpression_In RightParenthesis Statement_Return",
+      "\n      $$ = new (require('./ast/IterationStatement').ForOfStatementNode)($3, $5, $7, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis Expression ; Expression_In ; Expression_In RightParenthesis Statement_Return",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $8.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, $5, $7, $9, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis Expression ; ; Expression_In RightParenthesis Statement_Return",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $7.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, null, $6, $8, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis Expression ; ; RightParenthesis Statement_Return",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $6.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, null, null, $7, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis Expression ; Expression_In ; RightParenthesis Statement_Return",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $7.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, $5, null, $8, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis ; Expression_In ; Expression_In RightParenthesis Statement_Return",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $7.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)(null, $4, $6, $8, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis ; ; Expression_In RightParenthesis Statement_Return",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $6.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)(null, null, $5, $7, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis ; ; RightParenthesis Statement_Return",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $5.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)(null, null, null, $6, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis ; Expression_In ; RightParenthesis Statement_Return",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $6.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)(null, $4, null, $7, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis VAR VariableDeclarationList ; ; Expression_In RightParenthesis Statement_Return",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $8.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)(\n        new (require('./ast/VariableStatement').VariableStatementNode)($4, { loc: {\n          first_line: $3.first_line,\n          last_line: $4[$4.length-1].lastLine,\n          first_column: $3.firts_column,\n          last_column:  $4[$4.length-1].lastColumnu,\n          range: [$3.range[0], $4[$4.length-1].range[1]],\n        }, yy }), null, $7, $9, { loc: this._$, yy });\n    "
+    ],
+    [
+      "for LeftParenthesis VAR VariableDeclarationList ; Expression_In ; RightParenthesis Statement_Return",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $8.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)(\n        new (require('./ast/VariableStatement').VariableStatementNode)($4, { loc: {\n          first_line: $3.first_line,\n          last_line: $4[$4.length-1].lastLine,\n          first_column: $3.firts_column,\n          last_column:  $4[$4.length-1].lastColumnu,\n          range: [$3.range[0], $4[$4.length-1].range[1]],\n        }, yy }), $6, null, $9, { loc: this._$, yy });\n    "
+    ],
+    [
+      "for LeftParenthesis VAR VariableDeclarationList ; ; RightParenthesis Statement_Return",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $7.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)(\n        new (require('./ast/VariableStatement').VariableStatementNode)($4, { loc: {\n          first_line: $3.first_line,\n          last_line: $4[$4.length-1].lastLine,\n          first_column: $3.firts_column,\n          last_column:  $4[$4.length-1].lastColumnu,\n          range: [$3.range[0], $4[$4.length-1].range[1]],\n        }, yy }), null, null, $8, { loc: this._$, yy });\n    "
+    ],
+    [
+      "for LeftParenthesis LexicalDeclaration ; Expression_In RightParenthesis Statement_Return",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $6.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, null, $5, $7, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis LexicalDeclaration Expression_In ; RightParenthesis Statement_Return",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $6.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, $4, null, $7, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis LexicalDeclaration ; RightParenthesis Statement_Return",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $5.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, null, null, $6, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis VAR ForBinding in Expression_In RightParenthesis Statement_Return",
+      "\n      $$ = new (require('./ast/IterationStatement').ForInStatementNode)(\n        // NOTICE:\n        // we need to merge the VAR's loc and VariableDeclarator's to get VaribleStatement's range\n        // $4 is a single VariableDeclarator\n        new (require('./ast/VariableStatement').VariableStatementNode)([$4], { loc: {\n          first_line: $3.first_line,\n          last_line: $4.lastLine,\n          first_column: $3.firts_column,\n          last_column:  $4.lastColumnu,\n          range: [$3.range[0], $4.range[1]],\n        }, yy }), $6, $8, { loc: this._$, yy });\n    "
+    ]
+  ],
+  "LexicalDeclaration": [
+    [
+      "LetOrConst BindingList ;",
+      "$$ = new (require('./ast/LexicalDeclaration').LexicalDeclarationNode)($1, $2, { loc: this._$, yy })"
+    ]
+  ],
+  "BindingList": [
+    [
+      "LexicalBinding",
+      "$$ = [$1]"
+    ],
+    [
+      "BindingList , LexicalBinding",
+      "$$ = $1.concat([$3])"
+    ]
+  ],
+  "LexicalBinding": [
+    [
+      "BindingIdentifier",
+      "$$ = new (require('./ast/VariableDeclaratorNode'))($1, null, { loc: this._$, yy })"
+    ],
+    [
+      "BindingIdentifier Initializer",
+      "$$ = new (require('./ast/VariableDeclaratorNode'))($1, $2, { loc: this._$, yy })"
+    ],
+    [
+      "BindingPattern Initializer",
+      "$$ = new (require('./ast/VariableDeclaratorNode'))($1, $2, { loc: this._$, yy })"
+    ]
+  ],
+  "Initializer": [
+    [
+      "= AssignmentExpression",
+      "$$ = $2"
+    ]
+  ],
+  "AssignmentExpression": [
+    [
+      "ConditionalExpression",
+      "$$ = $1"
+    ],
+    [
+      "LeftHandSideExpression AssignmentOperator AssignmentExpression",
+      "$$ = new (require('./ast/AssignmentExpression').AssignmentExpressionNode)($2, $1, $3, { loc: this._$, yy });"
+    ],
+    [
+      "LeftHandSideExpression = AssignmentExpression",
+      "$$ = new (require('./ast/AssignmentExpression').AssignmentExpressionNode)($2, $1, $3, { loc: this._$, yy });"
+    ],
+    [
+      "ArrowFunction",
+      "$$ = $1"
+    ]
+  ],
+  "ConditionalExpression": [
+    [
+      "LogicalORExpression",
+      "$$ = $1;"
+    ],
+    [
+      "LogicalORExpression ? AssignmentExpression : AssignmentExpression",
+      "$$ = new (require('./ast/ConditionalExpression').ConditionalExpressionNode)($1, $3, $5, { loc: this._$, yy });"
+    ]
+  ],
+  "LogicalORExpression": [
+    [
+      "LogicalANDExpression",
+      "$$ = $1"
+    ],
+    [
+      "LogicalORExpression || LogicalANDExpression",
+      "$$ = new (require('./ast/LogicalExpression').LogicalORExpressionNode)($2, $1, $3, { loc: this._$, yy })"
+    ]
+  ],
+  "LogicalANDExpression": [
+    [
+      "BitwiseORExpression",
+      "$$ = $1"
+    ],
+    [
+      "LogicalANDExpression && BitwiseORExpression",
+      "$$ = new (require('./ast/LogicalExpression').LogicalANDExpressionNode)($2, $1, $3, { loc: this._$, yy })"
+    ]
+  ],
+  "BitwiseORExpression": [
+    [
+      "BitwiseXORExpression",
+      "$$ = $1;"
+    ],
+    [
+      "BitwiseORExpression | BitwiseXORExpression",
+      "$$ = new (require('./ast/BitwiseExpression').BitwiseORExpressionNode)($2, $1, $3, { loc: this._$, yy })"
+    ]
+  ],
+  "BitwiseXORExpression": [
+    [
+      "BitwiseANDExpression",
+      "$$ = $1;"
+    ],
+    [
+      "BitwiseXORExpression ^ BitwiseANDExpression",
+      "$$ = new (require('./ast/BitwiseExpression').BitwiseXORExpressionNode)($2, $1, $3, { loc: this._$, yy })"
+    ]
+  ],
+  "BitwiseANDExpression": [
+    [
+      "EqualityExpression",
+      "$$ = $1;"
+    ],
+    [
+      "BitwiseANDExpression & EqualityExpression",
+      "$$ = new (require('./ast/BitwiseExpression').BitwiseANDExpressionNode)($2, $1, $3, { loc: this._$, yy })"
+    ]
+  ],
+  "EqualityExpression": [
+    [
+      "RelationalExpression",
+      "$$ = $1;"
+    ],
+    [
+      "EqualityExpression EqualityOperator RelationalExpression",
+      "$$ = new (require('./ast/EqualityExpression').EqualityExpressionNode)($2, $1, $3, { loc: this._$, yy })"
+    ]
+  ],
+  "RelationalExpression": [
+    [
+      "ShiftExpression",
+      "$$ = $1"
+    ],
+    [
+      "RelationalExpression RelationalOperator ShiftExpression",
+      "$$ = new (require('./ast/RelationalExpression').RelationalExpressionNode)($2, $1, $3, { loc: this._$, yy })"
+    ]
+  ],
+  "ArrowFunction": [
+    [
+      "ArrowParameters => ConciseBody",
+      "$$ = new (require('./ast/ArrowFunctionNode'))($1, $3, { loc: this._$, yy })"
+    ]
+  ],
+  "ArrowParameters": [
+    [
+      "BindingIdentifier",
+      "$$ = $1"
+    ],
+    [
+      "CoverParenthesizedExpressionAndArrowParameterList",
+      "$$ = $1"
+    ]
+  ],
+  "ConciseBody": [
+    [
+      "AssignmentExpression",
+      "$$ = $1"
+    ],
+    [
+      "LEFT_ARROW_BRACE }",
+      "$$ = new (require('./ast/BlockStatement').BlockStatementNode)([], { yy, loc: this._$ })"
+    ],
+    [
+      "LEFT_ARROW_BRACE FunctionBody }",
+      "$$ = new (require('./ast/BlockStatement').BlockStatementNode)($2, { yy, loc: this._$ })"
+    ]
+  ],
+  "VariableDeclarationList": [
+    [
+      "VariableDeclaration",
+      "$$ = [$1];"
+    ],
+    [
+      "VariableDeclarationList , VariableDeclaration",
+      "$$ = $1.concat([$3]);"
+    ]
+  ],
+  "VariableDeclaration": [
+    [
+      "BindingIdentifier",
+      "$$ = new (require('./ast/VariableDeclaratorNode'))($1, null, { loc: this._$, yy })"
+    ],
+    [
+      "BindingIdentifier Initializer",
+      "$$ = new (require('./ast/VariableDeclaratorNode'))($1, $2, { loc: this._$, yy })"
+    ],
+    [
+      "BindingPattern Initializer",
+      "$$ = new (require('./ast/VariableDeclaratorNode'))($1, $2, { loc: this._$, yy })"
+    ]
+  ],
+  "ForDeclaration": [
+    [
+      "LetOrConst ForBinding",
+      "$$ = new (require('./ast/LexicalDeclaration').LexicalDeclarationNode)($1, [$2], { loc: this._$, yy })"
+    ]
+  ],
+  "ForBinding": [
+    [
+      "BindingIdentifier",
+      "$$ = new (require('./ast/VariableDeclaratorNode'))($1, null, { loc: this._$, yy })"
+    ],
+    [
+      "BindingPattern",
+      "$$ = new (require('./ast/VariableDeclaratorNode'))($1, null, { loc: this._$, yy })"
+    ]
+  ],
+  "Expression": [
+    [
+      "AssignmentExpression",
+      "$$ = $1;"
+    ],
+    [
+      "Expression , AssignmentExpression",
+      "$$ = (require('./ast/SequenceExpressionNode'))([$1].concat([$3]), { loc: this._$, yy })"
+    ]
+  ],
+  "LeftParenthesis": [
+    [
+      "(",
+      "$$ = this._$"
+    ]
+  ],
+  "RightParenthesis": [
+    [
+      ")",
+      "$$ = this._$"
+    ]
+  ],
+  "VAR": [
+    [
+      "var",
+      "$$ = this._$"
+    ]
+  ],
+  "SwitchStatement_Return": [
+    [
+      "switch ( Expression_In ) CaseBlock_Return",
+      "$$ = new (require('./ast/SwitchStatement').SwitchStatementNode)($3, $5, { loc: this._$, yy })"
+    ]
+  ],
+  "CaseBlock_Return": [
+    [
+      "{ }",
+      "$$ = [];"
+    ],
+    [
+      "{ CaseClauses_Return }",
+      "$$ = $2"
+    ],
+    [
+      "{ DefaultClause_Return CaseClauses_Return }",
+      "$$ = [$2].concat($3);"
+    ],
+    [
+      "{ DefaultClause_Return }",
+      "$$ = [$2]"
+    ],
+    [
+      "{ CaseClauses_Return DefaultClause_Return }",
+      "$$ = $2.concat([$3])"
+    ],
+    [
+      "{ CaseClauses_Return DefaultClause_Return CaseClauses_Return }",
+      "$$ = $2.concat([$3]).concat($4)"
+    ]
+  ],
+  "CaseClauses_Return": [
+    [
+      "CaseClause_Return",
+      "$$ = [$1]"
+    ],
+    [
+      "CaseClauses_Return CaseClause_Return",
+      "$$ = $1.concat($2)"
+    ]
+  ],
+  "CaseClause_Return": [
+    [
+      "case Expression_In : StatementList_Return",
+      "$$ = new (require('./ast/SwitchStatement').SwitchCaseNode)($2, $4, { loc: this._$, yy })"
+    ],
+    [
+      "case Expression_In :",
+      "$$ = new (require('./ast/SwitchStatement').SwitchCaseNode)($2, null, { loc: this._$, yy })"
+    ]
+  ],
+  "DefaultClause_Return": [
+    [
+      "default : StatementList_Return",
+      "$$ = new (require('./ast/SwitchStatement').SwitchCaseNode)(null, $3, { loc: this._$, yy })"
+    ],
+    [
+      "default :",
+      "$$ = new (require('./ast/SwitchStatement').SwitchCaseNode)(null, null, { loc: this._$, yy })"
+    ]
+  ],
+  "ContinueStatement": [
+    [
+      "continue ;",
+      "$$ = new (require('./ast/ContinueStatementNode'))(null, { loc: this._$, yy });"
+    ],
+    [
+      "CONTINUE_LF",
+      "\n      throw new (require('./error').NoLineTerminatorError)('no line terminator', {\n        text: $1,\n        token: 'CONTINUE_LF',\n        line: yy.lexer.yylloc.first_line,\n        loc: yy.lexer.yylloc,\n        offset: yy.lexer.offset,\n      });\n    "
+    ],
+    [
+      "continue LabelIdentifier ;",
+      "$$ = new (require('./ast/ContinueStatementNode'))($2, { loc: this._$, yy });"
+    ]
+  ],
+  "BreakStatement": [
+    [
+      "break ;",
+      "$$ = new (require('./ast/BreakStatementNode'))(null, { loc: this._$, yy })"
+    ],
+    [
+      "BREAK_LF",
+      "\n      throw new (require('./error').NoLineTerminatorError)('no line terminator', {\n        text: $1,\n        token: 'BREAK_LF',\n        line: yy.lexer.yylloc.first_line,\n        loc: yy.lexer.yylloc,\n        offset: yy.lexer.offset,\n      });\n    "
+    ],
+    [
+      "break LabelIdentifier ;",
+      "$$ = new (require('./ast/BreakStatementNode'))($2, { loc: this._$, yy })"
+    ]
+  ],
+  "WithStatement_Return": [
+    [
+      "with ( Expression_In ) Statement_Return",
+      "$$ = new (require('./ast/WithStatement').WithStatementNode)($3, $5, { loc: this._$, yy })"
+    ]
+  ],
+  "ThrowStatement": [
+    [
+      "throw Expression_In ;",
+      "$$ = new (require('./ast/ThrowStatementNode'))($2, { loc: this._$, yy })"
+    ],
+    [
+      "THROW_LF",
+      "\n      throw new (require('./error').NoLineTerminatorError)('no line terminator', {\n        text: $1,\n        token: 'THROW_LF',\n        line: yy.lexer.yylloc.first_line,\n        loc: yy.lexer.yylloc,\n        offset: yy.lexer.offset,\n      });\n    "
+    ]
+  ],
+  "DebuggerStatement": [
+    [
+      "debugger ;",
+      "$$ = new (require('./ast/DebuggerStatementNode'))({ loc: this._$, yy })"
+    ]
+  ],
+  "TryStatement_Return": [
+    [
+      "try Block_Return Catch_Return",
+      "$$ = new (require('./ast/TryStatement').TryStatementNode)($2, $3, null, { loc: this._$, yy })"
+    ],
+    [
+      "try Block_Return Finally_Return",
+      "$$ = new (require('./ast/TryStatement').TryStatementNode)($2, null, $3, { loc: this._$, yy })"
+    ],
+    [
+      "try Block_Return Catch_Return Finally_Return",
+      "$$ = new (require('./ast/TryStatement').TryStatementNode)($2, $3, $4, { loc: this._$, yy })"
+    ]
+  ],
+  "Catch_Return": [
+    [
+      "catch ( CatchParameter ) Block_Return",
+      "$$ = new (require('./ast/TryStatement').CatchNode)($3, $5, { loc: this._$, yy })"
+    ]
+  ],
+  "CatchParameter": [
+    [
+      "BindingIdentifier",
+      "$$ = $1"
+    ],
+    [
+      "BindingPattern",
+      "$$ = $1"
+    ]
+  ],
+  "Finally_Return": [
+    [
+      "finally Block_Return",
+      "$$ = $2"
+    ]
+  ],
+  "ReturnStatement": [
+    [
+      "return ;",
+      "$$ = new (require('./ast/ReturnStatementNode'))(null, { loc: this._$, yy })"
+    ],
+    [
+      "RETURN_LF",
+      "\n      throw new (require('./error').NoLineTerminatorError)('no line terminator', {\n        text: $1,\n        token: 'RETURN_LF',\n        line: yy.lexer.yylloc.first_line,\n        loc: yy.lexer.yylloc,\n        offset: yy.lexer.offset,\n      });\n    "
+    ],
+    [
+      "return Expression_In ;",
+      "$$ = new (require('./ast/ReturnStatementNode'))($2, { loc: this._$, yy })"
+    ]
+  ],
+  "Declaration": [
+    [
+      "HoistableDeclaration",
+      "$$ = $1;"
+    ],
+    [
+      "LexicalDeclaration_In",
+      "$$ = $1;"
+    ]
+  ],
+  "HoistableDeclaration": [
+    [
+      "FunctionDeclaration",
+      "$$ = $1"
+    ]
+  ],
+  "LexicalDeclaration_In": [
+    [
+      "LetOrConst BindingList_In ;",
+      "$$ = new (require('./ast/LexicalDeclaration').LexicalDeclarationNode)($1, $2, { loc: this._$, yy })"
+    ]
+  ],
+  "BindingList_In": [
+    [
+      "LexicalBinding_In",
+      "$$ = [$1]"
+    ],
+    [
+      "BindingList_In , LexicalBinding_In",
+      "$$ = $1.concat([$3])"
+    ]
+  ],
+  "LexicalBinding_In": [
+    [
+      "BindingIdentifier",
+      "$$ = new (require('./ast/VariableDeclaratorNode'))($1, null, { loc: this._$, yy })"
+    ],
+    [
+      "BindingIdentifier Initializer_In",
+      "$$ = new (require('./ast/VariableDeclaratorNode'))($1, $2, { loc: this._$, yy })"
+    ],
+    [
+      "BindingPattern Initializer_In",
+      "$$ = new (require('./ast/VariableDeclaratorNode'))($1, $2, { loc: this._$, yy })"
+    ]
+  ],
+  "LeftBrace": [
+    [
+      "{",
+      "$$ = this._$"
+    ]
+  ],
+  "RightBrace": [
+    [
+      "}",
+      "$$ = this._$"
+    ]
+  ],
+  "TemplateLiteral": [
+    [
+      "NoSubstitutionTemplate",
+      "$$ = new (require('./ast/Literal').TemplateLiteralNode)([$1], [], { loc: this._$, yy })"
+    ],
+    [
+      "TemplateHead Expression_In TemplateSpans",
+      "$$ = new (require('./ast/Literal').TemplateLiteralNode)([$1].concat($3.quasis), [$2].concat($3.expressions), { loc: this._$, yy })"
+    ]
+  ],
+  "NoSubstitutionTemplate": [
+    [
+      "` `",
+      "$$ = new (require('./ast/Literal').TemplateElementNode)('', true, { loc: this._$, yy })"
+    ],
+    [
+      "` TemplateCharacters `",
+      "$$ = new (require('./ast/Literal').TemplateElementNode)($2, true, { loc: this._$, yy })"
+    ]
+  ],
+  "TemplateCharacters": [
+    [
+      "TemplateCharacter",
+      "$$ = $1"
+    ],
+    [
+      "TemplateCharacter TemplateCharacters",
+      "$$ = $1 + $2"
+    ]
+  ],
+  "TemplateCharacter": [
+    [
+      "TemplateEscape EscapeSequence",
+      "$$ = $1 + $2"
+    ],
+    [
+      "TemplateChar",
+      "$$ = $1"
+    ]
+  ],
+  "TemplateHead": [
+    [
+      "` LEFT_TEMPLATE_BRACE",
+      "$$ = new (require('./ast/Literal').TemplateElementNode)('', false, { loc: this._$, yy })"
+    ],
+    [
+      "` TemplateCharacters LEFT_TEMPLATE_BRACE",
+      "$$ = new (require('./ast/Literal').TemplateElementNode)($2, false, { loc: this._$, yy })"
+    ]
+  ],
+  "TemplateSpans": [
+    [
+      "TemplateTail",
+      "$$ = { quasis: [$1], expressions: [] }"
+    ],
+    [
+      "TemplateMiddleList TemplateTail",
+      "$$ = { quasis: $1.quasis.concat([$2]), expressions: $1.expressions }"
+    ]
+  ],
+  "TemplateTail": [
+    [
+      "RIGHT_TEMPLATE_BRACE `",
+      "$$ = new (require('./ast/Literal').TemplateElementNode)('', true, { loc: this._$, yy })"
+    ],
+    [
+      "RIGHT_TEMPLATE_BRACE TemplateCharacters `",
+      "$$ = new (require('./ast/Literal').TemplateElementNode)($2, true, { loc: this._$, yy })"
+    ]
+  ],
+  "TemplateMiddleList": [
+    [
+      "TemplateMiddle Expression_In",
+      "$$ = { quasis: [$1], expressions: [$2] }"
+    ],
+    [
+      "TemplateMiddleList TemplateMiddle Expression_In",
+      "$$ = { quasis: $1.quasis.concat([$2]), expressions: $1.expressions.concat([$3]) }"
+    ]
+  ],
+  "TemplateMiddle": [
+    [
+      "RIGHT_TEMPLATE_BRACE LEFT_TEMPLATE_BRACE",
+      "$$ = new (require('./ast/Literal').TemplateElementNode)('', false, { loc: this._$, yy })"
+    ],
+    [
+      "RIGHT_TEMPLATE_BRACE TemplateCharacters LEFT_TEMPLATE_BRACE",
+      "$$ = new (require('./ast/Literal').TemplateElementNode)($2, false, { loc: this._$, yy })"
+    ]
+  ],
+  "RegularExpressionLiteral": [
+    [
+      "LEFT_REGEXP_DIV RegularExpressionBody RIGHT_REGEXP_DIV",
+      "$$ = new (require('./ast/Literal').RegexpLiteralNode)($1 + $2 + $3, $2, '', { loc: this._$, yy })"
+    ],
+    [
+      "LEFT_REGEXP_DIV RegularExpressionBody RIGHT_REGEXP_DIV RegularExpressionFlags",
+      "$$ = new (require('./ast/Literal').RegexpLiteralNode)($1 + $2 + $3, $2, $4, { loc: this._$, yy })"
+    ]
+  ],
+  "RegularExpressionBody": [
+    [
+      "RegularExpressionFirstChar",
+      "$$ = $1"
+    ],
+    [
+      "RegularExpressionFirstChar RegularExpressionChars",
+      "$$ = $1 + $2"
+    ]
+  ],
+  "RegularExpressionFirstChar": [
+    [
+      "RegularExpressionNonTerminator",
+      "$$ = $1"
+    ],
+    [
+      "RegularExpressionBackslashSequence",
+      "$$ = $1"
+    ],
+    [
+      "RegularExpressionClass",
+      "$$ = $1"
+    ]
+  ],
+  "RegularExpressionBackslashSequence": [
+    [
+      "RegexpBackslash RegularExpressionNonTerminator",
+      "$$ = $1 + $2"
+    ]
+  ],
+  "RegularExpressionClass": [
+    [
+      "LEFT_REGEXP_CLASS_BRACKET RIGHT_REGEXP_CLASS_BRACKET",
+      "$$ = $1"
+    ],
+    [
+      "LEFT_REGEXP_CLASS_BRACKET RegularExpressionClassChars RIGHT_REGEXP_CLASS_BRACKET",
+      "$$ = $1 + $2 + $3"
+    ]
+  ],
+  "RegularExpressionClassChars": [
+    [
+      "RegularExpressionClassChar",
+      "$$ = $1"
+    ],
+    [
+      "RegularExpressionClassChars RegularExpressionClassChar",
+      "$$ = $1 + $2"
+    ]
+  ],
+  "RegularExpressionClassChar": [
+    [
+      "RegularExpressionNonTerminator",
+      "$$ = $1;"
+    ],
+    [
+      "RegularExpressionBackslashSequence",
+      "$$ = $1;"
+    ]
+  ],
+  "RegularExpressionChars": [
+    [
+      "RegularExpressionChar",
+      "$$ = $1"
+    ],
+    [
+      "RegularExpressionChars RegularExpressionChar",
+      "$$ = $1 + $2"
+    ]
+  ],
+  "RegularExpressionChar": [
+    [
+      "RegularExpressionNonTerminator",
+      "$$ = $1"
+    ],
+    [
+      "RegularExpressionBackslashSequence",
+      "$$ = $1"
+    ],
+    [
+      "RegularExpressionClass",
+      "$$ = $1"
+    ]
+  ],
+  "RegularExpressionFlags": [
+    [
+      "IdentifierPart",
+      "$$ = $1.value;"
+    ],
+    [
+      "RegularExpressionFlags IdentifierPart",
+      "$$ = $1 + $2.value;"
+    ]
+  ],
+  "SuperProperty": [
+    [
+      "super [ Expression_In ]",
+      "$$ =\n      new (require('./ast/LeftHandSideExpression').MemberExpressionNode)(new (require('./ast/SuperNode')($1)), $3, { loc: this._$, yy })\n    "
+    ],
+    [
+      "super . IdentifierName",
+      "$$ =\n      new (require('./ast/LeftHandSideExpression').MemberExpressionNode)(new (require('./ast/SuperNode')($1)), $3, { loc: this._$, yy })\n    "
+    ]
+  ],
+  "MetaProperty": [
+    [
+      "new . target",
+      "$$ = new (require('./ast/MetaPropertyNode'))($1, $3, { loc: this._$, yy })"
+    ]
+  ],
+  "Arguments": [
+    [
+      "( )",
+      "$$ = [];"
+    ],
+    [
+      "( ArgumentList )",
+      "$$ = $2"
+    ]
+  ],
+  "ArgumentList": [
+    [
+      "AssignmentExpression_In",
+      "$$ = [$1]"
+    ],
+    [
+      "... AssignmentExpression_In",
+      "$$ = [new (require('./ast/SpreadElementNode'))($2, { loc: this._$, yy })]"
+    ],
+    [
+      "ArgumentList , AssignmentExpression_In",
+      "$$ = $1.concat($3)"
+    ],
+    [
+      "ArgumentList , ... AssignmentExpression_In",
+      "$$ = $1.concat([new (require('./ast/SpreadElementNode'))($4, { loc: this._$, yy })])"
+    ]
+  ],
+  "CallExpression": [
+    [
+      "MemberExpression Arguments",
+      "$$ = new (require('./ast/LeftHandSideExpression').CallExpressionNode)($1, $2, { loc: this._$, yy })"
+    ],
+    [
+      "SuperCall",
+      "$$ = new (require('./ast/LeftHandSideExpression').CallExpressionNode)($1, [], { loc: this._$, yy })"
+    ],
+    [
+      "CallExpression Arguments",
+      "$$ = new (require('./ast/LeftHandSideExpression').CallExpressionNode)($1, [], { loc: this._$, yy })"
+    ],
+    [
+      "CallExpression [ Expression_In ]",
+      "$$ = new (require('./ast/LeftHandSideExpression').MemberExpressionNode)($1, $3, true, { loc: this._$, yy })"
+    ],
+    [
+      "CallExpression . IdentifierName",
+      "$$ = new (require('./ast/LeftHandSideExpression').MemberExpressionNode)($1, $3, false, { loc: this._$, yy })"
+    ]
+  ],
+  "SuperCall": [
+    [
+      "super Arguments",
+      "$$ = new (require('./ast/LeftHandSideExpression').SuperCallExpressionNode)($2, [], { loc: this._$, yy })"
+    ]
+  ],
+  "ArrowFunction_In": [
+    [
+      "ArrowParameters => ConciseBody_In",
+      "$$ = new (require('./ast/ArrowFunctionNode'))($1, $3, { loc: this._$, yy })"
+    ]
+  ],
+  "ConciseBody_In": [
+    [
+      "AssignmentExpression_In",
+      "$$ = $1"
+    ],
+    [
+      "LEFT_ARROW_BRACE }",
+      "$$ = new (require('./ast/BlockStatement').BlockStatementNode)([], { yy, loc: this._$ })"
+    ],
+    [
+      "LEFT_ARROW_BRACE FunctionBody }",
+      "$$ = new (require('./ast/BlockStatement').BlockStatementNode)($2, { yy, loc: this._$ })"
+    ]
+  ],
+  "BlockStatement": [
+    [
+      "Block",
+      "$$ = $1;"
+    ]
+  ],
+  "Block": [
+    [
+      "{ }",
+      "$$ = new (require('./ast/BlockStatement').BlockStatementNode)([], { loc: this._$, yy });"
+    ],
+    [
+      "{ StatementList }",
+      "$$ = new (require('./ast/BlockStatement').BlockStatementNode)($2, { loc: this._$, yy });"
+    ]
+  ],
+  "IfStatement": [
+    [
+      "if ( Expression_In ) Statement",
+      "$$ = new (require('./ast/IfStatement').IfStatementNode)($3, $5, null, { loc: this._$, yy })"
+    ],
+    [
+      "if ( Expression_In ) Statement else Statement",
+      "$$ = new (require('./ast/IfStatement').IfStatementNode)($3, $5, $7, { loc: this._$, yy })"
+    ]
+  ],
+  "BreakableStatement": [
+    [
+      "IterationStatement",
+      "$$ = $1"
+    ],
+    [
+      "SwitchStatement",
+      "$$ = $1"
+    ]
+  ],
+  "IterationStatement": [
+    [
+      "do Statement while LeftParenthesis Expression_In RightParenthesis ;",
+      "$$ = new (require('./ast/IterationStatement').DoWhileStatementNode)($5, $2, { loc: this._$, yy })"
+    ],
+    [
+      "while LeftParenthesis Expression_In RightParenthesis Statement",
+      "$$ = new (require('./ast/IterationStatement').WhileStatementNode)($3, $5, { loc: this._$, yy })"
+    ],
+    [
+      "for LeftParenthesis LexicalDeclaration Expression_In ; Expression_In RightParenthesis Statement",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $7.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, $4, $6, $8, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis VAR VariableDeclarationList ; Expression_In ; Expression_In RightParenthesis Statement",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $9.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)(\n        // NOTICE:\n        // we need to merge the VAR's loc and VariableDeclarator's to get VaribleStatement's range\n        // var a = 100\n        // VaribleStatement' range is [0, 9]\n        // VariableDeclarator's range is [4, 9]\n        // $4 is an array of VariableDeclarator, we need the last one's range\n        new (require('./ast/VariableStatement').VariableStatementNode)($4, { loc: {\n          first_line: $3.first_line,\n          last_line: $4[$4.length-1].lastLine,\n          first_column: $3.firts_column,\n          last_column:  $4[$4.length-1].lastColumnu,\n          range: [$3.range[0], $4[$4.length-1].range[1]],\n        }, yy }), $6, $8, $10, { loc: this._$, yy });\n    "
+    ],
+    [
+      "for LeftParenthesis LeftHandSideExpression in Expression_In RightParenthesis Statement",
+      "\n      $$ = new (require('./ast/IterationStatement').ForInStatementNode)($3, $5, $7, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis ForDeclaration in Expression_In RightParenthesis Statement",
+      "\n      $$ = new (require('./ast/IterationStatement').ForInStatementNode)($3, $5, $7, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis LeftHandSideExpression of AssignmentExpression_In RightParenthesis Statement",
+      "\n      $$ = new (require('./ast/IterationStatement').ForOfStatementNode)($3, $5, $7, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis VAR ForBinding of AssignmentExpression_In RightParenthesis Statement",
+      "\n      $$ = new (require('./ast/IterationStatement').ForOfStatementNode)(\n        // NOTICE:\n        // we need to merge the VAR's loc and VariableDeclarator's to get VaribleStatement's range\n        // $4 is a single VariableDeclarator\n        new (require('./ast/VariableStatement').VariableStatementNode)([$4], { loc: {\n          first_line: $3.first_line,\n          last_line: $4.lastLine,\n          first_column: $3.firts_column,\n          last_column:  $4.lastColumnu,\n          range: [$3.range[0], $4.range[1]],\n        }, yy }), $6, $8, { loc: this._$, yy });\n    "
+    ],
+    [
+      "for LeftParenthesis ForDeclaration of AssignmentExpression_In RightParenthesis Statement",
+      "\n      $$ = new (require('./ast/IterationStatement').ForOfStatementNode)($3, $5, $7, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis Expression ; Expression_In ; Expression_In RightParenthesis Statement",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $8.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, $5, $7, $9, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis Expression ; ; Expression_In RightParenthesis Statement",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $7.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, null, $6, $8, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis Expression ; ; RightParenthesis Statement",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $6.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, null, null, $7, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis Expression ; Expression_In ; RightParenthesis Statement",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $7.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, $5, null, $8, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis ; Expression_In ; Expression_In RightParenthesis Statement",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $7.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)(null, $4, $6, $8, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis ; ; Expression_In RightParenthesis Statement",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $6.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)(null, null, $5, $7, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis ; ; RightParenthesis Statement",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $5.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)(null, null, null, $6, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis ; Expression_In ; RightParenthesis Statement",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $6.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)(null, $4, null, $7, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis VAR VariableDeclarationList ; ; Expression_In RightParenthesis Statement",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $8.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)(\n        new (require('./ast/VariableStatement').VariableStatementNode)($4, { loc: {\n          first_line: $3.first_line,\n          last_line: $4[$4.length-1].lastLine,\n          first_column: $3.firts_column,\n          last_column:  $4[$4.length-1].lastColumnu,\n          range: [$3.range[0], $4[$4.length-1].range[1]],\n        }, yy }), null, $7, $9, { loc: this._$, yy });\n    "
+    ],
+    [
+      "for LeftParenthesis VAR VariableDeclarationList ; Expression_In ; RightParenthesis Statement",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $8.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)(\n        new (require('./ast/VariableStatement').VariableStatementNode)($4, { loc: {\n          first_line: $3.first_line,\n          last_line: $4[$4.length-1].lastLine,\n          first_column: $3.firts_column,\n          last_column:  $4[$4.length-1].lastColumnu,\n          range: [$3.range[0], $4[$4.length-1].range[1]],\n        }, yy }), $6, null, $9, { loc: this._$, yy });\n    "
+    ],
+    [
+      "for LeftParenthesis VAR VariableDeclarationList ; ; RightParenthesis Statement",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $7.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)(\n        new (require('./ast/VariableStatement').VariableStatementNode)($4, { loc: {\n          first_line: $3.first_line,\n          last_line: $4[$4.length-1].lastLine,\n          first_column: $3.firts_column,\n          last_column:  $4[$4.length-1].lastColumnu,\n          range: [$3.range[0], $4[$4.length-1].range[1]],\n        }, yy }), null, null, $8, { loc: this._$, yy });\n    "
+    ],
+    [
+      "for LeftParenthesis LexicalDeclaration ; Expression_In RightParenthesis Statement",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $6.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, null, $5, $7, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis LexicalDeclaration Expression_In ; RightParenthesis Statement",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $6.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, $4, null, $7, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis LexicalDeclaration ; RightParenthesis Statement",
+      "\n      require('./ast/IterationStatement').checkForAutoSemicolonInsertion(yy, $2.range, $5.range, yy.lexer.yylloc);\n      $$ = new (require('./ast/IterationStatement').ForStatementNode)($3, null, null, $6, { loc: this._$, yy })\n    "
+    ],
+    [
+      "for LeftParenthesis VAR ForBinding in Expression_In RightParenthesis Statement",
+      "\n      $$ = new (require('./ast/IterationStatement').ForInStatementNode)(\n        // NOTICE:\n        // we need to merge the VAR's loc and VariableDeclarator's to get VaribleStatement's range\n        // $4 is a single VariableDeclarator\n        new (require('./ast/VariableStatement').VariableStatementNode)([$4], { loc: {\n          first_line: $3.first_line,\n          last_line: $4.lastLine,\n          first_column: $3.firts_column,\n          last_column:  $4.lastColumnu,\n          range: [$3.range[0], $4.range[1]],\n        }, yy }), $6, $8, { loc: this._$, yy });\n    "
+    ]
+  ],
+  "SwitchStatement": [
+    [
+      "switch ( Expression_In ) CaseBlock",
+      "$$ = new (require('./ast/SwitchStatement').SwitchStatementNode)($3, $5, { loc: this._$, yy })"
+    ]
+  ],
+  "CaseBlock": [
+    [
+      "{ }",
+      "$$ = [];"
+    ],
+    [
+      "{ CaseClauses }",
+      "$$ = $2"
+    ],
+    [
+      "{ DefaultClause CaseClauses }",
+      "$$ = [$2].concat($3);"
+    ],
+    [
+      "{ DefaultClause }",
+      "$$ = [$2]"
+    ],
+    [
+      "{ CaseClauses DefaultClause }",
+      "$$ = $2.concat([$3])"
+    ],
+    [
+      "{ CaseClauses DefaultClause CaseClauses }",
+      "$$ = $2.concat([$3]).concat($4)"
+    ]
+  ],
+  "CaseClauses": [
+    [
+      "CaseClause",
+      "$$ = [$1]"
+    ],
+    [
+      "CaseClauses CaseClause",
+      "$$ = $1.concat($2)"
+    ]
+  ],
+  "CaseClause": [
+    [
+      "case Expression_In : StatementList",
+      "$$ = new (require('./ast/SwitchStatement').SwitchCaseNode)($2, $4, { loc: this._$, yy })"
+    ],
+    [
+      "case Expression_In :",
+      "$$ = new (require('./ast/SwitchStatement').SwitchCaseNode)($2, null, { loc: this._$, yy })"
+    ]
+  ],
+  "DefaultClause": [
+    [
+      "default : StatementList",
+      "$$ = new (require('./ast/SwitchStatement').SwitchCaseNode)(null, $3, { loc: this._$, yy })"
+    ],
+    [
+      "default :",
+      "$$ = new (require('./ast/SwitchStatement').SwitchCaseNode)(null, null, { loc: this._$, yy })"
+    ]
+  ],
+  "WithStatement": [
+    [
+      "with ( Expression_In ) Statement",
+      "$$ = new (require('./ast/WithStatement').WithStatementNode)($3, $5, { loc: this._$, yy })"
+    ]
+  ],
+  "TryStatement": [
+    [
+      "try Block Catch",
+      "$$ = new (require('./ast/TryStatement').TryStatementNode)($2, $3, null, { loc: this._$, yy })"
+    ],
+    [
+      "try Block Finally",
+      "$$ = new (require('./ast/TryStatement').TryStatementNode)($2, null, $3, { loc: this._$, yy })"
+    ],
+    [
+      "try Block Catch Finally",
+      "$$ = new (require('./ast/TryStatement').TryStatementNode)($2, $3, $4, { loc: this._$, yy })"
+    ]
+  ],
+  "Catch": [
+    [
+      "catch ( CatchParameter ) Block",
+      "$$ = new (require('./ast/TryStatement').CatchNode)($3, $5, { loc: this._$, yy })"
+    ]
+  ],
+  "Finally": [
+    [
+      "finally Block",
+      "$$ = $2"
+    ]
+  ]
+}

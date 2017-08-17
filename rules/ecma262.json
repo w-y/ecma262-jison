@@ -1,0 +1,2294 @@
+{
+  "Script": [
+    [
+      "ScriptBody",
+      ";"
+    ]
+  ],
+  "ScriptBody": [
+    [
+      "StatementList",
+      ";"
+    ]
+  ],
+  "StatementList": [
+    [
+      "StatementListItem",
+      ";"
+    ],
+    [
+      "StatementList StatementListItem",
+      ";"
+    ]
+  ],
+  "StatementListItem": [
+    [
+      "Statement",
+      ";"
+    ],
+    [
+      "Declaration",
+      ";"
+    ]
+  ],
+  "Statement": [
+    [
+      "EmptyStatement",
+      ";"
+    ],
+    [
+      "ExpressionStatement",
+      ";"
+    ],
+    [
+      "VariableStatement",
+      ";"
+    ],
+    [
+      "BlockStatement",
+      ";"
+    ],
+    [
+      "LabelledStatement",
+      ";"
+    ],
+    [
+      "IfStatement",
+      ";"
+    ],
+    [
+      "BreakableStatement",
+      ";"
+    ],
+    [
+      "ContinueStatement",
+      ";"
+    ],
+    [
+      "BreakStatement",
+      ";"
+    ],
+    [
+      "WithStatement",
+      ";"
+    ],
+    [
+      "ThrowStatement",
+      ";"
+    ],
+    [
+      "DebuggerStatement",
+      ";"
+    ],
+    [
+      "TryStatement",
+      ";"
+    ]
+  ],
+  "EmptyStatement": [
+    [
+      ";",
+      ";"
+    ]
+  ],
+  "ExpressionStatement": [
+    [
+      "Expression_In ;",
+      ";"
+    ]
+  ],
+  "Expression_In": [
+    [
+      "AssignmentExpression_In",
+      ";"
+    ],
+    [
+      "Expression_In , AssignmentExpression_In",
+      ";"
+    ]
+  ],
+  "AssignmentExpression_In": [
+    [
+      "ConditionalExpression_In",
+      ";"
+    ],
+    [
+      "LeftHandSideExpression AssignmentOperator AssignmentExpression_In",
+      ";"
+    ],
+    [
+      "LeftHandSideExpression = AssignmentExpression_In",
+      ";"
+    ],
+    [
+      "ArrowFunction_In",
+      ";"
+    ]
+  ],
+  "ConditionalExpression_In": [
+    [
+      "LogicalORExpression_In",
+      ";"
+    ],
+    [
+      "LogicalORExpression_In ? AssignmentExpression_In : AssignmentExpression_In",
+      ";"
+    ]
+  ],
+  "LogicalORExpression_In": [
+    [
+      "LogicalANDExpression_In",
+      ";"
+    ],
+    [
+      "LogicalORExpression_In || LogicalANDExpression_In",
+      ";"
+    ]
+  ],
+  "LogicalANDExpression_In": [
+    [
+      "BitwiseORExpression_In",
+      ";"
+    ],
+    [
+      "LogicalANDExpression_In && BitwiseORExpression_In",
+      ";"
+    ]
+  ],
+  "BitwiseORExpression_In": [
+    [
+      "BitwiseXORExpression_In",
+      ";"
+    ],
+    [
+      "BitwiseORExpression_In | BitwiseXORExpression_In",
+      ";"
+    ]
+  ],
+  "BitwiseXORExpression_In": [
+    [
+      "BitwiseANDExpression_In",
+      ";"
+    ],
+    [
+      "BitwiseXORExpression_In ^ BitwiseANDExpression_In",
+      ";"
+    ]
+  ],
+  "BitwiseANDExpression_In": [
+    [
+      "EqualityExpression_In",
+      ";"
+    ],
+    [
+      "BitwiseANDExpression_In & EqualityExpression_In",
+      ";"
+    ]
+  ],
+  "EqualityExpression_In": [
+    [
+      "RelationalExpression_In",
+      ";"
+    ],
+    [
+      "EqualityExpression_In EqualityOperator RelationalExpression_In",
+      ";"
+    ]
+  ],
+  "RelationalExpression_In": [
+    [
+      "ShiftExpression",
+      ";"
+    ],
+    [
+      "RelationalExpression_In RelationalOperator ShiftExpression",
+      ";"
+    ],
+    [
+      "RelationalExpression_In in ShiftExpression",
+      ";"
+    ],
+    [
+      "RelationalExpression_In instanceof ShiftExpression",
+      ";"
+    ]
+  ],
+  "ShiftExpression": [
+    [
+      "AdditiveExpression",
+      ";"
+    ],
+    [
+      "ShiftExpression ShiftOperator AdditiveExpression",
+      ";"
+    ]
+  ],
+  "AdditiveExpression": [
+    [
+      "MultiplicativeExpression",
+      ";"
+    ],
+    [
+      "AdditiveExpression AdditiveOperator MultiplicativeExpression",
+      ";"
+    ]
+  ],
+  "MultiplicativeExpression": [
+    [
+      "ExponentiationExpression",
+      ";"
+    ],
+    [
+      "MultiplicativeExpression MultiplicativeOperator ExponentiationExpression",
+      ";"
+    ]
+  ],
+  "ExponentiationExpression": [
+    [
+      "UnaryExpression",
+      ";"
+    ],
+    [
+      "UpdateExpression ** ExponentiationExpression",
+      ";"
+    ]
+  ],
+  "UnaryExpression": [
+    [
+      "UpdateExpression",
+      ";"
+    ],
+    [
+      "UnaryOperator UnaryExpression",
+      ";"
+    ],
+    [
+      "AdditiveOperator UnaryExpression",
+      ";"
+    ]
+  ],
+  "UpdateExpression": [
+    [
+      "LeftHandSideExpression",
+      ";"
+    ],
+    [
+      "LeftHandSideExpression UpdateOperator",
+      ";"
+    ],
+    [
+      "UpdateOperator LeftHandSideExpression",
+      ";"
+    ]
+  ],
+  "LeftHandSideExpression": [
+    [
+      "NewExpression",
+      ";"
+    ],
+    [
+      "CallExpression",
+      ";"
+    ]
+  ],
+  "NewExpression": [
+    [
+      "MemberExpression",
+      ";"
+    ],
+    [
+      "new NewExpression",
+      ";"
+    ]
+  ],
+  "MemberExpression": [
+    [
+      "PrimaryExpression",
+      ";"
+    ],
+    [
+      "MemberExpression [ Expression_In ]",
+      ";"
+    ],
+    [
+      "MemberExpression . IdentifierName",
+      ";"
+    ],
+    [
+      "SuperProperty",
+      ";"
+    ],
+    [
+      "MetaProperty",
+      ";"
+    ],
+    [
+      "new MemberExpression Arguments",
+      ";"
+    ]
+  ],
+  "PrimaryExpression": [
+    [
+      "this",
+      ";"
+    ],
+    [
+      "IdentifierReference",
+      ";"
+    ],
+    [
+      "Literal",
+      ";"
+    ],
+    [
+      "ArrayLiteral",
+      ";"
+    ],
+    [
+      "ObjectLiteral",
+      ";"
+    ],
+    [
+      "CoverParenthesizedExpressionAndArrowParameterList",
+      ";"
+    ],
+    [
+      "FunctionExpression",
+      ";"
+    ],
+    [
+      "TemplateLiteral",
+      ";"
+    ],
+    [
+      "RegularExpressionLiteral",
+      ";"
+    ]
+  ],
+  "IdentifierReference": [
+    [
+      "Identifier",
+      ";"
+    ],
+    [
+      "of",
+      ";"
+    ]
+  ],
+  "Identifier": [
+    [
+      "IdentifierName",
+      ";"
+    ]
+  ],
+  "IdentifierName": [
+    [
+      "IdentifierStart",
+      ";"
+    ],
+    [
+      "IdentifierName IdentifierPart",
+      ";"
+    ]
+  ],
+  "IdentifierStart": [
+    [
+      "UnicodeIDStart",
+      ";"
+    ],
+    [
+      "UnicodeEscapeSequence",
+      ";"
+    ],
+    [
+      "$",
+      ";"
+    ],
+    [
+      "_",
+      ";"
+    ]
+  ],
+  "UnicodeEscapeSequence": [
+    [
+      "UnicodeEscapeSequenceStart Hex4Digits",
+      ";"
+    ]
+  ],
+  "Hex4Digits": [
+    [
+      "HexDigit HexDigit HexDigit HexDigit",
+      ";"
+    ]
+  ],
+  "IdentifierPart": [
+    [
+      "UnicodeIDContinue",
+      ";"
+    ],
+    [
+      "UnicodeEscapeSequenceContinue",
+      ";"
+    ],
+    [
+      "$",
+      ";"
+    ],
+    [
+      "_",
+      ";"
+    ],
+    [
+      "ZWNJ",
+      ";"
+    ],
+    [
+      "ZWJ",
+      ";"
+    ]
+  ],
+  "UnicodeEscapeSequenceContinue": [
+    [
+      "UnicodeEscapeSequenceContinueStart Hex4Digits",
+      ";"
+    ]
+  ],
+  "Literal": [
+    [
+      "NullLiteral",
+      ";"
+    ],
+    [
+      "BooleanLiteral",
+      ";"
+    ],
+    [
+      "StringLiteral",
+      ";"
+    ],
+    [
+      "DecimalLiteral",
+      ";"
+    ],
+    [
+      "HexIntegerLiteral",
+      ";"
+    ]
+  ],
+  "StringLiteral": [
+    [
+      "SingleQuoteStart SingleStringCharacters SingleQuoteEnd",
+      ";"
+    ],
+    [
+      "DoubleQuoteStart DoubleStringCharacters DoubleQuoteEnd",
+      ";"
+    ],
+    [
+      "SingleQuoteStart SingleQuoteEnd",
+      ";"
+    ],
+    [
+      "DoubleQuoteStart DoubleQuoteEnd",
+      ";"
+    ]
+  ],
+  "SingleStringCharacters": [
+    [
+      "SingleStringCharacter",
+      ";"
+    ],
+    [
+      "SingleStringCharacter SingleStringCharacters",
+      ";"
+    ],
+    [
+      "EscapeSequenceStart EscapeSequence",
+      ";"
+    ],
+    [
+      "EscapeSequenceStart EscapeSequence SingleStringCharacters",
+      ";"
+    ]
+  ],
+  "EscapeSequence": [
+    [
+      "UnicodeEscapeSequence",
+      ";"
+    ],
+    [
+      "CharacterEscapeSequence",
+      ";"
+    ]
+  ],
+  "CharacterEscapeSequence": [
+    [
+      "SingleEscapeCharacter",
+      ";"
+    ],
+    [
+      "NonEscapeCharacter",
+      ";"
+    ]
+  ],
+  "DoubleStringCharacters": [
+    [
+      "DoubleStringCharacter",
+      ";"
+    ],
+    [
+      "DoubleStringCharacter DoubleStringCharacters",
+      ";"
+    ],
+    [
+      "EscapeSequenceStart EscapeSequence",
+      ";"
+    ],
+    [
+      "EscapeSequenceStart EscapeSequence DoubleStringCharacters",
+      ";"
+    ]
+  ],
+  "DecimalLiteral": [
+    [
+      "DecimalIntegerLiteral DecimalPoint",
+      ";"
+    ],
+    [
+      "DecimalIntegerLiteral DecimalPoint DecimalDigits",
+      ";"
+    ],
+    [
+      "DecimalPoint DecimalDigits",
+      ";"
+    ],
+    [
+      "DecimalIntegerLiteral",
+      ";"
+    ],
+    [
+      "DecimalIntegerLiteral DecimalPoint DecimalDigits ExponentPart",
+      ";"
+    ],
+    [
+      "DecimalIntegerLiteral DecimalPoint ExponentPart",
+      ";"
+    ],
+    [
+      "DecimalPoint DecimalDigits ExponentPart",
+      ";"
+    ],
+    [
+      "DecimalIntegerLiteral ExponentPart",
+      ";"
+    ]
+  ],
+  "DecimalIntegerLiteral": [
+    [
+      "0",
+      ";"
+    ],
+    [
+      "0 DecimalDigits",
+      ";"
+    ],
+    [
+      "NonZeroDigit",
+      ";"
+    ],
+    [
+      "NonZeroDigit DecimalDigits",
+      ";"
+    ]
+  ],
+  "DecimalDigits": [
+    [
+      "DecimalDigit",
+      ";"
+    ],
+    [
+      "DecimalDigits DecimalDigit",
+      ";"
+    ]
+  ],
+  "ExponentPart": [
+    [
+      "ExponentIndicator SignedInteger",
+      ";"
+    ]
+  ],
+  "SignedInteger": [
+    [
+      "DecimalDigits",
+      ";"
+    ],
+    [
+      "AdditiveOperator DecimalDigits",
+      ";"
+    ]
+  ],
+  "HexIntegerLiteral": [
+    [
+      "0x HexDigits",
+      ";"
+    ],
+    [
+      "0X HexDigits",
+      ";"
+    ]
+  ],
+  "HexDigits": [
+    [
+      "HexDigit",
+      ";"
+    ],
+    [
+      "HexDigits HexDigit",
+      ";"
+    ]
+  ],
+  "ArrayLiteral": [
+    [
+      "[ ]",
+      ";"
+    ],
+    [
+      "[ Elision ]",
+      ";"
+    ],
+    [
+      "[ ElementList ]",
+      ";"
+    ],
+    [
+      "[ ElementList , Elision ]",
+      ";"
+    ],
+    [
+      "[ ElementList , ]",
+      ";"
+    ]
+  ],
+  "Elision": [
+    [
+      ",",
+      ";"
+    ],
+    [
+      "Elision ,",
+      ";"
+    ]
+  ],
+  "ElementList": [
+    [
+      "AssignmentExpression_In",
+      ";"
+    ],
+    [
+      "Elision AssignmentExpression_In",
+      ";"
+    ],
+    [
+      "ElementList , AssignmentExpression_In",
+      ";"
+    ],
+    [
+      "ElementList , Elision AssignmentExpression_In",
+      ";"
+    ]
+  ],
+  "ObjectLiteral": [
+    [
+      "BRACE_START }",
+      ";"
+    ],
+    [
+      "BRACE_START PropertyDefinitionList }",
+      ";"
+    ],
+    [
+      "BRACE_START PropertyDefinitionList , }",
+      ";"
+    ]
+  ],
+  "PropertyDefinitionList": [
+    [
+      "PropertyDefinition",
+      ";"
+    ],
+    [
+      "PropertyDefinitionList , PropertyDefinition",
+      ";"
+    ]
+  ],
+  "PropertyDefinition": [
+    [
+      "IdentifierReference",
+      ";"
+    ],
+    [
+      "CoverInitializedName",
+      ";"
+    ],
+    [
+      "PropertyName : AssignmentExpression_In",
+      ";"
+    ]
+  ],
+  "CoverInitializedName": [
+    [
+      "IdentifierReference Initializer_In",
+      ";"
+    ]
+  ],
+  "Initializer_In": [
+    [
+      "= AssignmentExpression_In",
+      ";"
+    ]
+  ],
+  "PropertyName": [
+    [
+      "LiteralPropertyName",
+      ";"
+    ],
+    [
+      "ComputedPropertyName",
+      ";"
+    ]
+  ],
+  "LiteralPropertyName": [
+    [
+      "IdentifierName",
+      ";"
+    ],
+    [
+      "StringLiteral",
+      ";"
+    ],
+    [
+      "NumericLiteral",
+      ";"
+    ]
+  ],
+  "NumericLiteral": [
+    [
+      "DecimalLiteral",
+      ";"
+    ],
+    [
+      "HexIntegerLiteral",
+      ";"
+    ]
+  ],
+  "ComputedPropertyName": [
+    [
+      "[ AssignmentExpression_In ]",
+      ";"
+    ]
+  ],
+  "CoverParenthesizedExpressionAndArrowParameterList": [
+    [
+      "( Expression_In )",
+      ";"
+    ],
+    [
+      "( )",
+      ";"
+    ],
+    [
+      "( ... BindingIdentifier )",
+      ";"
+    ],
+    [
+      "( ... BindingPattern )",
+      ";"
+    ],
+    [
+      "( Expression_In , ... BindingIdentifier )",
+      ";"
+    ],
+    [
+      "( Expression_In , ... BindingPattern )",
+      ";"
+    ]
+  ],
+  "BindingIdentifier": [
+    [
+      "Identifier",
+      ";"
+    ],
+    [
+      "of",
+      ";"
+    ]
+  ],
+  "BindingPattern": [
+    [
+      "ObjectBindingPattern",
+      ";"
+    ],
+    [
+      "ArrayBindingPattern",
+      ";"
+    ]
+  ],
+  "ObjectBindingPattern": [
+    [
+      "BRACE_START }",
+      ";"
+    ],
+    [
+      "BRACE_START BindingPropertyList }",
+      ";"
+    ],
+    [
+      "BRACE_START BindingPropertyList , }",
+      ";"
+    ]
+  ],
+  "BindingPropertyList": [
+    [
+      "BindingProperty",
+      ";"
+    ],
+    [
+      "BindingPropertyList , BindingProperty",
+      ";"
+    ]
+  ],
+  "BindingProperty": [
+    [
+      "SingleNameBinding",
+      ";"
+    ],
+    [
+      "PropertyName : BindingElement",
+      ";"
+    ]
+  ],
+  "SingleNameBinding": [
+    [
+      "BindingIdentifier Initializer_In",
+      ";"
+    ],
+    [
+      "BindingIdentifier",
+      ";"
+    ]
+  ],
+  "BindingElement": [
+    [
+      "SingleNameBinding",
+      ";"
+    ],
+    [
+      "BindingPattern Initializer_In",
+      ";"
+    ],
+    [
+      "BindingPattern",
+      ";"
+    ]
+  ],
+  "ArrayBindingPattern": [
+    [
+      "[ ]",
+      ";"
+    ],
+    [
+      "[ Elision ]",
+      ";"
+    ],
+    [
+      "[ BindingRestElement ]",
+      ";"
+    ],
+    [
+      "[ Elision BindingRestElement ]",
+      ";"
+    ],
+    [
+      "[ BindingElementList ]",
+      ";"
+    ],
+    [
+      "[ BindingElementList , BindingRestElement ]",
+      ";"
+    ],
+    [
+      "[ BindingElementList , Elision BindingRestElement ]",
+      ";"
+    ],
+    [
+      "[ BindingElementList , Elision ]",
+      ";"
+    ]
+  ],
+  "BindingRestElement": [
+    [
+      "... BindingIdentifier",
+      ";"
+    ],
+    [
+      "... BindingPattern",
+      ";"
+    ]
+  ],
+  "BindingElementList": [
+    [
+      "BindingElisionElement",
+      ";"
+    ],
+    [
+      "BindingElementList , BindingElisionElement",
+      ";"
+    ]
+  ],
+  "BindingElisionElement": [
+    [
+      "BindingElement",
+      ";"
+    ],
+    [
+      "Elision BindingElement",
+      ";"
+    ]
+  ],
+  "FunctionExpression": [
+    [
+      "function ( ) LeftBrace RightBrace",
+      ";"
+    ],
+    [
+      "function BindingIdentifier ( ) LeftBrace RightBrace",
+      ";"
+    ],
+    [
+      "function ( ) { FunctionBody }",
+      ";"
+    ],
+    [
+      "function BindingIdentifier ( ) { FunctionBody }",
+      ";"
+    ],
+    [
+      "function ( FormalParameters ) LeftBrace RightBrace",
+      ";"
+    ],
+    [
+      "function BindingIdentifier ( FormalParameters ) LeftBrace RightBrace",
+      ";"
+    ],
+    [
+      "function ( FormalParameters ) { FunctionBody }",
+      ";"
+    ],
+    [
+      "function BindingIdentifier ( FormalParameters ) { FunctionBody }",
+      ";"
+    ]
+  ],
+  "FunctionBody": [
+    [
+      "FunctionStatementList",
+      ";"
+    ]
+  ],
+  "FunctionStatementList": [
+    [
+      "StatementList_Return",
+      ";"
+    ]
+  ],
+  "StatementList_Return": [
+    [
+      "StatementListItem_Return",
+      ";"
+    ],
+    [
+      "StatementList_Return StatementListItem_Return",
+      ";"
+    ]
+  ],
+  "StatementListItem_Return": [
+    [
+      "Statement_Return",
+      ";"
+    ],
+    [
+      "Declaration",
+      ";"
+    ]
+  ],
+  "Statement_Return": [
+    [
+      "EmptyStatement",
+      ";"
+    ],
+    [
+      "ExpressionStatement",
+      ";"
+    ],
+    [
+      "VariableStatement",
+      ";"
+    ],
+    [
+      "BlockStatement_Return",
+      ";"
+    ],
+    [
+      "LabelledStatement",
+      ";"
+    ],
+    [
+      "IfStatement_Return",
+      ";"
+    ],
+    [
+      "BreakableStatement_Return",
+      ";"
+    ],
+    [
+      "ContinueStatement",
+      ";"
+    ],
+    [
+      "BreakStatement",
+      ";"
+    ],
+    [
+      "WithStatement_Return",
+      ";"
+    ],
+    [
+      "ThrowStatement",
+      ";"
+    ],
+    [
+      "DebuggerStatement",
+      ";"
+    ],
+    [
+      "TryStatement_Return",
+      ";"
+    ],
+    [
+      "ReturnStatement",
+      ";"
+    ]
+  ],
+  "VariableStatement": [
+    [
+      "var VariableDeclarationList_In ;",
+      ";"
+    ]
+  ],
+  "VariableDeclarationList_In": [
+    [
+      "VariableDeclaration_In",
+      ";"
+    ],
+    [
+      "VariableDeclarationList_In , VariableDeclaration_In",
+      ";"
+    ]
+  ],
+  "VariableDeclaration_In": [
+    [
+      "BindingIdentifier",
+      ";"
+    ],
+    [
+      "BindingIdentifier Initializer_In",
+      ";"
+    ],
+    [
+      "BindingPattern Initializer_In",
+      ";"
+    ]
+  ],
+  "BlockStatement_Return": [
+    [
+      "Block_Return",
+      ";"
+    ]
+  ],
+  "Block_Return": [
+    [
+      "{ StatementList_Return }",
+      ";"
+    ],
+    [
+      "{ }",
+      ";"
+    ]
+  ],
+  "LabelledStatement": [
+    [
+      "LabelIdentifier : LabelledItem",
+      ";"
+    ]
+  ],
+  "LabelIdentifier": [
+    [
+      "Identifier",
+      ";"
+    ]
+  ],
+  "LabelledItem": [
+    [
+      "Statement",
+      ";"
+    ],
+    [
+      "FunctionDeclaration",
+      ";"
+    ]
+  ],
+  "FunctionDeclaration": [
+    [
+      "FUNCTION BindingIdentifier ( ) { FunctionBody }",
+      ";"
+    ],
+    [
+      "FUNCTION BindingIdentifier ( ) { }",
+      ";"
+    ],
+    [
+      "FUNCTION BindingIdentifier ( FormalParameters ) { FunctionBody }",
+      ";"
+    ],
+    [
+      "FUNCTION BindingIdentifier ( FormalParameters ) { }",
+      ";"
+    ]
+  ],
+  "FormalParameters": [
+    [
+      "FormalParameterList",
+      ";"
+    ]
+  ],
+  "FormalParameterList": [
+    [
+      "FunctionRestParameter",
+      ";"
+    ],
+    [
+      "FormalsList",
+      ";"
+    ],
+    [
+      "FormalsList , FunctionRestParameter",
+      ";"
+    ]
+  ],
+  "FormalsList": [
+    [
+      "FormalParameter",
+      ";"
+    ],
+    [
+      "FormalsList , FormalParameter",
+      ";"
+    ]
+  ],
+  "FormalParameter": [
+    [
+      "BindingElement",
+      ";"
+    ]
+  ],
+  "FunctionRestParameter": [
+    [
+      "BindingRestElement",
+      ";"
+    ]
+  ],
+  "IfStatement_Return": [
+    [
+      "if ( Expression_In ) Statement_Return",
+      ";"
+    ],
+    [
+      "if ( Expression_In ) Statement_Return else Statement_Return",
+      ";"
+    ]
+  ],
+  "BreakableStatement_Return": [
+    [
+      "IterationStatement_Return",
+      ";"
+    ],
+    [
+      "SwitchStatement_Return",
+      ";"
+    ]
+  ],
+  "IterationStatement_Return": [
+    [
+      "do Statement_Return while LeftParenthesis Expression_In RightParenthesis ;",
+      ";"
+    ],
+    [
+      "while LeftParenthesis Expression_In RightParenthesis Statement_Return",
+      ";"
+    ],
+    [
+      "for LeftParenthesis LexicalDeclaration Expression_In ; Expression_In RightParenthesis Statement_Return",
+      ";"
+    ],
+    [
+      "for LeftParenthesis VAR VariableDeclarationList ; Expression_In ; Expression_In RightParenthesis Statement_Return",
+      ";"
+    ],
+    [
+      "for LeftParenthesis LeftHandSideExpression in Expression_In RightParenthesis Statement_Return",
+      ";"
+    ],
+    [
+      "for LeftParenthesis ForDeclaration in Expression_In RightParenthesis Statement_Return",
+      ";"
+    ],
+    [
+      "for LeftParenthesis LeftHandSideExpression of AssignmentExpression_In RightParenthesis Statement_Return",
+      ";"
+    ],
+    [
+      "for LeftParenthesis VAR ForBinding of AssignmentExpression_In RightParenthesis Statement_Return",
+      ";"
+    ],
+    [
+      "for LeftParenthesis ForDeclaration of AssignmentExpression_In RightParenthesis Statement_Return",
+      ";"
+    ],
+    [
+      "for LeftParenthesis Expression ; Expression_In ; Expression_In RightParenthesis Statement_Return",
+      ";"
+    ],
+    [
+      "for LeftParenthesis Expression ; ; Expression_In RightParenthesis Statement_Return",
+      ";"
+    ],
+    [
+      "for LeftParenthesis Expression ; ; RightParenthesis Statement_Return",
+      ";"
+    ],
+    [
+      "for LeftParenthesis Expression ; Expression_In ; RightParenthesis Statement_Return",
+      ";"
+    ],
+    [
+      "for LeftParenthesis ; Expression_In ; Expression_In RightParenthesis Statement_Return",
+      ";"
+    ],
+    [
+      "for LeftParenthesis ; ; Expression_In RightParenthesis Statement_Return",
+      ";"
+    ],
+    [
+      "for LeftParenthesis ; ; RightParenthesis Statement_Return",
+      ";"
+    ],
+    [
+      "for LeftParenthesis ; Expression_In ; RightParenthesis Statement_Return",
+      ";"
+    ],
+    [
+      "for LeftParenthesis VAR VariableDeclarationList ; ; Expression_In RightParenthesis Statement_Return",
+      ";"
+    ],
+    [
+      "for LeftParenthesis VAR VariableDeclarationList ; Expression_In ; RightParenthesis Statement_Return",
+      ";"
+    ],
+    [
+      "for LeftParenthesis VAR VariableDeclarationList ; ; RightParenthesis Statement_Return",
+      ";"
+    ],
+    [
+      "for LeftParenthesis LexicalDeclaration ; Expression_In RightParenthesis Statement_Return",
+      ";"
+    ],
+    [
+      "for LeftParenthesis LexicalDeclaration Expression_In ; RightParenthesis Statement_Return",
+      ";"
+    ],
+    [
+      "for LeftParenthesis LexicalDeclaration ; RightParenthesis Statement_Return",
+      ";"
+    ],
+    [
+      "for LeftParenthesis VAR ForBinding in Expression_In RightParenthesis Statement_Return",
+      ";"
+    ]
+  ],
+  "LexicalDeclaration": [
+    [
+      "LetOrConst BindingList ;",
+      ";"
+    ]
+  ],
+  "BindingList": [
+    [
+      "LexicalBinding",
+      ";"
+    ],
+    [
+      "BindingList , LexicalBinding",
+      ";"
+    ]
+  ],
+  "LexicalBinding": [
+    [
+      "BindingIdentifier",
+      ";"
+    ],
+    [
+      "BindingIdentifier Initializer",
+      ";"
+    ],
+    [
+      "BindingPattern Initializer",
+      ";"
+    ]
+  ],
+  "Initializer": [
+    [
+      "= AssignmentExpression",
+      ";"
+    ]
+  ],
+  "AssignmentExpression": [
+    [
+      "ConditionalExpression",
+      ";"
+    ],
+    [
+      "LeftHandSideExpression AssignmentOperator AssignmentExpression",
+      ";"
+    ],
+    [
+      "LeftHandSideExpression = AssignmentExpression",
+      ";"
+    ],
+    [
+      "ArrowFunction",
+      ";"
+    ]
+  ],
+  "ConditionalExpression": [
+    [
+      "LogicalORExpression",
+      ";"
+    ],
+    [
+      "LogicalORExpression ? AssignmentExpression : AssignmentExpression",
+      ";"
+    ]
+  ],
+  "LogicalORExpression": [
+    [
+      "LogicalANDExpression",
+      ";"
+    ],
+    [
+      "LogicalORExpression || LogicalANDExpression",
+      ";"
+    ]
+  ],
+  "LogicalANDExpression": [
+    [
+      "BitwiseORExpression",
+      ";"
+    ],
+    [
+      "LogicalANDExpression && BitwiseORExpression",
+      ";"
+    ]
+  ],
+  "BitwiseORExpression": [
+    [
+      "BitwiseXORExpression",
+      ";"
+    ],
+    [
+      "BitwiseORExpression | BitwiseXORExpression",
+      ";"
+    ]
+  ],
+  "BitwiseXORExpression": [
+    [
+      "BitwiseANDExpression",
+      ";"
+    ],
+    [
+      "BitwiseXORExpression ^ BitwiseANDExpression",
+      ";"
+    ]
+  ],
+  "BitwiseANDExpression": [
+    [
+      "EqualityExpression",
+      ";"
+    ],
+    [
+      "BitwiseANDExpression & EqualityExpression",
+      ";"
+    ]
+  ],
+  "EqualityExpression": [
+    [
+      "RelationalExpression",
+      ";"
+    ],
+    [
+      "EqualityExpression EqualityOperator RelationalExpression",
+      ";"
+    ]
+  ],
+  "RelationalExpression": [
+    [
+      "ShiftExpression",
+      ";"
+    ],
+    [
+      "RelationalExpression RelationalOperator ShiftExpression",
+      ";"
+    ]
+  ],
+  "ArrowFunction": [
+    [
+      "ArrowParameters => ConciseBody",
+      ";"
+    ]
+  ],
+  "ArrowParameters": [
+    [
+      "BindingIdentifier",
+      ";"
+    ],
+    [
+      "CoverParenthesizedExpressionAndArrowParameterList",
+      ";"
+    ]
+  ],
+  "ConciseBody": [
+    [
+      "AssignmentExpression",
+      ";"
+    ],
+    [
+      "LEFT_ARROW_BRACE }",
+      ";"
+    ],
+    [
+      "LEFT_ARROW_BRACE FunctionBody }",
+      ";"
+    ]
+  ],
+  "VariableDeclarationList": [
+    [
+      "VariableDeclaration",
+      ";"
+    ],
+    [
+      "VariableDeclarationList , VariableDeclaration",
+      ";"
+    ]
+  ],
+  "VariableDeclaration": [
+    [
+      "BindingIdentifier",
+      ";"
+    ],
+    [
+      "BindingIdentifier Initializer",
+      ";"
+    ],
+    [
+      "BindingPattern Initializer",
+      ";"
+    ]
+  ],
+  "ForDeclaration": [
+    [
+      "LetOrConst ForBinding",
+      ";"
+    ]
+  ],
+  "ForBinding": [
+    [
+      "BindingIdentifier",
+      ";"
+    ],
+    [
+      "BindingPattern",
+      ";"
+    ]
+  ],
+  "Expression": [
+    [
+      "AssignmentExpression",
+      ";"
+    ],
+    [
+      "Expression , AssignmentExpression",
+      ";"
+    ]
+  ],
+  "LeftParenthesis": [
+    [
+      "(",
+      ";"
+    ]
+  ],
+  "RightParenthesis": [
+    [
+      ")",
+      ";"
+    ]
+  ],
+  "VAR": [
+    [
+      "var",
+      ";"
+    ]
+  ],
+  "SwitchStatement_Return": [
+    [
+      "switch ( Expression_In ) CaseBlock_Return",
+      ";"
+    ]
+  ],
+  "CaseBlock_Return": [
+    [
+      "{ }",
+      ";"
+    ],
+    [
+      "{ CaseClauses_Return }",
+      ";"
+    ],
+    [
+      "{ DefaultClause_Return CaseClauses_Return }",
+      ";"
+    ],
+    [
+      "{ DefaultClause_Return }",
+      ";"
+    ],
+    [
+      "{ CaseClauses_Return DefaultClause_Return }",
+      ";"
+    ],
+    [
+      "{ CaseClauses_Return DefaultClause_Return CaseClauses_Return }",
+      ";"
+    ]
+  ],
+  "CaseClauses_Return": [
+    [
+      "CaseClause_Return",
+      ";"
+    ],
+    [
+      "CaseClauses_Return CaseClause_Return",
+      ";"
+    ]
+  ],
+  "CaseClause_Return": [
+    [
+      "case Expression_In : StatementList_Return",
+      ";"
+    ],
+    [
+      "case Expression_In :",
+      ";"
+    ]
+  ],
+  "DefaultClause_Return": [
+    [
+      "default : StatementList_Return",
+      ";"
+    ],
+    [
+      "default :",
+      ";"
+    ]
+  ],
+  "ContinueStatement": [
+    [
+      "continue ;",
+      ";"
+    ],
+    [
+      "CONTINUE_LF",
+      ";"
+    ],
+    [
+      "continue LabelIdentifier ;",
+      ";"
+    ]
+  ],
+  "BreakStatement": [
+    [
+      "break ;",
+      ";"
+    ],
+    [
+      "BREAK_LF",
+      ";"
+    ],
+    [
+      "break LabelIdentifier ;",
+      ";"
+    ]
+  ],
+  "WithStatement_Return": [
+    [
+      "with ( Expression_In ) Statement_Return",
+      ";"
+    ]
+  ],
+  "ThrowStatement": [
+    [
+      "throw Expression_In ;",
+      ";"
+    ],
+    [
+      "THROW_LF",
+      ";"
+    ]
+  ],
+  "DebuggerStatement": [
+    [
+      "debugger ;",
+      ";"
+    ]
+  ],
+  "TryStatement_Return": [
+    [
+      "try Block_Return Catch_Return",
+      ";"
+    ],
+    [
+      "try Block_Return Finally_Return",
+      ";"
+    ],
+    [
+      "try Block_Return Catch_Return Finally_Return",
+      ";"
+    ]
+  ],
+  "Catch_Return": [
+    [
+      "catch ( CatchParameter ) Block_Return",
+      ";"
+    ]
+  ],
+  "CatchParameter": [
+    [
+      "BindingIdentifier",
+      ";"
+    ],
+    [
+      "BindingPattern",
+      ";"
+    ]
+  ],
+  "Finally_Return": [
+    [
+      "finally Block_Return",
+      ";"
+    ]
+  ],
+  "ReturnStatement": [
+    [
+      "return ;",
+      ";"
+    ],
+    [
+      "RETURN_LF",
+      ";"
+    ],
+    [
+      "return Expression_In ;",
+      ";"
+    ]
+  ],
+  "Declaration": [
+    [
+      "HoistableDeclaration",
+      ";"
+    ],
+    [
+      "LexicalDeclaration_In",
+      ";"
+    ]
+  ],
+  "HoistableDeclaration": [
+    [
+      "FunctionDeclaration",
+      ";"
+    ]
+  ],
+  "LexicalDeclaration_In": [
+    [
+      "LetOrConst BindingList_In ;",
+      ";"
+    ]
+  ],
+  "BindingList_In": [
+    [
+      "LexicalBinding_In",
+      ";"
+    ],
+    [
+      "BindingList_In , LexicalBinding_In",
+      ";"
+    ]
+  ],
+  "LexicalBinding_In": [
+    [
+      "BindingIdentifier",
+      ";"
+    ],
+    [
+      "BindingIdentifier Initializer_In",
+      ";"
+    ],
+    [
+      "BindingPattern Initializer_In",
+      ";"
+    ]
+  ],
+  "LeftBrace": [
+    [
+      "{",
+      ";"
+    ]
+  ],
+  "RightBrace": [
+    [
+      "}",
+      ";"
+    ]
+  ],
+  "TemplateLiteral": [
+    [
+      "NoSubstitutionTemplate",
+      ";"
+    ],
+    [
+      "TemplateHead Expression_In TemplateSpans",
+      ";"
+    ]
+  ],
+  "NoSubstitutionTemplate": [
+    [
+      "` `",
+      ";"
+    ],
+    [
+      "` TemplateCharacters `",
+      ";"
+    ]
+  ],
+  "TemplateCharacters": [
+    [
+      "TemplateCharacter",
+      ";"
+    ],
+    [
+      "TemplateCharacter TemplateCharacters",
+      ";"
+    ]
+  ],
+  "TemplateCharacter": [
+    [
+      "TemplateEscape EscapeSequence",
+      ";"
+    ],
+    [
+      "TemplateChar",
+      ";"
+    ]
+  ],
+  "TemplateHead": [
+    [
+      "` LEFT_TEMPLATE_BRACE",
+      ";"
+    ],
+    [
+      "` TemplateCharacters LEFT_TEMPLATE_BRACE",
+      ";"
+    ]
+  ],
+  "TemplateSpans": [
+    [
+      "TemplateTail",
+      ";"
+    ],
+    [
+      "TemplateMiddleList TemplateTail",
+      ";"
+    ]
+  ],
+  "TemplateTail": [
+    [
+      "RIGHT_TEMPLATE_BRACE `",
+      ";"
+    ],
+    [
+      "RIGHT_TEMPLATE_BRACE TemplateCharacters `",
+      ";"
+    ]
+  ],
+  "TemplateMiddleList": [
+    [
+      "TemplateMiddle Expression_In",
+      ";"
+    ],
+    [
+      "TemplateMiddleList TemplateMiddle Expression_In",
+      ";"
+    ]
+  ],
+  "TemplateMiddle": [
+    [
+      "RIGHT_TEMPLATE_BRACE LEFT_TEMPLATE_BRACE",
+      ";"
+    ],
+    [
+      "RIGHT_TEMPLATE_BRACE TemplateCharacters LEFT_TEMPLATE_BRACE",
+      ";"
+    ]
+  ],
+  "RegularExpressionLiteral": [
+    [
+      "LEFT_REGEXP_DIV RegularExpressionBody RIGHT_REGEXP_DIV",
+      ";"
+    ],
+    [
+      "LEFT_REGEXP_DIV RegularExpressionBody RIGHT_REGEXP_DIV RegularExpressionFlags",
+      ";"
+    ]
+  ],
+  "RegularExpressionBody": [
+    [
+      "RegularExpressionFirstChar",
+      ";"
+    ],
+    [
+      "RegularExpressionFirstChar RegularExpressionChars",
+      ";"
+    ]
+  ],
+  "RegularExpressionFirstChar": [
+    [
+      "RegularExpressionNonTerminator",
+      ";"
+    ],
+    [
+      "RegularExpressionBackslashSequence",
+      ";"
+    ],
+    [
+      "RegularExpressionClass",
+      ";"
+    ]
+  ],
+  "RegularExpressionBackslashSequence": [
+    [
+      "RegexpBackslash RegularExpressionNonTerminator",
+      ";"
+    ]
+  ],
+  "RegularExpressionClass": [
+    [
+      "LEFT_REGEXP_CLASS_BRACKET RIGHT_REGEXP_CLASS_BRACKET",
+      ";"
+    ],
+    [
+      "LEFT_REGEXP_CLASS_BRACKET RegularExpressionClassChars RIGHT_REGEXP_CLASS_BRACKET",
+      ";"
+    ]
+  ],
+  "RegularExpressionClassChars": [
+    [
+      "RegularExpressionClassChar",
+      ";"
+    ],
+    [
+      "RegularExpressionClassChars RegularExpressionClassChar",
+      ";"
+    ]
+  ],
+  "RegularExpressionClassChar": [
+    [
+      "RegularExpressionNonTerminator",
+      ";"
+    ],
+    [
+      "RegularExpressionBackslashSequence",
+      ";"
+    ]
+  ],
+  "RegularExpressionChars": [
+    [
+      "RegularExpressionChar",
+      ";"
+    ],
+    [
+      "RegularExpressionChars RegularExpressionChar",
+      ";"
+    ]
+  ],
+  "RegularExpressionChar": [
+    [
+      "RegularExpressionNonTerminator",
+      ";"
+    ],
+    [
+      "RegularExpressionBackslashSequence",
+      ";"
+    ],
+    [
+      "RegularExpressionClass",
+      ";"
+    ]
+  ],
+  "RegularExpressionFlags": [
+    [
+      "IdentifierPart",
+      ";"
+    ],
+    [
+      "RegularExpressionFlags IdentifierPart",
+      ";"
+    ]
+  ],
+  "SuperProperty": [
+    [
+      "super [ Expression_In ]",
+      ";"
+    ],
+    [
+      "super . IdentifierName",
+      ";"
+    ]
+  ],
+  "MetaProperty": [
+    [
+      "new . target",
+      ";"
+    ]
+  ],
+  "Arguments": [
+    [
+      "( )",
+      ";"
+    ],
+    [
+      "( ArgumentList )",
+      ";"
+    ]
+  ],
+  "ArgumentList": [
+    [
+      "AssignmentExpression_In",
+      ";"
+    ],
+    [
+      "... AssignmentExpression_In",
+      ";"
+    ],
+    [
+      "ArgumentList , AssignmentExpression_In",
+      ";"
+    ],
+    [
+      "ArgumentList , ... AssignmentExpression_In",
+      ";"
+    ]
+  ],
+  "CallExpression": [
+    [
+      "MemberExpression Arguments",
+      ";"
+    ],
+    [
+      "SuperCall",
+      ";"
+    ],
+    [
+      "CallExpression Arguments",
+      ";"
+    ],
+    [
+      "CallExpression [ Expression_In ]",
+      ";"
+    ],
+    [
+      "CallExpression . IdentifierName",
+      ";"
+    ]
+  ],
+  "SuperCall": [
+    [
+      "super Arguments",
+      ";"
+    ]
+  ],
+  "ArrowFunction_In": [
+    [
+      "ArrowParameters => ConciseBody_In",
+      ";"
+    ]
+  ],
+  "ConciseBody_In": [
+    [
+      "AssignmentExpression_In",
+      ";"
+    ],
+    [
+      "LEFT_ARROW_BRACE }",
+      ";"
+    ],
+    [
+      "LEFT_ARROW_BRACE FunctionBody }",
+      ";"
+    ]
+  ],
+  "BlockStatement": [
+    [
+      "Block",
+      ";"
+    ]
+  ],
+  "Block": [
+    [
+      "{ }",
+      ";"
+    ],
+    [
+      "{ StatementList }",
+      ";"
+    ]
+  ],
+  "IfStatement": [
+    [
+      "if ( Expression_In ) Statement",
+      ";"
+    ],
+    [
+      "if ( Expression_In ) Statement else Statement",
+      ";"
+    ]
+  ],
+  "BreakableStatement": [
+    [
+      "IterationStatement",
+      ";"
+    ],
+    [
+      "SwitchStatement",
+      ";"
+    ]
+  ],
+  "IterationStatement": [
+    [
+      "do Statement while LeftParenthesis Expression_In RightParenthesis ;",
+      ";"
+    ],
+    [
+      "while LeftParenthesis Expression_In RightParenthesis Statement",
+      ";"
+    ],
+    [
+      "for LeftParenthesis LexicalDeclaration Expression_In ; Expression_In RightParenthesis Statement",
+      ";"
+    ],
+    [
+      "for LeftParenthesis VAR VariableDeclarationList ; Expression_In ; Expression_In RightParenthesis Statement",
+      ";"
+    ],
+    [
+      "for LeftParenthesis LeftHandSideExpression in Expression_In RightParenthesis Statement",
+      ";"
+    ],
+    [
+      "for LeftParenthesis ForDeclaration in Expression_In RightParenthesis Statement",
+      ";"
+    ],
+    [
+      "for LeftParenthesis LeftHandSideExpression of AssignmentExpression_In RightParenthesis Statement",
+      ";"
+    ],
+    [
+      "for LeftParenthesis VAR ForBinding of AssignmentExpression_In RightParenthesis Statement",
+      ";"
+    ],
+    [
+      "for LeftParenthesis ForDeclaration of AssignmentExpression_In RightParenthesis Statement",
+      ";"
+    ],
+    [
+      "for LeftParenthesis Expression ; Expression_In ; Expression_In RightParenthesis Statement",
+      ";"
+    ],
+    [
+      "for LeftParenthesis Expression ; ; Expression_In RightParenthesis Statement",
+      ";"
+    ],
+    [
+      "for LeftParenthesis Expression ; ; RightParenthesis Statement",
+      ";"
+    ],
+    [
+      "for LeftParenthesis Expression ; Expression_In ; RightParenthesis Statement",
+      ";"
+    ],
+    [
+      "for LeftParenthesis ; Expression_In ; Expression_In RightParenthesis Statement",
+      ";"
+    ],
+    [
+      "for LeftParenthesis ; ; Expression_In RightParenthesis Statement",
+      ";"
+    ],
+    [
+      "for LeftParenthesis ; ; RightParenthesis Statement",
+      ";"
+    ],
+    [
+      "for LeftParenthesis ; Expression_In ; RightParenthesis Statement",
+      ";"
+    ],
+    [
+      "for LeftParenthesis VAR VariableDeclarationList ; ; Expression_In RightParenthesis Statement",
+      ";"
+    ],
+    [
+      "for LeftParenthesis VAR VariableDeclarationList ; Expression_In ; RightParenthesis Statement",
+      ";"
+    ],
+    [
+      "for LeftParenthesis VAR VariableDeclarationList ; ; RightParenthesis Statement",
+      ";"
+    ],
+    [
+      "for LeftParenthesis LexicalDeclaration ; Expression_In RightParenthesis Statement",
+      ";"
+    ],
+    [
+      "for LeftParenthesis LexicalDeclaration Expression_In ; RightParenthesis Statement",
+      ";"
+    ],
+    [
+      "for LeftParenthesis LexicalDeclaration ; RightParenthesis Statement",
+      ";"
+    ],
+    [
+      "for LeftParenthesis VAR ForBinding in Expression_In RightParenthesis Statement",
+      ";"
+    ]
+  ],
+  "SwitchStatement": [
+    [
+      "switch ( Expression_In ) CaseBlock",
+      ";"
+    ]
+  ],
+  "CaseBlock": [
+    [
+      "{ }",
+      ";"
+    ],
+    [
+      "{ CaseClauses }",
+      ";"
+    ],
+    [
+      "{ DefaultClause CaseClauses }",
+      ";"
+    ],
+    [
+      "{ DefaultClause }",
+      ";"
+    ],
+    [
+      "{ CaseClauses DefaultClause }",
+      ";"
+    ],
+    [
+      "{ CaseClauses DefaultClause CaseClauses }",
+      ";"
+    ]
+  ],
+  "CaseClauses": [
+    [
+      "CaseClause",
+      ";"
+    ],
+    [
+      "CaseClauses CaseClause",
+      ";"
+    ]
+  ],
+  "CaseClause": [
+    [
+      "case Expression_In : StatementList",
+      ";"
+    ],
+    [
+      "case Expression_In :",
+      ";"
+    ]
+  ],
+  "DefaultClause": [
+    [
+      "default : StatementList",
+      ";"
+    ],
+    [
+      "default :",
+      ";"
+    ]
+  ],
+  "WithStatement": [
+    [
+      "with ( Expression_In ) Statement",
+      ";"
+    ]
+  ],
+  "TryStatement": [
+    [
+      "try Block Catch",
+      ";"
+    ],
+    [
+      "try Block Finally",
+      ";"
+    ],
+    [
+      "try Block Catch Finally",
+      ";"
+    ]
+  ],
+  "Catch": [
+    [
+      "catch ( CatchParameter ) Block",
+      ";"
+    ]
+  ],
+  "Finally": [
+    [
+      "finally Block",
+      ";"
+    ]
+  ]
+}
