@@ -54,6 +54,9 @@ const MultiLineCommentCharsEnd = {
   conditions: ['multi_line_comment_start', 'multi_line_comment_post_asterisk_start'],
   rule: '\\*/',
   handler: `
+    if (this.topState() === 'multi_line_comment_post_asterisk_start') {
+      this.popState();
+    }
     this.popState();
     require('./lex/comment').onCommentEnd(this, 'MultiLine', yylloc.last_line, yylloc.last_column, yylloc.range[1]);
     return '';

@@ -425,19 +425,7 @@ exports.rightBrace = {
   conditions: ['*'],
   rule: '\\}',
   handler: `
-    this.__temp__ = require('./util').parseOperator.call(this, this.match);
-    if (this.topState() === 'brace_start') {
-      this.popState();
-    } else if (this.topState() === 'arrow_brace_start') {
-      this.popState();
-    } else if (this.topState() === 'function_brace_start') {
-      this.popState();
-    } else if (this.topState() === 'block_brace_start') {
-      this.popState();
-    } else if (this.topState() === 'identifier_start') {
-      this.popState();
-    }
-    return this.__temp__;
+    return require('./util').parseOperator.call(this, this.match);
   `,
 };
 

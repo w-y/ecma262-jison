@@ -1,4 +1,8 @@
 const Generator = require('jison/lib/jison').Generator;
+
+const fs = require('fs');
+const path = require('path');
+
 const { transLex, transBnf } = require('./transform');
 
 const {
@@ -120,6 +124,7 @@ exports.grammar = {
       decimal_digit_dot_start: 'decimal_digit_dot_start',
       function_start: 'function_start',
       brace_start: 'brace_start',
+      parentheses_start: 'parentheses_start',
       case_start: 'case_start',
       arrow_brace_start: 'arrow_brace_start',
       single_line_comment_start: 'single_line_comment_start',
@@ -129,6 +134,7 @@ exports.grammar = {
       template_string_head_start: 'template_string_head_start',
       template_escape_string_start: 'template_escape_string_start',
       function_brace_start: 'function_brace_start',
+      function_parentheses_start: 'function_parentheses_start',
       block_brace_start: 'block_brace_start',
       regexp_start: 'regexp_start',
       regexp_class_start: 'regexp_class_start',
@@ -253,9 +259,7 @@ const options = { type: 'lr', moduleType: 'commonjs', moduleName: 'esparse' };
 
 exports.main = function main() {
   const code = new Generator(exports.grammar, options).generate();
-  console.log(`
-    ${code}
-  `);
+  fs.writeFileSync(`${path.dirname(__filename)}/parser.js`, code);
 };
 
 if (require.main === module) {

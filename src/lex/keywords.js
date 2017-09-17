@@ -51,6 +51,7 @@ const FunctionExpression = {
   rule: 'function',
   handler: `
     this.popState();
+    this.begin('function_parentheses_start');
     return require('./util').parseKeyword.call(this, this.match);
   `,
 };
@@ -59,7 +60,7 @@ const FunctionStatement = {
   conditions: ['*'],
   rule: 'function',
   handler: `
-    this.popState();
+    this.begin('function_parentheses_start');
     return require('./util').parseKeyword.call(this, this.match, 'FUNCTION');
   `,
 };

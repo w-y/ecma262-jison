@@ -2,10 +2,11 @@
   "name": "ecma262-jison",
   "version": "0.1.0",
   "description": "ecma262 implementation in jison",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
+    "build": "node --max-old-space-size=4096 src/ecma262.js",
     "lint": "eslint --fix ./src",
-    "test": "mocha"
+    "test": "mocha --timeout 0"
   },
   "repository": {
     "type": "git",
@@ -22,7 +23,7 @@
   },
   "homepage": "https://github.com/w-y/ecma262-jison#readme",
   "dependencies": {
-    "jison": "^0.4.17",
+    "jison": "0.4.17",
     "unicode-6.3.0": "^0.7.0"
   },
   "devDependencies": {
@@ -30,8 +31,6 @@
     "eslint-config-airbnb": "^14.1.0",
     "eslint-config-airbnb-base": "^11.1.1",
     "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^4.0.0",
-    "eslint-plugin-react": "^6.10.0",
     "mocha": "^3.3.0"
   }
 }
