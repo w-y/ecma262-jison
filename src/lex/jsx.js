@@ -48,6 +48,29 @@ const JSXTextCharacters = {
 
 exports.JSXTextCharacters = JSXTextCharacters;
 
+const JSXChildBlockStart = {
+  conditions: ['jsx_start'],
+  rule: '{',
+  handler: `
+    this.begin('jsx_child_block_start');
+    return '{';
+  `,
+};
+
+const JSXChildBlockEnd = {
+  conditions: ['jsx_child_block_start'],
+  rule: '}',
+  handler: `
+    debugger;
+    this.popState();
+    return '}';
+  `,
+};
+
+exports.JSXChildBlockStart = JSXChildBlockStart;
+
+exports.JSXChildBlockEnd = JSXChildBlockEnd;
+
 const JSXSeperator = {
   conditions: ['jsxtag_start'],
   rule: '[\\u0009|\\u0020]+',

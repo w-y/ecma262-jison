@@ -2,7 +2,7 @@ module.exports = {
   conditions: [''],
   name: 'JSXAttributes',
   rules: [
-    // 'JSXSpreadAttribute',
+    'JSXSpreadAttribute',
     'JSXAttribute',
     'JSXAttribute JSXAttributes',
   ],
@@ -13,6 +13,6 @@ module.exports = {
   ],
   subRules: [
     require('./JSXAttribute'),
-    // require('./JSXSpreadAttribute'),
+    require('./JSXSpreadAttribute'),
   ],
 };

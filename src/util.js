@@ -462,6 +462,7 @@ function parseOperator(operator, alias) {
       // res = '}';
     }
   } else if (this.match === '{') {
+    debugger;
     if (this.topState() === 'jsxtag_attr_value_start') {
       // <a attr={{}} >
       this.begin('jsxtag_attr_start');
@@ -469,9 +470,9 @@ function parseOperator(operator, alias) {
         this.begin('brace_start');
       }
       return '{';
-    /*} else if (this.topState() === 'jsxtag_attr_start') {
+    } else if (this.topState() === 'jsx_child_block_start') {
       this.begin('brace_start');
-      res = 'BRACE_START';*/
+      return 'BRACE_START';
     } else if (this.topState() === 'jsxtag_start') {
       this.begin('jsxtag_attr_start');
       res = '{'; 
@@ -502,7 +503,13 @@ function parseOperator(operator, alias) {
   } else if (this.match === '=' && this.topState() === 'jsxtag_start') {
     this.begin('jsxtag_attr_value_start');
   } else if (/^{/.test(input.substring(i))) {
+    debugger;
     if (this.topState() === 'jsxtag_start') {
+      // <a attr={
+    } else if (this.topState() === 'jsxtagname_start') { 
+      // <a>{
+      this.popState();
+      this.popState();
     } else {
       this.begin('brace_start');
     }
@@ -522,7 +529,6 @@ function parseOperator(operator, alias) {
     this.begin('jsxtag_start');
     this.begin('jsxtagname_start');
   } else if (this.match === '>') {
-    debugger;
     if (this.topState() === 'jsxtag_start') {
       this.popState();
     } else if (this.topState() === 'jsxtag_closing') {
@@ -626,7 +632,6 @@ exports.parseEscapeStringCharacter = parseEscapeStringCharacter;
 
 function parseToken(token, alias) {
   let isDiv = false;
-  debugger;
 
   const { ch } = lookAhead(this.matches.input,
     this.matches.index + this.match.length, true, true, this.topState());
@@ -634,6 +639,7 @@ function parseToken(token, alias) {
   if (ch === '/') {
     isDiv = isDivAhead(this.topState(), this.match);
   }
+  debugger;
 
   switch (this.topState()) {
     case 'single_string_start':
