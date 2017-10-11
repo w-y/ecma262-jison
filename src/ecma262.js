@@ -15,6 +15,7 @@ const {
 const { decimal } = require('./lex/decimal');
 const { hexDigit } = require('./lex/hex');
 const { singleString, doubleString } = require('./lex/string');
+
 const { template } = require('./lex/template');
 
 const {
@@ -23,6 +24,15 @@ const {
   RegexpNoTerminatorCharacter,
   RegexForwardSlash,
 } = require('./lex/regexp');
+
+const {
+  JSXSingleString, JSXDoubleString,
+  // JSXSelfClosingOpening,
+  JSXSelfClosing,
+  JSXClosing,
+  JSXSeperator,
+  JSXTextCharacters,
+} = require('./lex/jsx');
 
 const { keywords } = require('./lex/keywords');
 const { tokens } = require('./lex/tokens');
@@ -142,12 +152,28 @@ exports.grammar = {
       regexp_flag_start: 'regexp_flag_start',
       regexp_noflag: 'regexp_noflag',
       div_start: 'div_start',
+      // lessthan_start: 'lessthan_start',
       property_start: 'property_start',
       hex_start: 'hex_start',
       exponent_start: 'exponent_start',
       condition_start: 'condition_start',
+      jsxtag_start: 'jsxtag_start',
+      jsxtagname_start: 'jsxtagname_start',
+      jsx_start: 'jsx_start',
+      jsxtag_closing: 'jsxtag_closing',
+      jsxtag_attr_start: 'jsxtag_attr_start',
+      jsxtag_attr_value_start: 'jsxtag_attr_value_start',
+
+      jsx_single_string_start: 'jsx_single_string_start',
+      jsx_double_string_start: 'jsx_double_string_start',
+
+      jsx_single_escape_string: 'jsx_single_escape_string',
+      jsx_double_escape_string: 'jsx_double_escape_string',
     },
     rules: transLex([
+      JSXSingleString,
+      JSXDoubleString,
+
       singleString,
       doubleString,
 
@@ -161,12 +187,18 @@ exports.grammar = {
 
       SingleLineCommentCharsStart,
 
+      // JSXSelfClosingOpening,
+      JSXSelfClosing,
+
       RegexpStart,
       RegexpNoTerminatorCharacter,
 
       SingleLineCommentCharEnd,
       SingleLineCommentChar,
 
+      JSXClosing,
+      JSXTextCharacters,
+      JSXSeperator,
       // singleLineComment,
       template,
 
@@ -251,7 +283,7 @@ exports.grammar = {
 
   start: 'Script',
 
-  operators: [['nonassoc', 'if'], ['nonassoc', 'else']],
+  operators: [['nonassoc', 'if'], ['nonassoc', 'else'], ['nonassoc', 'JSXTextCharacter']],
   bnf: transBnf(Script),
 };
 

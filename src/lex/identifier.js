@@ -6,7 +6,7 @@ exports.idStart = idStartReg;
 exports.idContinue = idContinueReg;
 
 const unicodeIDStart = {
-  conditions: ['INITIAL', 'brace_start', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'function_brace_start', 'block_brace_start', 'property_start', 'condition_start', 'parentheses_start', 'function_parentheses_start'],
+  conditions: ['INITIAL', 'brace_start', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'function_brace_start', 'block_brace_start', 'property_start', 'condition_start', 'parentheses_start', 'function_parentheses_start', 'jsxtag_start', 'jsxtag_closing', 'jsxtagname_start', 'jsxtag_attr_start', 'jsxtag_attr_value_start'],
   rule: idStartReg,
   handler: `
     if (this.topState() === 'property_start') {
@@ -45,7 +45,7 @@ const unicodeEscapeSequenceStart = {
 };
 
 const dollar = {
-  conditions: ['INITIAL', 'identifier_start', 'property_start', 'brace_start', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'function_brace_start', 'block_brace_start', 'property_start', 'condition_start', 'parentheses_start', 'function_parentheses_start'],
+  conditions: ['INITIAL', 'identifier_start', 'property_start', 'brace_start', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'function_brace_start', 'block_brace_start', 'property_start', 'condition_start', 'parentheses_start', 'function_parentheses_start', 'jsxtag_start', 'jsxtag_closing', 'jsxtagname_start', 'jsxtag_attr_start', 'jsxtag_attr_value_start'],
   rule: '\\$',
   handler: `
     if (this.topState() === 'property_start') {
@@ -57,7 +57,7 @@ const dollar = {
 };
 
 const underscore = {
-  conditions: ['INITIAL', 'identifier_start', 'property_start', 'brace_start', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'function_brace_start', 'block_brace_start', 'property_start', 'condition_start', 'parentheses_start', 'function_parentheses_start'],
+  conditions: ['INITIAL', 'identifier_start', 'property_start', 'brace_start', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'function_brace_start', 'block_brace_start', 'property_start', 'condition_start', 'parentheses_start', 'function_parentheses_start', 'jsxtag_start', 'jsxtag_closing', 'jsxtagname_start', 'jsxtag_attr_start', 'jsxtag_attr_value_start'],
   rule: '_',
   handler: `
     if (this.topState() === 'property_start') {

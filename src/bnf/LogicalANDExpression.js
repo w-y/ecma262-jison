@@ -3,7 +3,7 @@ module.exports = {
   name: 'LogicalANDExpression',
   rules: [
     'BitwiseORExpression',
-    'LogicalANDExpression && BitwiseORExpression',
+    //'LogicalANDExpression && BitwiseORExpression',
   ],
   handlers: [
     '$$ = $1',

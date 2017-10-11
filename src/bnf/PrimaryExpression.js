@@ -2,18 +2,19 @@ module.exports = {
   conditions: [''],
   name: 'PrimaryExpression',
   rules: [
-    'this',
+    //'this',
     'IdentifierReference',
     'Literal',
-    'ArrayLiteral',
+    'JSXElement',
+    //'ArrayLiteral',
     'ObjectLiteral',
-    'CoverParenthesizedExpressionAndArrowParameterList',
+    /*'CoverParenthesizedExpressionAndArrowParameterList',
     'FunctionExpression',
     'TemplateLiteral',
-    'RegularExpressionLiteral',
+    'RegularExpressionLiteral',*/
   ],
   handlers: [
-    '$$ = new (require(\'./ast/ThisExpressionNode\'))({ loc: this._$, yy });',
+    // '$$ = new (require(\'./ast/ThisExpressionNode\'))({ loc: this._$, yy });',
     '$$ = $1;',
     '$$ = $1;',
     '$$ = $1;',
@@ -32,5 +33,6 @@ module.exports = {
     require('./FunctionExpression'),
     require('./TemplateLiteral'),
     require('./RegularExpressionLiteral'),
+    require('./JSXElement'),
   ],
 };

@@ -65,7 +65,7 @@ exports.greaterThan = {
   conditions: ['*'],
   rule: '>',
   handler: `
-    return require('./util').parseOperator.call(this, this.match, 'RelationalOperator');
+    return require('./util').parseOperator.call(this, this.match, '>');
   `,
 };
 
@@ -73,7 +73,7 @@ exports.lessThan = {
   conditions: ['*'],
   rule: '<',
   handler: `
-    return require('./util').parseOperator.call(this, this.match, 'RelationalOperator');
+    return require('./util').parseOperator.call(this, this.match, '<');
   `,
 };
 
@@ -398,6 +398,14 @@ exports.rightParenthesis = {
 };
 
 exports.leftBrace = [
+  {
+    conditions: ['jsxtag_attr_start'],
+    rule: '\\{',
+    handler: `
+      debugger;
+      return require('./util').parseOperator.call(this, this.match, '{');
+    `,
+  },
   {
     conditions: ['brace_start'],
     rule: '\\{',

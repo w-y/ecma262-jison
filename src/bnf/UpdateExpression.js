@@ -3,8 +3,8 @@ module.exports = {
   name: 'UpdateExpression',
   rules: [
     'LeftHandSideExpression',
-    'LeftHandSideExpression UpdateOperator',
-    'UpdateOperator LeftHandSideExpression',
+    //'LeftHandSideExpression UpdateOperator',
+    //'UpdateOperator LeftHandSideExpression',
   ],
   handlers: [
     '$$ = $1',

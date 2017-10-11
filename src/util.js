@@ -182,6 +182,29 @@ function isDivAhead(state, match) {
 }
 exports.isDivAhead = isDivAhead;
 
+/*function isLessThanAhead(state, match) {
+  if (state === 'jsx_start') {
+    return false;
+  }
+  if (match === ')') {
+    return true;
+  }
+  if (match === ']') {
+    return true;
+  }
+  if (match === '}') {
+    return true;
+  }
+  if (state === 'identifier_start' ||
+      state === 'decimal_digit_start' ||
+      state === 'decimal_digit_dot_start' ||
+      state === 'regexp_flag_start' ||
+      state === 'regexp_noflag') {
+    return true;
+  }
+  return false;
+}*/
+
 function parseKeyword(keyword, alias) {
   let res = '';
   switch (this.topState()) {
@@ -284,6 +307,7 @@ exports.parseKeyword = parseKeyword;
 
 function parseOperator(operator, alias) {
   let isDiv = false;
+  // let isLessThan = false;
 
   const { ch, index: i } = lookAhead(this.matches.input,
     this.matches.index + this.match.length, true, true, this.topState());
@@ -355,6 +379,10 @@ function parseOperator(operator, alias) {
       break;
   }
 
+  /*if (ch === '<') {
+    isLessThan = isLessThanAhead(this.topState(), this.match);
+  }*/
+
   if (this.match === '(') {
     if (this.topState() === 'function_parentheses_start') {
     } else {
@@ -411,8 +439,12 @@ function parseOperator(operator, alias) {
     }
   } else if (this.match === ';') {
   } else if (this.match === '}') {
-    // `${foo}`
-    if (this.topState() === 'template_string_head_start') {
+    if (this.topState() === 'jsxtag_attr_start') {
+      this.popState();
+      this.popState();
+      res = '}';
+    } else if (this.topState() === 'template_string_head_start') {
+      // `${foo}`
       this.popState();
       res = 'RIGHT_TEMPLATE_BRACE';
     } else if (this.topState() === 'function_brace_start') {
@@ -430,7 +462,20 @@ function parseOperator(operator, alias) {
       // res = '}';
     }
   } else if (this.match === '{') {
-    if (this.topState() === 'template_string_head_start') {
+    if (this.topState() === 'jsxtag_attr_value_start') {
+      // <a attr={{}} >
+      this.begin('jsxtag_attr_start');
+      if (/^{/.test(input.substring(i))) {
+        this.begin('brace_start');
+      }
+      return '{';
+    /*} else if (this.topState() === 'jsxtag_attr_start') {
+      this.begin('brace_start');
+      res = 'BRACE_START';*/
+    } else if (this.topState() === 'jsxtag_start') {
+      this.begin('jsxtag_attr_start');
+      res = '{'; 
+    } else if (this.topState() === 'template_string_head_start') {
       // look behind for ')'
       const { ch: prevCh } = lookBehind(this.matched, 1, true, true);
       // `${function() {}}` the 2nd { should be the start of a block
@@ -454,14 +499,48 @@ function parseOperator(operator, alias) {
       // here { should be start of a block
       this.begin('block_brace_start');
     }
+  } else if (this.match === '=' && this.topState() === 'jsxtag_start') {
+    this.begin('jsxtag_attr_value_start');
   } else if (/^{/.test(input.substring(i))) {
-    this.begin('brace_start');
+    if (this.topState() === 'jsxtag_start') {
+    } else {
+      this.begin('brace_start');
+    }
   } else if (/^function/.test(input.substring(i))) {
     this.begin('function_start');
-  }
+  } else if (this.match === '<') {
+    //if (this.topState() === 'lessthan_start') {
+      // res = 'RelationalOperator';
+      // this.popState();
+    //} else if (this.topState() === 'jsx_start') {
+    // this.begin('jsxtag_start');
+    //} else {
+      // this.begin('jsx_start');
+      // this.begin('jsxtag_start');
+    //}
+    this.begin('jsx_start');
+    this.begin('jsxtag_start');
+    this.begin('jsxtagname_start');
+  } else if (this.match === '>') {
+    debugger;
+    if (this.topState() === 'jsxtag_start') {
+      this.popState();
+    } else if (this.topState() === 'jsxtag_closing') {
+      this.popState(); // tag close
+      this.popState(); // end tag
+    } else if (this.topState() === 'jsxtagname_start') {
+      this.popState();
+      this.popState();
+    }
+  } 
   if (isDiv) {
     this.begin('div_start');
   }
+
+  console.log(this.conditionStack);
+  /*if (isLessThan) {
+    this.begin('lessthan_start');
+  }*/
   if (res) { return res; }
 
   return undefined;
@@ -547,6 +626,7 @@ exports.parseEscapeStringCharacter = parseEscapeStringCharacter;
 
 function parseToken(token, alias) {
   let isDiv = false;
+  debugger;
 
   const { ch } = lookAhead(this.matches.input,
     this.matches.index + this.match.length, true, true, this.topState());
@@ -564,6 +644,12 @@ function parseToken(token, alias) {
       return 'TemplateChar';
     case 'identifier_start':
       this.popState();
+      if (this.topState() === 'jsxtagname_start') {
+        this.popState();
+        if (ch !== '>') {
+          return 'JSXSeperator';
+        }
+      }
       break;
     case 'decimal_digit_start':
       this.popState();
@@ -619,6 +705,7 @@ function parseToken(token, alias) {
       }
       break;
   }
+  console.log(this.conditionStack);
   if (isDiv) {
     this.begin('div_start');
   }
@@ -776,3 +863,39 @@ function parseRegexpCharacters(ch) {
 }
 
 exports.parseRegexpCharacters = parseRegexpCharacters;
+
+function parseJSXString(ch) {
+  const isSingleQuote = ch === 'JSXSingleStringCharacter';
+  const isDoubleQuote = ch === 'JSXDoubleStringCharacter';
+
+  if (this.match === '\u000A' || this.match === '\u000D') {
+    throw new Error('SyntaxError: Invalid or unexpected token');
+  } else if (this.match === '\\') {
+    if (isSingleQuote) {
+      this.begin('jsx_single_escape_string');
+    }
+    if (isDoubleQuote) {
+      this.begin('jsx_double_escape_string');
+    }
+    return 'JSXEscapeSequenceStart';
+  } else if (this.match === '\'' || this.match === '"') {
+    if (this.match === '\'') {
+      if (this.topState() === 'jsx_single_string_start') {
+        this.popState();
+        this.popState(); // end attribute
+        return 'JSXSingleQuoteEnd';
+      }
+    }
+    if (this.match === '"') {
+      if (this.topState() === 'jsx_double_string_start') {
+        this.popState();
+        this.popState(); // end attribute
+        return 'JSXDoubleQuoteEnd';
+      }
+    }
+  }
+  return ch;
+}
+
+exports.parseJSXString = parseJSXString;
+
