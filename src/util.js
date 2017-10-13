@@ -253,7 +253,10 @@ function parseKeyword(keyword, alias) {
       this.topState() === 'function_brace_start' ||
       this.topState() === 'block_brace_start' ||
       this.topState() === 'parentheses_start' ||
-      this.topState() === 'function_parentheses_start') {
+      this.topState() === 'function_parentheses_start' ||
+      this.topState() === 'jsx_child_block_start' ||
+      this.topState() === 'jsx_spread_attr_start'
+    ) {
     const idContinueReg = require('unicode-6.3.0/Binary_Property/ID_Continue/regex');
     if (idContinueReg.test(input[curr])) {
       this.begin('identifier_start');
@@ -443,6 +446,12 @@ function parseOperator(operator, alias) {
       this.popState();
       this.popState();
       res = '}';
+    } else if (this.topState() === 'jsx_spread_attr_start') {
+      this.popState();
+      res = '}';
+    } else if (this.topState() === 'jsx_child_block_start') {
+      this.popState();
+      res = '}';
     } else if (this.topState() === 'template_string_head_start') {
       // `${foo}`
       this.popState();
@@ -475,7 +484,7 @@ function parseOperator(operator, alias) {
       return 'BRACE_START';
     } else if (this.topState() === 'jsxtag_start') {
       this.begin('jsxtag_attr_start');
-      res = '{'; 
+      return '{'; 
     } else if (this.topState() === 'template_string_head_start') {
       // look behind for ')'
       const { ch: prevCh } = lookBehind(this.matched, 1, true, true);
@@ -502,6 +511,17 @@ function parseOperator(operator, alias) {
     }
   } else if (this.match === '=' && this.topState() === 'jsxtag_start') {
     this.begin('jsxtag_attr_value_start');
+  } else if (this.match === '>') {
+    debugger;
+    if (this.topState() === 'jsxtag_start') {
+      this.popState();
+    } else if (this.topState() === 'jsxtag_closing') {
+      this.popState(); // tag close
+      this.popState(); // end tag
+    } else if (this.topState() === 'jsxtagname_start') {
+      this.popState();
+      this.popState();
+    }
   } else if (/^{/.test(input.substring(i))) {
     debugger;
     if (this.topState() === 'jsxtag_start') {
@@ -528,17 +548,7 @@ function parseOperator(operator, alias) {
     this.begin('jsx_start');
     this.begin('jsxtag_start');
     this.begin('jsxtagname_start');
-  } else if (this.match === '>') {
-    if (this.topState() === 'jsxtag_start') {
-      this.popState();
-    } else if (this.topState() === 'jsxtag_closing') {
-      this.popState(); // tag close
-      this.popState(); // end tag
-    } else if (this.topState() === 'jsxtagname_start') {
-      this.popState();
-      this.popState();
-    }
-  } 
+  }   
   if (isDiv) {
     this.begin('div_start');
   }
@@ -639,9 +649,11 @@ function parseToken(token, alias) {
   if (ch === '/') {
     isDiv = isDivAhead(this.topState(), this.match);
   }
-  debugger;
 
   switch (this.topState()) {
+    case 'jsxtag_start':
+      debugger;
+      break;
     case 'single_string_start':
       return 'SingleStringCharacter';
     case 'double_string_start':
@@ -885,6 +897,7 @@ function parseJSXString(ch) {
     }
     return 'JSXEscapeSequenceStart';
   } else if (this.match === '\'' || this.match === '"') {
+    debugger;
     if (this.match === '\'') {
       if (this.topState() === 'jsx_single_string_start') {
         this.popState();

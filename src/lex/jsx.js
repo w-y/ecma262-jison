@@ -71,6 +71,31 @@ exports.JSXChildBlockStart = JSXChildBlockStart;
 
 exports.JSXChildBlockEnd = JSXChildBlockEnd;
 
+const JSXSpreadAttributeStart = {
+  conditions: ['jsxtag_start', 'jsxtagname_start'],
+  rule: '{',
+  handler: `
+    if (this.topState() === 'jsxtagname_start') {
+      this.popState();
+    }
+    this.begin('jsx_spread_attr_start');
+    return '{';
+  `,
+};
+
+const JSXSpreadAttributeEnd = {
+  conditions: ['jsx_spread_attr_start'],
+  rule: '}',
+  handler: `
+    this.popState();
+    return '}';
+  `,
+};
+
+exports.JSXSpreadAttributeStart = JSXSpreadAttributeStart;
+
+exports.JSXSpreadAttributeEnd = JSXSpreadAttributeEnd;
+
 const JSXSeperator = {
   conditions: ['jsxtag_start'],
   rule: '[\\u0009|\\u0020]+',
@@ -81,6 +106,10 @@ const JSXSeperator = {
     // <div a={a} b={b} >
     // NOTICE: ignore empty chars before '>'
     if (ch === '>') {
+      return '';
+    }
+    // <div a={a} b={b} />
+    if (ch === '/') {
       return '';
     }
 

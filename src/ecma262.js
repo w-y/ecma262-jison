@@ -26,6 +26,9 @@ const {
 } = require('./lex/regexp');
 
 const {
+  JSXSpreadAttributeStart,
+  JSXSpreadAttributeEnd,
+
   JSXChildBlockStart,
   JSXChildBlockEnd,
   JSXSingleString, JSXDoubleString,
@@ -172,6 +175,8 @@ exports.grammar = {
       jsx_single_escape_string: 'jsx_single_escape_string',
       jsx_double_escape_string: 'jsx_double_escape_string',
       jsx_child_block_start: 'jsx_child_block_start',
+
+      jsx_spread_attr_start: 'jsx_spread_attr_start',
     },
     rules: transLex([
       JSXSingleString,
@@ -192,6 +197,8 @@ exports.grammar = {
 
       // JSXSelfClosingOpening,
       JSXSelfClosing,
+      JSXSpreadAttributeStart,
+      JSXSpreadAttributeEnd,
       JSXChildBlockStart,
       JSXChildBlockEnd,
 

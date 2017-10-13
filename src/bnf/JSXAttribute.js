@@ -2,10 +2,11 @@ module.exports = {
   conditions: [''],
   name: 'JSXAttribute',
   rules: [
-    'JSXSeperator JSXAttributeName = JSXAttributeValue',
+    // 'JSXSeperator JSXAttributeName = JSXAttributeValue',
+    'JSXAttributeName = JSXAttributeValue',
   ],
   handlers: [
-    '$$ = $1 + $2 + $3;',
+    '$$ = $1 + $2;',
   ],
   subRules: [
     require('./JSXAttributeName'),
