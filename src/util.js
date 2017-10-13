@@ -484,7 +484,7 @@ function parseOperator(operator, alias) {
       return 'BRACE_START';
     } else if (this.topState() === 'jsxtag_start') {
       this.begin('jsxtag_attr_start');
-      return '{'; 
+      return '{';
     } else if (this.topState() === 'template_string_head_start') {
       // look behind for ')'
       const { ch: prevCh } = lookBehind(this.matched, 1, true, true);
@@ -526,7 +526,7 @@ function parseOperator(operator, alias) {
     debugger;
     if (this.topState() === 'jsxtag_start') {
       // <a attr={
-    } else if (this.topState() === 'jsxtagname_start') { 
+    } else if (this.topState() === 'jsxtagname_start') {
       // <a>{
       this.popState();
       this.popState();
@@ -548,7 +548,7 @@ function parseOperator(operator, alias) {
     this.begin('jsx_start');
     this.begin('jsxtag_start');
     this.begin('jsxtagname_start');
-  }   
+  }
   if (isDiv) {
     this.begin('div_start');
   }
@@ -583,12 +583,13 @@ function parseIdentifier() {
   if (this.topState() === 'identifier_start') {
     return 'UnicodeIDContinue';
   }
-  let res = 'UnicodeIDStart';  
-
-  this.begin('identifier_start');
+  let res = 'UnicodeIDStart';
   if (this.topState() === 'jsxtag_start' || this.topState() === 'jsxtagname_start' || this.topState() === 'jsxtag_closing') {
     res = 'JSXUnicodeIDStart';
   }
+
+  this.begin('identifier_start');
+
   return res;
 }
 
