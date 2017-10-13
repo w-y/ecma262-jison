@@ -12,8 +12,14 @@ const unicodeIDStart = {
     if (this.topState() === 'property_start') {
       this.popState();
     }
+    let res = 'UnicodeIDStart';
+
+    if (this.topState() === 'jsxtag_start' || this.topState() === 'jsxtagname_start' || this.topState() === 'jsxtag_closing') {
+      res = 'JSXUnicodeIDStart';
+    }
+
     this.begin('identifier_start');
-    return 'UnicodeIDStart';
+    return res;
   `,
 };
 
@@ -26,7 +32,7 @@ const unicodeIDContinue = {
 };
 
 const unicodeEscapeSequenceStart = {
-  conditions: ['INITIAL', 'identifier_start', 'property_start'],
+  conditions: ['INITIAL', 'identifier_start', 'brace_start', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'function_brace_start', 'block_brace_start', 'property_start', 'condition_start', 'parentheses_start', 'function_parentheses_start', 'jsxtag_start', 'jsxtag_closing', 'jsxtagname_start', 'jsxtag_attr_start', 'jsxtag_attr_value_start', 'jsx_child_block_start', 'jsx_spread_attr_start'],
   rule: '\\\\u|\\\\U',
   handler: `
     if (this.topState() === 'property_start') {
@@ -37,9 +43,16 @@ const unicodeEscapeSequenceStart = {
       this.begin('identifier_start_unicode');
       return 'UnicodeEscapeSequenceContinueStart'
     } else {
+      let res = 'UnicodeEscapeSequenceStart';
+
+      if (this.topState() === 'jsxtag_start' || this.topState() === 'jsxtagname_start' || this.topState() === 'jsxtag_closing') {
+        res = 'JSXUnicodeEscapeSequenceStart';
+      }
+
       this.begin('identifier_start');
       this.begin('identifier_start_unicode');
-      return 'UnicodeEscapeSequenceStart';
+
+      return res;
     }
   `,
 };

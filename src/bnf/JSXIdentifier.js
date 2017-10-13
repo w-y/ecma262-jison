@@ -2,7 +2,7 @@ module.exports = {
   conditions: [''],
   name: 'JSXIdentifier',
   rules: [
-    'IdentifierStart',
+    'JSXIdentifierStart',
     'JSXIdentifier IdentifierPart',
   ],
   handlers: [
@@ -10,7 +10,7 @@ module.exports = {
     '$$ = $1 + $2.value;',
   ],
   subRules: [
-    require('./IdentifierStart'),
+    require('./JSXIdentifierStart'),
     require('./IdentifierPart'),
   ],
 };

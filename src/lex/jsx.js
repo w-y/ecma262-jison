@@ -113,7 +113,7 @@ const JSXSeperator = {
       return '';
     }
 
-    return 'JSXSeperator';
+    return '';
   `,
 };
 

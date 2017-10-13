@@ -24,10 +24,6 @@ const RegexpStart = {
       this.popState();
       return 'MultiplicativeOperator';
     } else {
-      /*if (this.topState() === 'jsxtag_start') {
-        this.begin('jsxtag_closing')
-        return '/';
-      }*/
       if (this.topState() === 'template_string_start') {
         return 'TemplateChar';
       }

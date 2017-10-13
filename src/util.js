@@ -583,8 +583,13 @@ function parseIdentifier() {
   if (this.topState() === 'identifier_start') {
     return 'UnicodeIDContinue';
   }
+  let res = 'UnicodeIDStart';  
+
   this.begin('identifier_start');
-  return 'UnicodeIDStart';
+  if (this.topState() === 'jsxtag_start' || this.topState() === 'jsxtagname_start' || this.topState() === 'jsxtag_closing') {
+    res = 'JSXUnicodeIDStart';
+  }
+  return res;
 }
 
 exports.parseIdentifier = parseIdentifier;
