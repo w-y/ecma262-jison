@@ -670,9 +670,6 @@ function parseToken(token, alias) {
       this.popState();
       if (this.topState() === 'jsxtagname_start') {
         this.popState();
-        if (ch !== '>') {
-          return 'JSXSeperator';
-        }
       }
       break;
     case 'decimal_digit_start':

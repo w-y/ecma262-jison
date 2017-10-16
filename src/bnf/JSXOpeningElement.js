@@ -4,7 +4,7 @@ module.exports = {
   rules: [
     '< JSXElementName >',
     '< JSXElementName JSXAttributes >',
-    '< JSXElementName JSXSeperator JSXAttributes >',
+    // '< JSXElementName JSXSeperator JSXAttributes >',
   ],
   handlers: [
     '$$ = $1 + $2 + $3;',
