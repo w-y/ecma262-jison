@@ -6,8 +6,8 @@ module.exports = {
     'JSXChild JSXChildren',
   ],
   handlers: [
-    '$$ = $1;',
-    '$$ = $1 + $2;',
+    '$$ = [$1];',
+    '$$ = [$1].concat($2);',
   ],
   subRules: [
     require('./JSXChild'),

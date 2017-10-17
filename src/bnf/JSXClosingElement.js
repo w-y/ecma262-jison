@@ -5,7 +5,7 @@ module.exports = {
     'JSXClosing JSXElementName >',
   ],
   handlers: [
-    '$$ = $1 + $2 + $3;',
+    `$$ = new (require('./ast/JSXElement').JSXClosingElementNode)($2, [], false, { loc: this._$, yy });`,
   ],
   subRules: [
     require('./JSXElementName'),

@@ -8,8 +8,8 @@ module.exports = {
   ],
   handlers: [
     '$$ = $1;',
-    '$$ = $1 + $2;',
-    '$$ = $1 + $2 + $3;',
+    `$$ = new (require('./ast/JSXElement').JSXElementNode)($1, $2, null, { loc: this._$, yy });`,
+    `$$ = new (require('./ast/JSXElement').JSXElementNode)($1, $3, $2, { loc: this._$, yy });`,
   ],
   subRules: [
     require('./JSXSelfClosingElement'),

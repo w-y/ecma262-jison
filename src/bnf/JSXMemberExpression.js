@@ -6,8 +6,8 @@ module.exports = {
     'JSXMemberExpression . JSXIdentifier',
   ],
   handlers: [
-    '$$ = $1 + $2 + $3;',
-    '$$ = $1 + $2 + $3;',
+    `$$ = new (require('./ast/JSXElement').JSXMemberExpressionNode)($1, $2, { loc: this._$, yy });`,
+    `$$ = new (require('./ast/JSXElement').JSXMemberExpressionNode)($1, $2, { loc: this._$, yy });`,
   ],
   subRules: [
     require('./JSXIdentifier'),

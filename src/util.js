@@ -471,7 +471,6 @@ function parseOperator(operator, alias) {
       // res = '}';
     }
   } else if (this.match === '{') {
-    debugger;
     if (this.topState() === 'jsxtag_attr_value_start') {
       // <a attr={{}} >
       this.begin('jsxtag_attr_start');
@@ -512,7 +511,6 @@ function parseOperator(operator, alias) {
   } else if (this.match === '=' && this.topState() === 'jsxtag_start') {
     this.begin('jsxtag_attr_value_start');
   } else if (this.match === '>') {
-    debugger;
     if (this.topState() === 'jsxtag_start') {
       this.popState();
     } else if (this.topState() === 'jsxtag_closing') {
@@ -523,7 +521,6 @@ function parseOperator(operator, alias) {
       this.popState();
     }
   } else if (/^{/.test(input.substring(i))) {
-    debugger;
     if (this.topState() === 'jsxtag_start') {
       // <a attr={
     } else if (this.topState() === 'jsxtagname_start') {
@@ -658,7 +655,6 @@ function parseToken(token, alias) {
 
   switch (this.topState()) {
     case 'jsxtag_start':
-      debugger;
       break;
     case 'single_string_start':
       return 'SingleStringCharacter';
@@ -900,7 +896,6 @@ function parseJSXString(ch) {
     }
     return 'JSXEscapeSequenceStart';
   } else if (this.match === '\'' || this.match === '"') {
-    debugger;
     if (this.match === '\'') {
       if (this.topState() === 'jsx_single_string_start') {
         this.popState();

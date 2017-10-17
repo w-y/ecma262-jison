@@ -4,12 +4,10 @@ module.exports = {
   rules: [
     '< JSXElementName >',
     '< JSXElementName JSXAttributes >',
-    // '< JSXElementName JSXSeperator JSXAttributes >',
   ],
   handlers: [
-    '$$ = $1 + $2 + $3;',
-    '$$ = $1 + $2 + $3;',
-    '$$ = $1 + $2 + $3 + $4;',
+    `$$ = new (require('./ast/JSXElement').JSXOpeningElementNode)($2, [], false, { loc: this._$, yy });`,
+    `$$ = new (require('./ast/JSXElement').JSXOpeningElementNode)($2, $3, false, { loc: this._$, yy });`,
   ],
   subRules: [
     require('./JSXElementName'),

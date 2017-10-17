@@ -2,12 +2,10 @@ module.exports = {
   conditions: [''],
   name: 'JSXSpreadAttribute',
   rules: [
-    // 'JSXSeperator { ... AssignmentExpression }',
     '{ ... AssignmentExpression }',
   ],
   handlers: [
-    '$$ = $1;',
-    '$$ = $1;',
+    `$$ = new (require('./ast/JSXElement').JSXSpreadAttributeNode)($3, { loc: this._$, yy });`
   ],
   subRules: [
     require('./AssignmentExpression'),

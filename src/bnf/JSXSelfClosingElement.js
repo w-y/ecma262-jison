@@ -3,15 +3,11 @@ module.exports = {
   name: 'JSXSelfClosingElement',
   rules: [
     '< JSXElementName JSXSelfClosing',
-    // '< JSXElementName JSXSeperator JSXSelfClosing',
     '< JSXElementName JSXAttributes JSXSelfClosing',
-    // '< JSXElementName JSXSeperator JSXAttributes JSXSelfClosing',
   ],
   handlers: [
-    '$$ = $1 + $2 + $3;',
-    '$$ = $1 + $2 + $3 + $4;',
-    '$$ = $1 + $2 + $3 + $4;',
-    '$$ = $1 + $2 + $3 + $4;',
+    `$$ = new (require('./ast/JSXElement').JSXOpeningElementNode)($2, [], true, { loc: this._$, yy });`,
+    `$$ = new (require('./ast/JSXElement').JSXOpeningElementNode)($2, $3, true, { loc: this._$, yy });`,
   ],
   subRules: [
     require('./JSXElementName'),
