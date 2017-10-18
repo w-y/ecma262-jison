@@ -9,7 +9,7 @@ module.exports = {
   handlers: [
     '$$ = $1;',
     '$$ = $1;',
-    `$$ = new (require('./ast/JSXElement').JSXExpressionContainerNode)($1, $3, $2, { loc: this._$, yy });`,
+    `$$ = new (require('./ast/JSXElement').JSXExpressionContainerNode)($2, { loc: this._$, yy });`,
   ],
   subRules: [
     require('./JSXText'),

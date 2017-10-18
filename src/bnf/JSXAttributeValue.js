@@ -8,9 +8,9 @@ module.exports = {
     'JSXElement',
   ],
   handlers: [
-    '$$ = $1 + $2 +$3;',
-    '$$ = $1 + $2 +$3;',
-    '$$ = $1 + $2 +$3;',
+    `$$ = new (require('./ast/Literal').StringLiteralNode)($1 + $2 + $3, { raw: $1, loc: this._$, yy });`,
+    `$$ = new (require('./ast/Literal').StringLiteralNode)($1 + $2 + $3, { raw: $1, loc: this._$, yy });`,
+    '$$ = $2;',
     '$$ = $1;',
   ],
   subRules: [
