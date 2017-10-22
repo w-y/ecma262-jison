@@ -3,7 +3,7 @@ module.exports = {
   name: 'AdditiveExpression',
   rules: [
     'MultiplicativeExpression',
-    // 'AdditiveExpression AdditiveOperator MultiplicativeExpression',
+    'AdditiveExpression AdditiveOperator MultiplicativeExpression',
   ],
   handlers: [
     '$$ = $1',

@@ -3,7 +3,7 @@ module.exports = {
   name: 'Expression',
   rules: [
     'AssignmentExpression',
-    // 'Expression , AssignmentExpression',
+    'Expression , AssignmentExpression',
   ],
   handlers: [
     '$$ = $1;',

@@ -3,11 +3,11 @@ module.exports = {
   name: 'LeftHandSideExpression',
   rules: [
     'NewExpression',
-    //'CallExpression',
+    'CallExpression',
   ],
   handlers: [
     '$$ = $1;',
-    //'$$ = $1;',
+    '$$ = $1;',
   ],
   subRules: [
     require('./NewExpression'),

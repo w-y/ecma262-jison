@@ -6,7 +6,7 @@ module.exports = {
     'ExpressionStatement',
     'VariableStatement',
     'BlockStatement',
-    /*'LabelledStatement',
+    'LabelledStatement',
     'IfStatement',
     'BreakableStatement',
     'ContinueStatement',
@@ -14,7 +14,7 @@ module.exports = {
     'WithStatement',
     'ThrowStatement',
     'DebuggerStatement',
-    'TryStatement',*/
+    'TryStatement',
   ],
   handlers: [
     '$$ = $1;',

@@ -7,8 +7,10 @@ const JSXTextCharacter = {
 
 exports.JSXTextCharacter = JSXTextCharacter;
 
+// />/ is regular expression
+// <a a/ >
 const JSXSelfClosing = {
-  conditions: ['*'],
+  conditions: ['jsxtag_start', 'identifier_start'],
   rule: '/[\\u0009|\\u0020]*>',
   handler: `
 
@@ -16,11 +18,17 @@ const JSXSelfClosing = {
       require('./lex/comment').onComment(this, this.match);
       return '';
     }
+
     // <a/>
     if (this.topState() === 'identifier_start') {
       this.popState();
     }
-    this.popState();
+
+    // <a/> or <a />
+    if (this.topState() === 'jsxtagname_start') {
+      this.popState(); //jsxtagname_start
+    }
+
     this.popState(); //jsxtag_start
     this.popState(); //jsx_start
 
@@ -41,7 +49,6 @@ const JSXTextCharacters = {
   conditions: ['jsx_start'],
   rule: '[^{<>}]+',
   handler: `
-    debugger;
     return 'JSXTextCharacters';
   `,
 };
@@ -61,7 +68,6 @@ const JSXChildBlockEnd = {
   conditions: ['jsx_child_block_start'],
   rule: '}',
   handler: `
-    debugger;
     this.popState();
     return '}';
   `,
@@ -204,22 +210,6 @@ const JSXDoubleQuoteStart = {
     return 'JSXDoubleQuoteStart';
   `,
 };
-
-/*exports.singleString = [
-  SingleStringCharacter,
-  SingleStringCharacterLineTerminator,
-  SingleStringEscapeStart,
-  SingleStringEscape,
-  SingleQuoteStart,
-];
-
-exports.doubleString = [
-  DoubleStringCharacter,
-  DoubleStringCharacterLineTerminator,
-  DoubleStringEscapeStart,
-  DoubleStringEscape,
-  DoubleQuoteStart,
-];*/
 
 exports.JSXSingleString = [
   JSXSingleStringCharacter,

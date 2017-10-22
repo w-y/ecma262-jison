@@ -157,11 +157,12 @@ exports.grammar = {
       regexp_flag_start: 'regexp_flag_start',
       regexp_noflag: 'regexp_noflag',
       div_start: 'div_start',
-      // lessthan_start: 'lessthan_start',
+      lessthan_start: 'lessthan_start',
       property_start: 'property_start',
       hex_start: 'hex_start',
       exponent_start: 'exponent_start',
       condition_start: 'condition_start',
+
       jsxtag_start: 'jsxtag_start',
       jsxtagname_start: 'jsxtagname_start',
       jsx_start: 'jsx_start',

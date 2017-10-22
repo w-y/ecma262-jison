@@ -3,7 +3,7 @@ module.exports = {
   name: 'ConditionalExpression',
   rules: [
     'LogicalORExpression',
-    // 'LogicalORExpression ? AssignmentExpression : AssignmentExpression',
+    'LogicalORExpression ? AssignmentExpression : AssignmentExpression',
   ],
   handlers: [
     '$$ = $1;',

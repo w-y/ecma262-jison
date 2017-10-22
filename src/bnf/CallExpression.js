@@ -7,6 +7,7 @@ module.exports = {
     'CallExpression Arguments',
     'CallExpression [ Expression_In ]',
     'CallExpression . IdentifierName',
+    'CallExpression TemplateLiteral',
   ],
   handlers: [
     '$$ = new (require(\'./ast/LeftHandSideExpression\').CallExpressionNode)($1, $2, { loc: this._$, yy })',
@@ -14,6 +15,7 @@ module.exports = {
     '$$ = new (require(\'./ast/LeftHandSideExpression\').CallExpressionNode)($1, [], { loc: this._$, yy })',
     '$$ = new (require(\'./ast/LeftHandSideExpression\').MemberExpressionNode)($1, $3, true, { loc: this._$, yy })',
     '$$ = new (require(\'./ast/LeftHandSideExpression\').MemberExpressionNode)($1, $3, false, { loc: this._$, yy })',
+    '$$ = new (require(\'./ast/LeftHandSideExpression\').CallExpressionNode)($1, $2, { loc: this._$, yy })',
   ],
   subRules: [
     require('./MemberExpression'),
@@ -22,5 +24,6 @@ module.exports = {
     require('./Arguments'),
     require('./Expression_In'),
     require('./IdentifierName'),
+    require('./TemplateLiteral'),
   ],
 };

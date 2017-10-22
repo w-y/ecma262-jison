@@ -3,7 +3,7 @@ module.exports = {
   name: 'ExponentiationExpression',
   rules: [
     'UnaryExpression',
-    //'UpdateExpression ** ExponentiationExpression',
+    'UpdateExpression ** ExponentiationExpression',
   ],
   handlers: [
     '$$ = $1;',

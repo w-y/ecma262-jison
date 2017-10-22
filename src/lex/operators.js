@@ -402,7 +402,6 @@ exports.leftBrace = [
     conditions: ['jsxtag_attr_start'],
     rule: '\\{',
     handler: `
-      debugger;
       return require('./util').parseOperator.call(this, this.match, '{');
     `,
   },

@@ -3,7 +3,7 @@ module.exports = {
   name: 'EqualityExpression',
   rules: [
     'RelationalExpression',
-    //'EqualityExpression EqualityOperator RelationalExpression',
+    'EqualityExpression EqualityOperator RelationalExpression',
   ],
   handlers: [
     '$$ = $1;',

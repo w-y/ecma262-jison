@@ -1,2 +1,5 @@
 parser.js
 mock/
+parser*.*
+p*.js
+test*.js

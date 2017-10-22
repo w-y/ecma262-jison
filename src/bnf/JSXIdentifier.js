@@ -19,8 +19,6 @@ module.exports = {
       $1.lastLine = $2.loc.last_line;
       $$ = $1;
     `,
-    // '$$ = $1;',
-    // '$$ = $1 + $2.value;',
   ],
   subRules: [
     require('./JSXIdentifierStart'),

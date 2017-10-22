@@ -140,7 +140,10 @@ function lookBehind(source, offset, ignoreWhitespace, ignoreLineTerminator) {
 exports.lookBehind = lookBehind;
 
 // check if next '/' is a div operator or start of a regular expression
-function isDivAhead(state, match) {
+function isDivAhead(state, currState, match) {
+  if (currState === 'jsxtag_start') {
+    return false;
+  }
   if (state === 'single_line_comment_start' || state === 'multi_line_comment_start') {
     return false;
   }
@@ -155,6 +158,10 @@ function isDivAhead(state, match) {
     return false;
   }
   if (state === 'function_brace_start' && match === '}') {
+    return false;
+  }
+  // <a attr={{}} />
+  if (currState === 'jsxtag_attr_start' && match === '}') {
     return false;
   }
   if (match === ']' ||
@@ -182,8 +189,11 @@ function isDivAhead(state, match) {
 }
 exports.isDivAhead = isDivAhead;
 
-/*function isLessThanAhead(state, match) {
+function isLessThanAhead(state, match) {
   if (state === 'jsx_start') {
+    return false;
+  }
+  if (state === 'jsxtag_start') {
     return false;
   }
   if (match === ')') {
@@ -192,22 +202,19 @@ exports.isDivAhead = isDivAhead;
   if (match === ']') {
     return true;
   }
-  if (match === '}') {
-    return true;
-  }
   if (state === 'identifier_start' ||
       state === 'decimal_digit_start' ||
-      state === 'decimal_digit_dot_start' ||
-      state === 'regexp_flag_start' ||
-      state === 'regexp_noflag') {
+      state === 'decimal_digit_dot_start') {
     return true;
   }
   return false;
-}*/
+}
 
 function parseKeyword(keyword, alias) {
   let res = '';
-  switch (this.topState()) {
+  const oldState = this.topState();
+
+  switch (oldState) {
     case 'single_string_start':
       res = 'SingleStringCharacter';
       break;
@@ -240,7 +247,7 @@ function parseKeyword(keyword, alias) {
   const input = this.matches.input;
   let isDiv = false;
   if (ch === '/') {
-    isDiv = isDivAhead(this.topState(), this.match);
+    isDiv = isDivAhead(oldState, this.topState(), this.match);
   }
   // look ahead for id_continue
 
@@ -310,16 +317,22 @@ exports.parseKeyword = parseKeyword;
 
 function parseOperator(operator, alias) {
   let isDiv = false;
-  // let isLessThan = false;
+  let isLessThan = false;
 
   const { ch, index: i } = lookAhead(this.matches.input,
     this.matches.index + this.match.length, true, true, this.topState());
 
   const input = this.matches.input;
 
-  if (ch === '/') {
-    isDiv = isDivAhead(this.topState(), this.match);
-  }
+  /*if (ch === '/') {
+    isDiv = isDivAhead(this.topState(), this.match, oldState);
+  }*/
+
+  /*if (ch === '<') {
+    isLessThan = isLessThanAhead(this.topState(), this.match);
+  }*/
+
+  const oldState = this.topState();
 
   let res = '';
 
@@ -382,9 +395,16 @@ function parseOperator(operator, alias) {
       break;
   }
 
-  /*if (ch === '<') {
-    isLessThan = isLessThanAhead(this.topState(), this.match);
-  }*/
+  if (ch === '/') {
+    isDiv = isDivAhead(oldState, this.topState(), this.match);
+  }
+
+  if (ch === '<') {
+    // ignore <=  <<
+    if (this.matches.input[i + 1] !== '=' && this.matches.input[i + 1] !== '<') {
+      isLessThan = isLessThanAhead(this.topState(), this.match);
+    }
+  }
 
   if (this.match === '(') {
     if (this.topState() === 'function_parentheses_start') {
@@ -533,27 +553,28 @@ function parseOperator(operator, alias) {
   } else if (/^function/.test(input.substring(i))) {
     this.begin('function_start');
   } else if (this.match === '<') {
-    //if (this.topState() === 'lessthan_start') {
-      // res = 'RelationalOperator';
-      // this.popState();
-    //} else if (this.topState() === 'jsx_start') {
-    // this.begin('jsxtag_start');
-    //} else {
-      // this.begin('jsx_start');
-      // this.begin('jsxtag_start');
-    //}
-    this.begin('jsx_start');
-    this.begin('jsxtag_start');
-    this.begin('jsxtagname_start');
+    if (this.topState() === 'lessthan_start') {
+      this.popState();
+      res = 'RelationalOperator';
+    } else {
+      if (oldState === 'identifier_start' ||
+          oldState === 'decimal_digit_start' ||
+          oldState === 'decimal_digit_dot_start') {
+        res = 'RelationalOperator';
+      } else {
+        this.begin('jsx_start');
+        this.begin('jsxtag_start');
+        this.begin('jsxtagname_start');
+      }
+    }
   }
   if (isDiv) {
     this.begin('div_start');
   }
-
-  console.log(this.conditionStack);
-  /*if (isLessThan) {
+  if (isLessThan) {
     this.begin('lessthan_start');
-  }*/
+  }
+  // console.log(this.conditionStack);
   if (res) { return res; }
 
   return undefined;
@@ -562,6 +583,8 @@ function parseOperator(operator, alias) {
 exports.parseOperator = parseOperator;
 
 function parseIdentifier() {
+  const oldState = this.topState();
+
   switch (this.topState()) {
     case 'single_string_start':
       return 'SingleStringCharacter';
@@ -584,7 +607,6 @@ function parseIdentifier() {
   if (this.topState() === 'jsxtag_start' || this.topState() === 'jsxtagname_start' || this.topState() === 'jsxtag_closing') {
     res = 'JSXUnicodeIDStart';
   }
-
   this.begin('identifier_start');
 
   return res;
@@ -645,13 +667,12 @@ exports.parseEscapeStringCharacter = parseEscapeStringCharacter;
 
 function parseToken(token, alias) {
   let isDiv = false;
+  let isLessThan = false;
 
-  const { ch } = lookAhead(this.matches.input,
+  const { ch, index } = lookAhead(this.matches.input,
     this.matches.index + this.match.length, true, true, this.topState());
 
-  if (ch === '/') {
-    isDiv = isDivAhead(this.topState(), this.match);
-  }
+  const oldState = this.topState();
 
   switch (this.topState()) {
     case 'jsxtag_start':
@@ -722,9 +743,21 @@ function parseToken(token, alias) {
       }
       break;
   }
-  console.log(this.conditionStack);
+
+  if (ch === '/') {
+    isDiv = isDivAhead(oldState, this.topState(), this.match);
+  }
+  if (ch === '<') {
+    // ignore <=  <<
+    if (this.matches.input[index + 1] !== '=' && this.matches.input[index + 1] !== '<') {
+      isLessThan = isLessThanAhead(oldState, this.match, this.topState());
+    }
+  }
   if (isDiv) {
     this.begin('div_start');
+  }
+  if (isLessThan) {
+    this.begin('lessthan_start');
   }
   return alias || '';
 }
@@ -819,6 +852,8 @@ function isRegexpFlag(ch) {
  * RegularExpressionClass :: [ RegularExpressionClassChars ]
  */
 function parseRegexpCharacters(ch) {
+  const oldState = this.topState();
+
   if (ch === '/' && this.topState() === 'regexp_start') {
     this.popState();
     const { ch: nextCh } = lookAhead(this.matches.input,
@@ -843,7 +878,7 @@ function parseRegexpCharacters(ch) {
     let isDiv = false;
 
     if (nextChNonWS === '/') {
-      isDiv = isDivAhead(this.topState(), this.match);
+      isDiv = isDivAhead(oldState, this.topState(), this.match);
     }
 
     if (!isRegexpFlag(nextCh)) {
