@@ -358,6 +358,40 @@ exports.In = {
   `,
 };
 
+const Class = {
+  conditions: ['*'],
+  rule: 'class',
+  handler: `
+    return require('./util').parseKeyword.call(this, this.match);
+  `,
+};
+
+const Extend = {
+  conditions: ['*'],
+  rule: 'extends',
+  handler: `
+    return require('./util').parseKeyword.call(this, this.match);
+  `,
+};
+
+// method definition
+const Set = {
+  conditions: ['*'],
+  rule: 'set',
+  handler: `
+    return require('./util').parseKeyword.call(this, this.match);
+  `,
+};
+
+// method definition
+const Get = {
+  conditions: ['*'],
+  rule: 'get',
+  handler: `
+    return require('./util').parseKeyword.call(this, this.match);
+  `,
+};
+
 exports.keywords = [
   True, False,
   This, Null,
@@ -373,4 +407,8 @@ exports.keywords = [
   Debugger,
   ReturnLf,
   Return,
+  Class,
+  Extend,
+  Set,
+  Get,
 ];
