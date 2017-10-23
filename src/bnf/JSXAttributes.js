@@ -8,7 +8,7 @@ module.exports = {
     'JSXAttribute JSXAttributes',
   ],
   handlers: [
-    `$$ = [$1];`,
+    '$$ = [$1];',
     '$$ = [$1].concat($2);',
     '$$ = [$1];',
     '$$ = [$1].concat($2);',

@@ -324,13 +324,13 @@ function parseOperator(operator, alias) {
 
   const input = this.matches.input;
 
-  /*if (ch === '/') {
+  /* if (ch === '/') {
     isDiv = isDivAhead(this.topState(), this.match, oldState);
-  }*/
+  } */
 
-  /*if (ch === '<') {
+  /* if (ch === '<') {
     isLessThan = isLessThanAhead(this.topState(), this.match);
-  }*/
+  } */
 
   const oldState = this.topState();
 
@@ -556,16 +556,14 @@ function parseOperator(operator, alias) {
     if (this.topState() === 'lessthan_start') {
       this.popState();
       res = 'RelationalOperator';
-    } else {
-      if (oldState === 'identifier_start' ||
+    } else if (oldState === 'identifier_start' ||
           oldState === 'decimal_digit_start' ||
           oldState === 'decimal_digit_dot_start') {
-        res = 'RelationalOperator';
-      } else {
-        this.begin('jsx_start');
-        this.begin('jsxtag_start');
-        this.begin('jsxtagname_start');
-      }
+      res = 'RelationalOperator';
+    } else {
+      this.begin('jsx_start');
+      this.begin('jsxtag_start');
+      this.begin('jsxtagname_start');
     }
   }
   if (isDiv) {
@@ -585,7 +583,7 @@ exports.parseOperator = parseOperator;
 function parseIdentifier() {
   const oldState = this.topState();
 
-  switch (this.topState()) {
+  switch (oldState) {
     case 'single_string_start':
       return 'SingleStringCharacter';
     case 'double_string_start':
@@ -595,16 +593,16 @@ function parseIdentifier() {
     default:
       break;
   }
-  if (this.topState() === 'property_start') {
+  if (oldState === 'property_start') {
     this.popState();
     this.begin('identifier_start');
     return 'UnicodeIDStart';
   }
-  if (this.topState() === 'identifier_start') {
+  if (oldState === 'identifier_start') {
     return 'UnicodeIDContinue';
   }
   let res = 'UnicodeIDStart';
-  if (this.topState() === 'jsxtag_start' || this.topState() === 'jsxtagname_start' || this.topState() === 'jsxtag_closing') {
+  if (oldState === 'jsxtag_start' || oldState === 'jsxtagname_start' || oldState === 'jsxtag_closing') {
     res = 'JSXUnicodeIDStart';
   }
   this.begin('identifier_start');

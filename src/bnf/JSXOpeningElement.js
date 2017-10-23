@@ -6,8 +6,8 @@ module.exports = {
     '< JSXElementName JSXAttributes >',
   ],
   handlers: [
-    `$$ = new (require('./ast/JSXElement').JSXOpeningElementNode)($2, [], false, { loc: this._$, yy });`,
-    `$$ = new (require('./ast/JSXElement').JSXOpeningElementNode)($2, $3, false, { loc: this._$, yy });`,
+    '$$ = new (require(\'./ast/JSXElement\').JSXOpeningElementNode)($2, [], false, { loc: this._$, yy });',
+    '$$ = new (require(\'./ast/JSXElement\').JSXOpeningElementNode)($2, $3, false, { loc: this._$, yy });',
   ],
   subRules: [
     require('./JSXElementName'),

@@ -7,9 +7,9 @@ module.exports = {
     'JSXOpeningElement JSXChildren JSXClosingElement',
   ],
   handlers: [
-    `$$ = new (require('./ast/JSXElement').JSXElementNode)($1, null, null, { loc: this._$, yy });`,
-    `$$ = new (require('./ast/JSXElement').JSXElementNode)($1, $2, null, { loc: this._$, yy });`,
-    `$$ = new (require('./ast/JSXElement').JSXElementNode)($1, $3, $2, { loc: this._$, yy });`,
+    '$$ = new (require(\'./ast/JSXElement\').JSXElementNode)($1, null, null, { loc: this._$, yy });',
+    '$$ = new (require(\'./ast/JSXElement\').JSXElementNode)($1, $2, null, { loc: this._$, yy });',
+    '$$ = new (require(\'./ast/JSXElement\').JSXElementNode)($1, $3, $2, { loc: this._$, yy });',
   ],
   subRules: [
     require('./JSXSelfClosingElement'),
