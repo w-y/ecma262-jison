@@ -5,6 +5,7 @@ module.exports = {
     'this',
     'IdentifierReference',
     'Literal',
+    'JSXElement',
     'ArrayLiteral',
     'ObjectLiteral',
     'CoverParenthesizedExpressionAndArrowParameterList',
@@ -14,6 +15,7 @@ module.exports = {
   ],
   handlers: [
     '$$ = new (require(\'./ast/ThisExpressionNode\'))({ loc: this._$, yy });',
+    '$$ = $1;',
     '$$ = $1;',
     '$$ = $1;',
     '$$ = $1;',
@@ -32,5 +34,6 @@ module.exports = {
     require('./FunctionExpression'),
     require('./TemplateLiteral'),
     require('./RegularExpressionLiteral'),
+    require('./JSXElement'),
   ],
 };
