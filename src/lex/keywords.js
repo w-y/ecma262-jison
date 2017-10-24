@@ -358,11 +358,20 @@ exports.In = {
   `,
 };
 
-const Class = {
+const ClassExpression = {
+  conditions: ['class_start'],
+  rule: 'class',
+  handler: `
+    this.popState();
+    return require('./util').parseKeyword.call(this, this.match);
+  `,
+};
+
+const ClassDeclaration = {
   conditions: ['*'],
   rule: 'class',
   handler: `
-    return require('./util').parseKeyword.call(this, this.match);
+    return require('./util').parseKeyword.call(this, this.match, 'CLASS');
   `,
 };
 
@@ -407,7 +416,7 @@ exports.keywords = [
   Debugger,
   ReturnLf,
   Return,
-  Class,
+  ClassExpression, ClassDeclaration,
   Extend,
   Set,
   Get,

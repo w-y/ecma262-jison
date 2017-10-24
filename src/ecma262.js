@@ -178,6 +178,7 @@ exports.grammar = {
       jsx_child_block_start: 'jsx_child_block_start',
 
       jsx_spread_attr_start: 'jsx_spread_attr_start',
+      class_start: 'class_start',
     },
     rules: transLex([
       JSXSingleString,
