@@ -2,7 +2,7 @@ module.exports = {
   conditions: [''],
   name: 'ClassDeclaration',
   rules: [
-    'class BindingIdentifier ClassTail',
+    'CLASS BindingIdentifier ClassTail',
   ],
   handlers: [
     '$$ = $1',
