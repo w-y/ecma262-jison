@@ -375,7 +375,7 @@ const ClassDeclaration = {
   `,
 };
 
-const Extend = {
+const Extends = {
   conditions: ['*'],
   rule: 'extends',
   handler: `
@@ -384,7 +384,7 @@ const Extend = {
 };
 
 // method definition
-const Set = {
+exports.Set = {
   conditions: ['*'],
   rule: 'set',
   handler: `
@@ -393,7 +393,7 @@ const Set = {
 };
 
 // method definition
-const Get = {
+exports.Get = {
   conditions: ['*'],
   rule: 'get',
   handler: `
@@ -417,7 +417,5 @@ exports.keywords = [
   ReturnLf,
   Return,
   ClassExpression, ClassDeclaration,
-  Extend,
-  Set,
-  Get,
+  Extends,
 ];

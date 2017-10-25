@@ -118,6 +118,8 @@ const {
   New,
   In,
   Of,
+  Set,
+  Get,
 } = require('./lex/keywords');
 
 const Script = require('./bnf/Script');
@@ -288,6 +290,8 @@ exports.grammar = {
       In,
       Of,
       New,
+      Set,
+      Get,
 
       hexDigit,
       decimal,
