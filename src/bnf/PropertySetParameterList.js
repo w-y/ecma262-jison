@@ -5,7 +5,7 @@ module.exports = {
     'FormalParameter',
   ],
   handlers: [
-    '$$ = $1',
+    '$$ = [$1]',
   ],
   subRules: [
     require('./FormalParameter'),

@@ -3,9 +3,11 @@ module.exports = {
   name: 'ClassHeritage',
   rules: [
     'extends LeftHandSideExpression',
+    'extends LeftBrace RightBrace',
   ],
   handlers: [
-    '$$ = $1',
+    '$$ = $2',
+    `$$ = new (require('./ast/Literal').ObjectLiteralNode)([], { loc: require('./utils').mergeLoc($2, $3), yy })`,
   ],
   subRules: [
     require('./LeftHandSideExpression'),

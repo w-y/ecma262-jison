@@ -675,6 +675,10 @@ function parseEscapeStringCharacter() {
     this.popState();
     return 'SingleEscapeCharacter';
   }
+  if (this.match === 'u') {
+    this.popState();
+    return parseEscapeString.call(this);
+  }
   this.popState();
   return 'NonEscapeCharacter';
 }

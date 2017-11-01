@@ -147,7 +147,7 @@ const JSXSingleStringCharacterLineTerminator = {
 
 const JSXSingleStringEscapeStart = {
   conditions: ['jsx_single_escape_string'],
-  rule: '\\u|\\U',
+  rule: '\\\\u|\\\\U',
   handler: `
    return require('./util').parseEscapeString.call(this, this.match);
   `,
@@ -188,7 +188,7 @@ const JSXDoubleStringCharacterLineTerminator = {
 
 const JSXDoubleStringEscapeStart = {
   conditions: ['jsx_double_escape_string'],
-  rule: '\\u|\\U',
+  rule: '\\\\u|\\\\U',
   handler: `
    return require('./util').parseEscapeString.call(this, this.match);
   `,

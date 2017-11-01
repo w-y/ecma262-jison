@@ -6,8 +6,8 @@ module.exports = {
     'class ClassTail',
   ],
   handlers: [
-    '$$ = $1',
-    '$$ = $1',
+    `$$ = new (require('./ast/Class').ClassExpressionNode)($2, $3.body, $3.superClass, { loc: this._$, yy })`,
+    `$$ = new (require('./ast/Class').ClassExpressionNode)(null, $2.body, $2.superClass, { loc: this._$, yy })`,
   ],
   subRules: [
     require('./BindingIdentifier'),

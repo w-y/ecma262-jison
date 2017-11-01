@@ -3,8 +3,8 @@ module.exports = {
   name: 'UnaryExpression',
   rules: [
     'UpdateExpression',
-    'UnaryOperator UnaryExpression',
-    'AdditiveOperator UnaryExpression',
+    // 'UnaryOperator UnaryExpression',
+    // 'AdditiveOperator UnaryExpression',
   ],
   handlers: [
     '$$ = $1',

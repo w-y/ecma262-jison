@@ -3,15 +3,19 @@ module.exports = {
   name: 'ClassTail',
   rules: [
     '{ }',
-    'ClassHeritage { }',
     '{ ClassBody }',
     'ClassHeritage { ClassBody }',
   ],
   handlers: [
-    '$$ = $1',
-    '$$ = $1',
-    '$$ = $1',
-    '$$ = $1',
+    `
+      $$ = { body: new (require('./ast/Class').ClassBody)([], { loc: this._$, yy }), superClass: null }
+    `,
+    `
+      $$ = { body: new (require('./ast/Class').ClassBody)($2, { loc: this._$, yy }), superClass: null }
+    `,
+    `
+      $$ = { body: new (require('./ast/Class').ClassBody)($3, { loc: this._$, yy }), superClass: $1 }
+    `,
   ],
   subRules: [
     require('./ClassHeritage'),

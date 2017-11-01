@@ -383,6 +383,14 @@ const Extends = {
   `,
 };
 
+const Static = {
+  conditions: ['*'],
+  rule: 'static',
+  handler: `
+    return require('./util').parseKeyword.call(this, this.match);
+  `,
+};
+
 // method definition
 exports.Set = {
   conditions: ['*'],
@@ -418,4 +426,5 @@ exports.keywords = [
   Return,
   ClassExpression, ClassDeclaration,
   Extends,
+  Static,
 ];
