@@ -3,7 +3,7 @@ module.exports = {
   name: 'NewExpression',
   rules: [
     'MemberExpression',
-    // 'new NewExpression',
+    'new NewExpression',
   ],
   handlers: [
     '$$ = $1',

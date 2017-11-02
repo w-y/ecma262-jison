@@ -3,9 +3,9 @@ module.exports = {
   name: 'AssignmentExpression',
   rules: [
     'ConditionalExpression',
-    // 'LeftHandSideExpression AssignmentOperator AssignmentExpression',
-    // 'LeftHandSideExpression = AssignmentExpression',
-    // 'ArrowFunction',
+    'LeftHandSideExpression AssignmentOperator AssignmentExpression',
+    'LeftHandSideExpression = AssignmentExpression',
+    'ArrowFunction',
   ],
   handlers: [
     '$$ = $1',
