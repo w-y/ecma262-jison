@@ -22,7 +22,7 @@ exports.ClassDeclarationNode = ClassDeclarationNode;
 
 function MethodDefinitionNode(key, value, kind, ...args) {
   BaseNode.call(this, Object.assign({}, { type: 'MethodDefinition' }, ...args));
-  
+
   this.key = key;
   this.value = value;
   this.kind = kind;
@@ -32,7 +32,7 @@ exports.MethodDefinitionNode = MethodDefinitionNode;
 
 function ClassBody(body, ...args) {
   BaseNode.call(this, Object.assign({}, { type: 'ClassBody' }, ...args));
-  
+
   this.body = body;
 }
 

@@ -5,7 +5,7 @@ module.exports = {
     'CLASS BindingIdentifier ClassTail',
   ],
   handlers: [
-    `$$ = new (require('./ast/Class').ClassDeclarationNode)($2, $3.body, $3.superClass, { loc: this._$, yy })`,
+    '$$ = new (require(\'./ast/Class\').ClassDeclarationNode)($2, $3.body, $3.superClass, { loc: this._$, yy })',
   ],
   subRules: [
     require('./BindingIdentifier'),
