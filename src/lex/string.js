@@ -16,7 +16,7 @@ const SingleStringCharacterLineTerminator = {
 
 const SingleStringEscapeStart = {
   conditions: ['single_escape_string'],
-  rule: '\\\\u|\\\\U',
+  rule: 'u|U',
   handler: `
    return require('./util').parseEscapeString.call(this, this.match);
   `,
@@ -57,7 +57,7 @@ const DoubleStringCharacterLineTerminator = {
 
 const DoubleStringEscapeStart = {
   conditions: ['double_escape_string'],
-  rule: '\\\\u|\\\\U',
+  rule: 'u|U',
   handler: `
    return require('./util').parseEscapeString.call(this, this.match);
   `,

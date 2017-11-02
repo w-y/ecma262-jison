@@ -677,7 +677,9 @@ function parseEscapeStringCharacter() {
   }
   if (this.match === 'u') {
     this.popState();
-    return parseEscapeString.call(this);
+
+    this.begin('identifier_start_unicode');
+    return 'UnicodeEscapeSequenceStart';
   }
   this.popState();
   return 'NonEscapeCharacter';
