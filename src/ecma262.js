@@ -1,4 +1,5 @@
 const Generator = require('jison/lib/jison').Generator;
+// const Generator = require('jison-gho/lib/jison').Generator;
 
 const fs = require('fs');
 const path = require('path');
@@ -118,6 +119,8 @@ const {
   New,
   In,
   Of,
+  Set,
+  Get,
 } = require('./lex/keywords');
 
 const Script = require('./bnf/Script');
@@ -178,6 +181,7 @@ exports.grammar = {
       jsx_child_block_start: 'jsx_child_block_start',
 
       jsx_spread_attr_start: 'jsx_spread_attr_start',
+      class_start: 'class_start',
     },
     rules: transLex([
       JSXSingleString,
@@ -287,6 +291,8 @@ exports.grammar = {
       In,
       Of,
       New,
+      Set,
+      Get,
 
       hexDigit,
       decimal,
@@ -296,11 +302,13 @@ exports.grammar = {
 
   start: 'Script',
 
-  operators: [['nonassoc', 'if'], ['nonassoc', 'else'], ['nonassoc', 'JSXTextCharacter']],
+  operators: [['nonassoc', 'if'], ['nonassoc', 'else']],
   bnf: transBnf(Script),
 };
 
-const options = { type: 'lr', moduleType: 'commonjs', moduleName: 'esparse' };
+// const options = { type: 'lr', moduleType: 'commonjs', moduleName: 'esparse' };
+const options = { type: 'lr', moduleType: 'commonjs', moduleName: 'esparse', json: true, compressTables: 0, tokenStack: true, ranges: true };
+
 
 exports.main = function main() {
   const code = new Generator(exports.grammar, options).generate();

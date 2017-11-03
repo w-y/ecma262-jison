@@ -358,6 +358,57 @@ exports.In = {
   `,
 };
 
+const ClassExpression = {
+  conditions: ['class_start'],
+  rule: 'class',
+  handler: `
+    this.popState();
+    return require('./util').parseKeyword.call(this, this.match);
+  `,
+};
+
+const ClassDeclaration = {
+  conditions: ['*'],
+  rule: 'class',
+  handler: `
+    return require('./util').parseKeyword.call(this, this.match, 'CLASS');
+  `,
+};
+
+const Extends = {
+  conditions: ['*'],
+  rule: 'extends',
+  handler: `
+    return require('./util').parseKeyword.call(this, this.match);
+  `,
+};
+
+const Static = {
+  conditions: ['*'],
+  rule: 'static',
+  handler: `
+    return require('./util').parseKeyword.call(this, this.match);
+  `,
+};
+
+// method definition
+exports.Set = {
+  conditions: ['*'],
+  rule: 'set',
+  handler: `
+    return require('./util').parseKeyword.call(this, this.match);
+  `,
+};
+
+// method definition
+exports.Get = {
+  conditions: ['*'],
+  rule: 'get',
+  handler: `
+    return require('./util').parseKeyword.call(this, this.match);
+  `,
+};
+
 exports.keywords = [
   True, False,
   This, Null,
@@ -373,4 +424,7 @@ exports.keywords = [
   Debugger,
   ReturnLf,
   Return,
+  ClassExpression, ClassDeclaration,
+  Extends,
+  Static,
 ];

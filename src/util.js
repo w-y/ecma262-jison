@@ -280,6 +280,9 @@ function parseKeyword(keyword, alias) {
     if (/^function/.test(input.substring(next))) {
       this.begin('function_start');
     }
+    if (/^class/.test(input.substring(next))) {
+      this.begin('class_start');
+    }
   }
   // { after const/let/var should be brace not block
   if (this.match === 'const' || this.match === 'var' || this.match === 'let') {
@@ -296,6 +299,9 @@ function parseKeyword(keyword, alias) {
   if (this.match === 'new') {
     if (/^function/.test(input.substring(next))) {
       this.begin('function_start');
+    }
+    if (/^class/.test(input.substring(next))) {
+      this.begin('class_start');
     }
   }
   if (this.topState() === 'brace_start' && ch === ':') {
@@ -414,6 +420,9 @@ function parseOperator(operator, alias) {
     if (/^function/.test(input.substring(i))) {
       this.begin('function_start');
     }
+    if (/^class/.test(input.substring(i))) {
+      this.begin('class_start');
+    }
   } else if (this.match === ':') {
     // "case : {"  here { is start of block
     if (this.topState() === 'case_start') {
@@ -429,9 +438,14 @@ function parseOperator(operator, alias) {
       if (/^function/.test(input.substring(i))) {
         this.begin('function_start');
       }
+      if (/^class/.test(input.substring(i))) {
+        this.begin('class_start');
+      }
     } else if (/^function/.test(input.substring(i))) {
       // NOTICE: { a : function() {} }
       this.begin('function_start');
+    } else if (/^class/.test(input.substring(i))) {
+      this.begin('class_start');
     }
   } else if (this.match === '?') {
     if (this.topState() !== 'condition_start') {
@@ -442,6 +456,8 @@ function parseOperator(operator, alias) {
       this.begin('function_start');
     } else if (/^{/.test(input.substring(i))) {
       this.begin('brace_start');
+    } else if (/^class/.test(input.substring(i))) {
+      this.begin('class_start');
     }
   } else if (this.match === ')') {
     if (this.topState() === 'function_parentheses_start') {
@@ -552,6 +568,8 @@ function parseOperator(operator, alias) {
     }
   } else if (/^function/.test(input.substring(i))) {
     this.begin('function_start');
+  } else if (/^class/.test(input.substring(i))) {
+    this.begin('class_start');
   } else if (this.match === '<') {
     if (this.topState() === 'lessthan_start') {
       this.popState();
@@ -572,7 +590,6 @@ function parseOperator(operator, alias) {
   if (isLessThan) {
     this.begin('lessthan_start');
   }
-  // console.log(this.conditionStack);
   if (res) { return res; }
 
   return undefined;
@@ -656,6 +673,12 @@ function parseEscapeStringCharacter() {
   if (SINGLE_ESCAPE_CHARACTERS.indexOf(this.match) !== -1) {
     this.popState();
     return 'SingleEscapeCharacter';
+  }
+  if (this.match === 'u') {
+    this.popState();
+
+    this.begin('identifier_start_unicode');
+    return 'UnicodeEscapeSequenceStart';
   }
   this.popState();
   return 'NonEscapeCharacter';

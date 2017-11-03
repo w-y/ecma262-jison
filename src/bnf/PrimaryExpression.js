@@ -12,9 +12,11 @@ module.exports = {
     'FunctionExpression',
     'TemplateLiteral',
     'RegularExpressionLiteral',
+    'ClassExpression',
   ],
   handlers: [
     '$$ = new (require(\'./ast/ThisExpressionNode\'))({ loc: this._$, yy });',
+    '$$ = $1;',
     '$$ = $1;',
     '$$ = $1;',
     '$$ = $1;',
@@ -35,5 +37,6 @@ module.exports = {
     require('./TemplateLiteral'),
     require('./RegularExpressionLiteral'),
     require('./JSXElement'),
+    require('./ClassExpression'),
   ],
 };
