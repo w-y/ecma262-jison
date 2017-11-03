@@ -16,7 +16,6 @@ describe('jsx', function() {
 
   describe('jsx element', function() {
     it('element and text', function(done) {
-      console.log(JSON.stringify(ast, null, 2));
       assert.equal('JSXElement', ast.body[0].expression.type);
 
       assert.equal('JSXOpeningElement', ast.body[0].expression.openingElement.type);
@@ -51,7 +50,6 @@ describe('jsx', function() {
       assert.equal('JSXElement', ast.body[1].expression.type);
       assert.equal('Box', ast.body[1].expression.openingElement.name.name);
 
-      console.log(ast.body[1].expression.children[1]);
       assert.equal('JSXExpressionContainer', ast.body[1].expression.children[1].type);
       assert.equal('JSXElement', ast.body[1].expression.children[1].expression.type);
       assert.equal('Answer', ast.body[1].expression.children[1].expression.openingElement.name.name);
@@ -59,7 +57,6 @@ describe('jsx', function() {
       assert.equal(1, ast.body[1].expression.children[1].expression.openingElement.attributes.length);
 
       assert.equal('value', ast.body[1].expression.children[1].expression.openingElement.attributes[0].name.name);
-      console.log(ast.body[1].expression.children[1].expression.openingElement.attributes[0]);
       assert.equal(false, ast.body[1].expression.children[1].expression.openingElement.attributes[0].value.value);
 
       done();

@@ -590,7 +590,6 @@ function parseOperator(operator, alias) {
   if (isLessThan) {
     this.begin('lessthan_start');
   }
-  // console.log(this.conditionStack);
   if (res) { return res; }
 
   return undefined;
