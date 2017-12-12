@@ -5,7 +5,7 @@ module.exports = {
     'StringLiteral',
   ],
   handlers: [
-    '$$ = $1;',
+    '$$ = new (require(\'./ast/Literal\').StringLiteralNode)($1, { raw: $1, loc: this._$, yy });',
   ],
   subRules: [
     require('./StringLiteral'),

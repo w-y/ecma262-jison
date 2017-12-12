@@ -7,9 +7,9 @@ module.exports = {
     '{ ImportsList , }',
   ],
   handlers: [
-    '$$ = $1;',
-    '$$ = $1;',
-    '$$ = $1;',
+    '$$ = [];',
+    '$$ = $2;',
+    '$$ = $2;',
   ],
   subRules: [
     require('./ImportsList'),

@@ -5,7 +5,7 @@ module.exports = {
     '* as ImportedBinding',
   ],
   handlers: [
-    '$$ = $1;',
+    '$$ = $3;',
   ],
   subRules: [
     require('./ImportedBinding'),
