@@ -262,7 +262,8 @@ function parseKeyword(keyword, alias) {
       this.topState() === 'parentheses_start' ||
       this.topState() === 'function_parentheses_start' ||
       this.topState() === 'jsx_child_block_start' ||
-      this.topState() === 'jsx_spread_attr_start'
+      this.topState() === 'jsx_spread_attr_start' ||
+      this.topState() === 'import_start'
     ) {
     const idContinueReg = require('unicode-6.3.0/Binary_Property/ID_Continue/regex');
     if (idContinueReg.test(input[curr])) {
@@ -304,8 +305,21 @@ function parseKeyword(keyword, alias) {
       this.begin('class_start');
     }
   }
+  if (this.match === 'export') {
+    if (/^default/.test(input.substring(next))) {
+      this.begin('export_start');
+    }
+  }
   if (this.topState() === 'brace_start' && ch === ':') {
     res = 'UnicodeIDStart';
+  }
+  if (this.match === 'import') {
+    this.begin('import_start');
+  }
+  if (this.match === 'from') {
+    if (this.topState() === 'import_start') {
+      this.popState();
+    }
   }
   // NOTICE:
   // else {
@@ -563,6 +577,8 @@ function parseOperator(operator, alias) {
       // <a>{
       this.popState();
       this.popState();
+    } else if (this.topState() === 'import_start') {
+      // import {a}
     } else {
       this.begin('brace_start');
     }
@@ -971,4 +987,26 @@ function parseJSXString(ch) {
 }
 
 exports.parseJSXString = parseJSXString;
+
+
+function parseCaseDefault() {
+  if (this.topState() === 'property_start') {
+    parseKeyword.call(this, this.match);
+  } else if (this.topState() === 'brace_start' || this.topState() === 'identifier_start') {
+    parseKeyword.call(this, this.match);
+  } else if (this.topState() === 'export_start') {
+    this.popState();
+    return parseKeyword.call(this, this.match);
+  }
+  const { ch } = lookAhead(this.matches.input, this.matches.index + this.match.length, false, false);
+
+  if (isWhiteSpace(ch) || isLineTerminator(ch) || ch === ':') {
+    this.begin('case_start');
+    return parseKeyword.call(this, this.match);
+  } else {
+    return parseKeyword.call(this, this.match);
+  }
+}
+
+exports.parseCaseDefault = parseCaseDefault;
 

@@ -17,7 +17,7 @@ describe('class', function() {
   describe('class declaration and expression', function() {
     it('simple declaration', function(done) {
       assert.equal('ClassDeclaration', ast.body[0].type);
-      assert.equal(0, JSON.stringify(ast.body[0].body.body.length, null, 2));
+      assert.equal(0, ast.body[0].body.body.length, null, 2);
       assert.equal('Identifier', ast.body[0].id.type);
       assert.equal('Base', ast.body[0].id.name);
       assert.equal(null, ast.body[0].supperClass);

@@ -121,9 +121,11 @@ const {
   Of,
   Set,
   Get,
+  From,
+  As,
 } = require('./lex/keywords');
 
-const Script = require('./bnf/Script');
+const Program = require('./bnf/Program');
 
 exports.grammar = {
   comment: 'ECMA-262 7th Edition, 17.02.23 The es Grammar. Parses strings into ast.',
@@ -182,6 +184,10 @@ exports.grammar = {
 
       jsx_spread_attr_start: 'jsx_spread_attr_start',
       class_start: 'class_start',
+
+      export_start: 'export_start',
+
+      import_start: 'import_start',
     },
     rules: transLex([
       JSXSingleString,
@@ -293,6 +299,8 @@ exports.grammar = {
       New,
       Set,
       Get,
+      As,
+      From,
 
       hexDigit,
       decimal,
@@ -300,10 +308,10 @@ exports.grammar = {
     ]),
   },
 
-  start: 'Script',
+  start: 'Program',
 
   operators: [['nonassoc', 'if'], ['nonassoc', 'else']],
-  bnf: transBnf(Script),
+  bnf: transBnf(Program),
 };
 
 // const options = { type: 'lr', moduleType: 'commonjs', moduleName: 'esparse' };
