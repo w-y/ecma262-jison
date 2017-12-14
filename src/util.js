@@ -266,7 +266,7 @@ function parseKeyword(keyword, alias) {
       this.topState() === 'import_start'
     ) {
     const idContinueReg = require('unicode-6.3.0/Binary_Property/ID_Continue/regex');
-    if (idContinueReg.test(input[curr])) {
+    if (idContinueReg.test(input[curr]) || input[curr] === '$' || input[curr] === '_') {
       this.begin('identifier_start');
       res = 'UnicodeIDStart';
     }
@@ -343,14 +343,6 @@ function parseOperator(operator, alias) {
     this.matches.index + this.match.length, true, true, this.topState());
 
   const input = this.matches.input;
-
-  /* if (ch === '/') {
-    isDiv = isDivAhead(this.topState(), this.match, oldState);
-  } */
-
-  /* if (ch === '<') {
-    isLessThan = isLessThanAhead(this.topState(), this.match);
-  } */
 
   const oldState = this.topState();
 
@@ -991,9 +983,9 @@ exports.parseJSXString = parseJSXString;
 
 function parseCaseDefault() {
   if (this.topState() === 'property_start') {
-    parseKeyword.call(this, this.match);
+    return parseKeyword.call(this, this.match);
   } else if (this.topState() === 'brace_start' || this.topState() === 'identifier_start') {
-    parseKeyword.call(this, this.match);
+    return parseKeyword.call(this, this.match);
   } else if (this.topState() === 'export_start') {
     this.popState();
     return parseKeyword.call(this, this.match);
