@@ -990,14 +990,14 @@ function parseCaseDefault() {
     this.popState();
     return parseKeyword.call(this, this.match);
   }
-  const { ch } = lookAhead(this.matches.input, this.matches.index + this.match.length, false, false);
+  const { ch } = lookAhead(this.matches.input,
+    this.matches.index + this.match.length, false, false);
 
   if (isWhiteSpace(ch) || isLineTerminator(ch) || ch === ':') {
     this.begin('case_start');
     return parseKeyword.call(this, this.match);
-  } else {
-    return parseKeyword.call(this, this.match);
   }
+  return parseKeyword.call(this, this.match);
 }
 
 exports.parseCaseDefault = parseCaseDefault;
