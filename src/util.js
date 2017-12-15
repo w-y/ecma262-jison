@@ -376,10 +376,6 @@ function parseOperator(operator, alias) {
     case 'brace_start':
       res = alias || operator;
       break;
-    case 'arrow_brace_start':
-      this.popState();
-      res = alias || operator;
-      break;
     case 'div_start':
       this.popState();
       res = alias || operator;
@@ -546,6 +542,9 @@ function parseOperator(operator, alias) {
       this.begin('brace_start');
       res = 'BRACE_START';
     } else if (this.topState() === 'block_brace_start') {
+
+    } else if (this.topState() === 'arrow_brace_start') {
+      this.popState();
     } else {
       // here { should be start of a block
       this.begin('block_brace_start');
