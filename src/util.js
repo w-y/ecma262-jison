@@ -235,6 +235,12 @@ function parseKeyword(keyword, alias) {
       this.begin('identifier_start');
       res = 'UnicodeIDStart';
       break;
+    case 'jsxtag_start':
+    case 'jsxtagname_start':
+    case 'jsxtag_closing':
+      this.begin('identifier_start');
+      res = 'JSXUnicodeIDStart';
+      break;
     default:
       res = alias || keyword;
       break;
