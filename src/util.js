@@ -235,6 +235,12 @@ function parseKeyword(keyword, alias) {
       this.begin('identifier_start');
       res = 'UnicodeIDStart';
       break;
+    case 'jsxtag_start':
+    case 'jsxtagname_start':
+    case 'jsxtag_closing':
+      this.begin('identifier_start');
+      res = 'JSXUnicodeIDStart';
+      break;
     default:
       res = alias || keyword;
       break;
@@ -262,10 +268,11 @@ function parseKeyword(keyword, alias) {
       this.topState() === 'parentheses_start' ||
       this.topState() === 'function_parentheses_start' ||
       this.topState() === 'jsx_child_block_start' ||
-      this.topState() === 'jsx_spread_attr_start'
+      this.topState() === 'jsx_spread_attr_start' ||
+      this.topState() === 'import_start'
     ) {
     const idContinueReg = require('unicode-6.3.0/Binary_Property/ID_Continue/regex');
-    if (idContinueReg.test(input[curr])) {
+    if (idContinueReg.test(input[curr]) || input[curr] === '$' || input[curr] === '_') {
       this.begin('identifier_start');
       res = 'UnicodeIDStart';
     }
@@ -304,8 +311,21 @@ function parseKeyword(keyword, alias) {
       this.begin('class_start');
     }
   }
+  if (this.match === 'export') {
+    if (/^default/.test(input.substring(next))) {
+      this.begin('export_start');
+    }
+  }
   if (this.topState() === 'brace_start' && ch === ':') {
     res = 'UnicodeIDStart';
+  }
+  if (this.match === 'import') {
+    this.begin('import_start');
+  }
+  if (this.match === 'from') {
+    if (this.topState() === 'import_start') {
+      this.popState();
+    }
   }
   // NOTICE:
   // else {
@@ -329,14 +349,6 @@ function parseOperator(operator, alias) {
     this.matches.index + this.match.length, true, true, this.topState());
 
   const input = this.matches.input;
-
-  /* if (ch === '/') {
-    isDiv = isDivAhead(this.topState(), this.match, oldState);
-  } */
-
-  /* if (ch === '<') {
-    isLessThan = isLessThanAhead(this.topState(), this.match);
-  } */
 
   const oldState = this.topState();
 
@@ -368,10 +380,6 @@ function parseOperator(operator, alias) {
       res = alias || operator;
       break;
     case 'brace_start':
-      res = alias || operator;
-      break;
-    case 'arrow_brace_start':
-      this.popState();
       res = alias || operator;
       break;
     case 'div_start':
@@ -540,6 +548,9 @@ function parseOperator(operator, alias) {
       this.begin('brace_start');
       res = 'BRACE_START';
     } else if (this.topState() === 'block_brace_start') {
+
+    } else if (this.topState() === 'arrow_brace_start') {
+      this.popState();
     } else {
       // here { should be start of a block
       this.begin('block_brace_start');
@@ -563,6 +574,8 @@ function parseOperator(operator, alias) {
       // <a>{
       this.popState();
       this.popState();
+    } else if (this.topState() === 'import_start') {
+      // import {a}
     } else {
       this.begin('brace_start');
     }
@@ -971,4 +984,26 @@ function parseJSXString(ch) {
 }
 
 exports.parseJSXString = parseJSXString;
+
+
+function parseCaseDefault() {
+  if (this.topState() === 'property_start') {
+    return parseKeyword.call(this, this.match);
+  } else if (this.topState() === 'brace_start' || this.topState() === 'identifier_start') {
+    return parseKeyword.call(this, this.match);
+  } else if (this.topState() === 'export_start') {
+    this.popState();
+    return parseKeyword.call(this, this.match);
+  }
+  const { ch } = lookAhead(this.matches.input,
+    this.matches.index + this.match.length, false, false);
+
+  if (isWhiteSpace(ch) || isLineTerminator(ch) || ch === ':') {
+    this.begin('case_start');
+    return parseKeyword.call(this, this.match);
+  }
+  return parseKeyword.call(this, this.match);
+}
+
+exports.parseCaseDefault = parseCaseDefault;
 

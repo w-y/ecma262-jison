@@ -248,7 +248,7 @@ exports.multiplication = {
   conditions: ['*'],
   rule: '\\*',
   handler: `
-    return require('./util').parseOperator.call(this, this.match, 'MultiplicativeOperator');
+    return require('./util').parseOperator.call(this, this.match);
   `,
 };
 

@@ -77,22 +77,7 @@ const Case = {
   conditions: ['*'],
   rule: 'case',
   handler: `
-    if (this.topState() === 'property_start') {
-      return require('./util').parseKeyword.call(this, this.match);
-    } else if (this.topState() === 'brace_start' || this.topState() === 'identifier_start') {
-      return require('./util').parseKeyword.call(this, this.match);
-    }
-    {
-      const utils = require('./util');
-      const { ch } = utils.lookAhead(this.matches.input, this.matches.index + this.match.length, false, false);
-
-      if (utils.isWhiteSpace(ch) || utils.isLineTerminator(ch) || ch === ':') {
-        this.begin('case_start');
-        return require('./util').parseKeyword.call(this, this.match);
-      } else {
-        return require('./util').parseKeyword.call(this, this.match);
-      }
-    }
+    return require('./util').parseCaseDefault.call(this, this.match);
   `,
 };
 
@@ -100,22 +85,7 @@ const Default = {
   conditions: ['*'],
   rule: 'default',
   handler: `
-    if (this.topState() === 'property_start') {
-      return require('./util').parseKeyword.call(this, this.match);
-    } else if (this.topState() === 'brace_start' || this.topState() === 'identifier_start') {
-      return require('./util').parseKeyword.call(this, this.match);
-    }
-    {
-      const utils = require('./util');
-      const { ch } = utils.lookAhead(this.matches.input, this.matches.index + this.match.length, false, false);
-
-      if (utils.isWhiteSpace(ch) || utils.isLineTerminator(ch) || ch === ':') {
-        this.begin('case_start');
-        return require('./util').parseKeyword.call(this, this.match);
-      } else {
-        return require('./util').parseKeyword.call(this, this.match);
-      }
-    }
+    return require('./util').parseCaseDefault.call(this, this.match);
   `,
 };
 
@@ -409,6 +379,38 @@ exports.Get = {
   `,
 };
 
+exports.From = {
+  conditions: ['*'],
+  rule: 'from',
+  handler: `
+    return require('./util').parseKeyword.call(this, this.match);
+  `,
+};
+
+exports.As = {
+  conditions: ['*'],
+  rule: 'as',
+  handler: `
+    return require('./util').parseKeyword.call(this, this.match);
+  `,
+};
+
+const Import = {
+  conditions: ['*'],
+  rule: 'import',
+  handler: `
+    return require('./util').parseKeyword.call(this, this.match);
+  `,
+};
+
+const Export = {
+  conditions: ['*'],
+  rule: 'export',
+  handler: `
+    return require('./util').parseKeyword.call(this, this.match);
+  `,
+};
+
 exports.keywords = [
   True, False,
   This, Null,
@@ -427,4 +429,6 @@ exports.keywords = [
   ClassExpression, ClassDeclaration,
   Extends,
   Static,
+  Import,
+  Export,
 ];
