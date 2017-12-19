@@ -14,3 +14,4 @@
     {tip}
   </Box.Comment>
 </Box>;
+<Link to={`${url}`}>{label}</Link>;

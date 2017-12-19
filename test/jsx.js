@@ -84,6 +84,37 @@ describe('jsx', function() {
       assert.equal('Identifier', ast.body[1].expression.children[3].children[1].expression.type);
       assert.equal('tip', ast.body[1].expression.children[3].children[1].expression.name);
 
+      assert.equal('ExpressionStatement', ast.body[2].type);
+      assert.equal('JSXElement', ast.body[2].expression.type);
+
+      assert.equal('JSXOpeningElement', ast.body[2].expression.openingElement.type);
+      assert.equal('JSXIdentifier', ast.body[2].expression.openingElement.name.type);
+      assert.equal('Link', ast.body[2].expression.openingElement.name.name);
+
+      assert.equal(1, ast.body[2].expression.openingElement.attributes.length);
+      assert.equal('JSXAttribute', ast.body[2].expression.openingElement.attributes[0].type);
+      assert.equal('JSXIdentifier', ast.body[2].expression.openingElement.attributes[0].name.type);
+      assert.equal('to', ast.body[2].expression.openingElement.attributes[0].name.name);
+      assert.equal('TemplateLiteral', ast.body[2].expression.openingElement.attributes[0].value.type);
+
+      assert.equal('TemplateElement', ast.body[2].expression.openingElement.attributes[0].value.quasis[0].type);
+      assert.equal('TemplateElement', ast.body[2].expression.openingElement.attributes[0].value.quasis[1].type);
+      assert.equal('', ast.body[2].expression.openingElement.attributes[0].value.quasis[0].value);
+      assert.equal('', ast.body[2].expression.openingElement.attributes[0].value.quasis[1].value);
+
+      assert.equal('Identifier', ast.body[2].expression.openingElement.attributes[0].value.expressions[0].type);
+      assert.equal('url', ast.body[2].expression.openingElement.attributes[0].value.expressions[0].name);
+      
+      assert.equal(false, ast.body[2].expression.openingElement.selfClosing);
+
+      assert.equal('JSXOpeningElement', ast.body[2].expression.closingElement.type);
+      assert.equal('JSXIdentifier', ast.body[2].expression.closingElement.name.type);
+      assert.equal('Link', ast.body[2].expression.closingElement.name.name);
+      
+      assert.equal('JSXExpressionContainer', ast.body[2].expression.children[0].type);
+      assert.equal('Identifier', ast.body[2].expression.children[0].expression.type);
+      assert.equal('label', ast.body[2].expression.children[0].expression.name);
+
       done();
     });
 
