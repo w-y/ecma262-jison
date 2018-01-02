@@ -7,7 +7,7 @@ module.exports = {
   ],
   handlers: [
     '$$ = $2',
-    '$$ = new (require(\'./ast/Literal\').ObjectLiteralNode)([], { loc: require(\'./utils\').mergeLoc($2, $3), yy })',
+    '$$ = new (require(\'./ast/Literal\').ObjectLiteralNode)([], { loc: require(\'./utils\').mergeLoc(@2, @3), yy })',
   ],
   subRules: [
     require('./LeftHandSideExpression'),

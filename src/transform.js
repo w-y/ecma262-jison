@@ -23,7 +23,21 @@ const transBnfImpl = (bnf, bnfTable) => {
     const handlers = bnf.handlers[condition] || bnf.handlers;
 
     for (let ii = 0; ii < rules.length; ii++) {
-      table[bnf.name].push([rules[ii], handlers[ii]]);
+      // NOTICE: add location code auto
+      const segments = rules[ii].split(' ');
+      let locPrefix = `
+        @$ = @1;
+      `;
+
+      if (segments.length > 1) {
+        locPrefix = `
+          // automaticall add location info
+          @$ = require('./util').mergeLoc(@1, @${segments.length});
+        `;
+      }
+      const newHandler = `${locPrefix}${handlers[ii]}`;
+
+      table[bnf.name].push([rules[ii], newHandler]);
     }
 
     for (let ii = 0; ii < subRules.length; ii++) {
