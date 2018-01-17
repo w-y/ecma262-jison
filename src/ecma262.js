@@ -340,7 +340,6 @@ exports.main = function main(args) {
     console.log(grammar());
     code = new GeneratorGho(grammar(), options).generate();
   } else {
-    debugger;
     const Generator = require('jison/lib/jison').Generator;
     code = new Generator(grammar(true), options).generate();
   }

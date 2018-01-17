@@ -24,6 +24,7 @@
   "homepage": "https://github.com/w-y/ecma262-jison#readme",
   "dependencies": {
     "jison": "0.4.17",
+    "jison-gho": "^0.6.1-214",
     "unicode-6.3.0": "^0.7.0"
   },
   "devDependencies": {

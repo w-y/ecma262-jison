@@ -363,22 +363,21 @@ function parseOperator(operator, alias) {
     }
     prevCh = lookBehind(this.matched.substring(0, prevIndex + 1), 0, true, true).ch;
 
-
-    //
+    //   ASI for
     //   a
     //   /**/++c
-    while (prevCh === '/' && this.matched[prevIndex-1] === '*') {
-      let i = prevIndex - 2;
+    while (prevCh === '/' && this.matched[prevIndex - 1] === '*') {
+      let offset = prevIndex - 2;
 
       let commentIndex = -1;
 
-      while (i >= 1) {
+      while (offset >= 1) {
         // find /*
-        if (this.matched[i] === '*' && this.matched[i-1] === '/') {
-          commentIndex = i - 1;
+        if (this.matched[offset] === '*' && this.matched[offset - 1] === '/') {
+          commentIndex = offset - 1;
           break;
         }
-        i--;
+        offset--;
       }
       if (commentIndex >= 0) {
         const beforeComment = lookBehind(this.matched.substring(0, commentIndex), 0, true, false);

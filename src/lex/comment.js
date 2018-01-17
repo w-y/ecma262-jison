@@ -1,3 +1,4 @@
+/* eslint no-param-reassign: 0 */
 const LINE_TERMINATORS = '\\u000A|\\u000D|\\u2028\\|\\u2029';
 
 exports.onCommentStart = (yy, type, line, column, range) => {
@@ -25,9 +26,6 @@ exports.onCommentEnd = (yy, type, line, column, range) => {
 };
 
 exports.onComment = (yy, value) => {
-  if (!yy.comment) {
-    debugger;
-  }
   yy.comment.buffer.push(value);
 };
 

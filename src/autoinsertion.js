@@ -1,7 +1,7 @@
-const { isWhiteSpace, isLineTerminator } = require('./util');
+const { isLineTerminator } = require('./util');
 const { ParseError } = require('./error');
 const parser = require('./parser');
-const { lookBehind, lookAhead } = require('./util');
+const { lookBehind } = require('./util');
 
 const EOF = 1;
 
@@ -22,7 +22,7 @@ function canApplyRule(source, ex) {
   const token = ex.hash.token;
   const text = ex.hash.text;
   const range = ex.hash.loc.range;
-  let tokenOffset = range[0];
+  const tokenOffset = range[0];
 
   if (token === '";"' && ex.hash.failedAutoSemicolon) {
     return -1;
@@ -39,14 +39,11 @@ function canApplyRule(source, ex) {
 
   // recover from no LineTerminator exception
   if (ex.hash.exception instanceof require('./error').NoLineTerminatorError) {
-
     // ++/--
     if (text === '++' || text === '--') {
-      const { index: tokenOffset } = lookBehind(source.substring(0, ex.hash.loc.range[0] + 1), 0, true, false);
-      return tokenOffset;
-    } else {
-      return ex.hash.loc.range[1] - 1;
+      return lookBehind(source.substring(0, ex.hash.loc.range[0] + 1), 0, true, false).index;
     }
+    return ex.hash.loc.range[1] - 1;
   }
 
   const { index: prevOffset } = lookBehind(source.substring(0, tokenOffset), 0, true, false);
@@ -58,12 +55,6 @@ function canApplyRule(source, ex) {
   if (source[prevOffset] === ')') {
     return prevOffset + 1;
   }
-
-  /*const { index } = lookBehind(source.substring(0, tokenOffset), 0, true, true);
-
-  if (/^\+\+/.test(source.substring(index - 1)) || /^--/.test(source.substring(index - 1))) {
-    return lookBehind(source.substring(0, index - 1), 0, true, true).index + 1;
-  }*/
 
   // The offending token is separated from the previous token by at least one LineTerminator.
   if (isLineTerminator(source[prevOffset])) {
@@ -84,7 +75,13 @@ function autoinsertion(source) {
   parser.parser.lexer.options.ranges = true;
 
   // custom error handler
-  // parser.Parser.prototype.parseError = function (str, hash) {};
+  parser.Parser.prototype.parseError = function (str, hash) {
+    if (hash.recoverable) {
+      this.trace(str);
+    } else {
+      throw new ParseError(str, hash);
+    }
+  };
 
   // jison-gho
   // parser.Parser.prototype.originalParseError = function (str, hash) {};
@@ -127,9 +124,10 @@ function autoinsertion(source) {
     }
     return false;
   }
+
   let lastTime = Date.now();
   let count = 0;
-  let lastSrc = null;
+
   while (true) {
     lastTime = Date.now();
     count += 1;
@@ -143,9 +141,7 @@ function autoinsertion(source) {
       if (!parser.parser.yy.originEx) {
         parser.parser.yy.originEx = ex;
       }
-      lastSrc = src;
       src = applyRule(src, ex);
-      // console.log(src);
       console.warn(`retry ${count} times time parsed: ${Date.now() - lastTime}`);
       if (!src) {
         const originEx = parser.parser.yy.originEx;
