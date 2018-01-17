@@ -24,7 +24,7 @@ module.exports = {
           $3,
           $6,
           // function loc
-          { loc: require('./util').mergeLoc(@2, @7), yy }
+          { loc: require('./util').mergeLoc($2, $7), yy }
         ), '', { loc: this._$, yy  })
     `,
     `
@@ -32,10 +32,10 @@ module.exports = {
         new (require('./ast/FunctionExpression').FunctionExpressionNode)(null, $3, new (require('./ast/BlockStatement').BlockStatementNode)(
             [],
             // block loc
-            { loc: (require('./util').mergeLoc(@5, @6)), yy }
+            { loc: (require('./util').mergeLoc($5, $6)), yy }
           ),
             // function loc
-          { loc: require('./util').mergeLoc(@2, @6), yy }
+          { loc: require('./util').mergeLoc($2, $6), yy }
         ), '', { loc: this._$, yy })
     `,
     `
@@ -45,7 +45,7 @@ module.exports = {
           [],
           $5,
           // function loc
-          { loc: require('./util').mergeLoc(@2, @6), yy }
+          { loc: require('./util').mergeLoc($2, $6), yy }
         ), '', { loc: this._$, yy  })
     `,
     `
@@ -53,10 +53,10 @@ module.exports = {
         new (require('./ast/FunctionExpression').FunctionExpressionNode)(null, [], new (require('./ast/BlockStatement').BlockStatementNode)(
             [],
             // block loc
-            { loc: (require('./util').mergeLoc(@4, @5)), yy }
+            { loc: (require('./util').mergeLoc($4, $5)), yy }
           ),
           // function loc
-          { loc: require('./util').mergeLoc(@2, @5), yy }
+          { loc: require('./util').mergeLoc($2, $5), yy }
         ), '', { loc: this._$, yy })
     `,
 
@@ -67,7 +67,7 @@ module.exports = {
           [],
           $6,
           // function loc
-          { loc: require('./util').mergeLoc(@2, @7), yy }
+          { loc: require('./util').mergeLoc($2, $7), yy }
         ), 'get', { loc: this._$, yy })
     `,
     `
@@ -78,10 +78,10 @@ module.exports = {
           new (require('./ast/BlockStatement').BlockStatementNode)(
             [],
             // block loc
-            { loc: (require('./util').mergeLoc(@5, @6)), yy }
+            { loc: (require('./util').mergeLoc($5, $6)), yy }
           ),
           // func loc
-          { loc: require('./util').mergeLoc(@2, @6), yy }
+          { loc: require('./util').mergeLoc($2, $6), yy }
         ), '', { loc: this._$, yy })
     `,
 
@@ -93,7 +93,7 @@ module.exports = {
           $4,
           $7,
           // func loc
-          { loc: require('./util').mergeLoc(@4, @8), yy }
+          { loc: require('./util').mergeLoc($4, $8), yy }
         ), 'set', { loc: this._$, yy  })
     `,
     `
@@ -104,10 +104,10 @@ module.exports = {
           new (require('./ast/BlockStatement').BlockStatementNode)(
             [],
             // block loc
-            { loc: (require('./util').mergeLoc(@6, @7)), yy }
+            { loc: (require('./util').mergeLoc($6, $7)), yy }
           ),
           // func loc
-          { loc: require('./util').mergeLoc(@2, @7), yy }), 'set', { loc: this._$, yy })
+          { loc: require('./util').mergeLoc($2, $7), yy }), 'set', { loc: this._$, yy })
     `,
 
 
@@ -118,7 +118,7 @@ module.exports = {
           [],
           $6,
           // func loc
-          { loc: require('./util').mergeLoc(@2, @7), yy }
+          { loc: require('./util').mergeLoc($2, $7), yy }
         ), 'set', { loc: this._$, yy  })
     `,
     `
@@ -129,10 +129,10 @@ module.exports = {
           new (require('./ast/BlockStatement').BlockStatementNode)(
             [],
             // block loc
-            { loc: (require('./util').mergeLoc(@5, @6)), yy }
+            { loc: (require('./util').mergeLoc($5, $6)), yy }
           ),
           // func loc
-          { loc: require('./util').mergeLoc(@2, @6), yy }
+          { loc: require('./util').mergeLoc($2, $6), yy }
         ), 'set', { loc: this._$, yy })
     `,
   ],

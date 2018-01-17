@@ -10,45 +10,44 @@ const transLex = (lexs) => {
   return rules;
 };
 
-const transBnfImpl = (bnf, bnfTable) => {
+const transBnfImpl = (bnf, bnfTable, useJison) => {
   if (!bnf.name) { return; }
   const table = bnfTable;
 
   table[bnf.name] = [];
 
-  for (let i = 0; i < bnf.conditions.length; i++) {
-    const condition = bnf.conditions[i] || 'INITIAL';
-    const rules = bnf.rules[condition] || bnf.rules;
-    const subRules = bnf.subRules[condition] || bnf.subRules;
-    const handlers = bnf.handlers[condition] || bnf.handlers;
+  const { rules, subRules, handlers } = bnf;
 
-    for (let ii = 0; ii < rules.length; ii++) {
-      // NOTICE: add location code auto
-      const segments = rules[ii].split(' ');
-      let locPrefix = `
-        @$ = @1;
+  for (let ii = 0; ii < rules.length; ii++) {
+    // NOTICE: add location code auto
+    const segments = rules[ii].split(' ');
+    let locPrefix = `
+      @$ = @1;
+    `;
+
+    if (segments.length > 1) {
+      locPrefix = `
+        // automaticall add location info
+        @$ = require('./util').mergeLoc(@1, @${segments.length});
       `;
+    }
+    const newHandler = `${locPrefix}${handlers[ii]}`;
 
-      if (segments.length > 1) {
-        locPrefix = `
-          // automaticall add location info
-          @$ = require('./util').mergeLoc(@1, @${segments.length});
-        `;
-      }
-      const newHandler = `${locPrefix}${handlers[ii]}`;
-
+    if (useJison) {
+      table[bnf.name].push([rules[ii], handlers[ii]]);
+    } else {
       table[bnf.name].push([rules[ii], newHandler]);
     }
+  }
 
-    for (let ii = 0; ii < subRules.length; ii++) {
-      transBnfImpl(subRules[ii], table);
-    }
+  for (let ii = 0; ii < subRules.length; ii++) {
+    transBnfImpl(subRules[ii], table, useJison);
   }
 };
 
-const transBnf = (bnf) => {
+const transBnf = (bnf, useJison = false) => {
   const table = {};
-  transBnfImpl(bnf, table);
+  transBnfImpl(bnf, table, useJison);
   return table;
 };
 

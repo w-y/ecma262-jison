@@ -15,7 +15,7 @@ module.exports = {
           new (require('./ast/BlockStatement').BlockStatementNode)(
             [],
             // block location
-            { loc: (require('./util').mergeLoc(@5, @6)), yy }
+            { loc: (require('./util').mergeLoc($5, $6)), yy }
           ),
           { loc: this._$, yy }
         )`,
@@ -26,7 +26,7 @@ module.exports = {
         // block location
         new (require('./ast/BlockStatement').BlockStatementNode)(
           [],
-          { loc: (require('./util').mergeLoc(@6, @7)), yy }
+          { loc: (require('./util').mergeLoc($6, $7)), yy }
         ),
         { loc: this._$, yy })`,
   ],

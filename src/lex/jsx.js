@@ -15,7 +15,7 @@ const JSXSelfClosing = {
   handler: `
 
     if (this.topState() === 'single_line_comment_start') {
-      require('./lex/comment').onComment(this, this.match);
+      require('./lex/comment').onComment(yy, this.match);
       return '';
     }
 

@@ -20,6 +20,7 @@ function canApplyRule(source, ex) {
     return false;
   }
   const token = ex.hash.token;
+  const text = ex.hash.text;
   const range = ex.hash.loc.range;
   let tokenOffset = range[0];
 
@@ -38,11 +39,14 @@ function canApplyRule(source, ex) {
 
   // recover from no LineTerminator exception
   if (ex.hash.exception instanceof require('./error').NoLineTerminatorError) {
-    tokenOffset = ex.hash.loc.range[1] - 1;
-    while (isWhiteSpace(source[tokenOffset]) || isLineTerminator(source[tokenOffset])) {
-      tokenOffset -= 1;
+
+    // ++/--
+    if (text === '++' || text === '--') {
+      const { index: tokenOffset } = lookBehind(source.substring(0, ex.hash.loc.range[0] + 1), 0, true, false);
+      return tokenOffset;
+    } else {
+      return ex.hash.loc.range[1] - 1;
     }
-    return tokenOffset + 1;
   }
 
   const { index: prevOffset } = lookBehind(source.substring(0, tokenOffset), 0, true, false);
@@ -55,11 +59,11 @@ function canApplyRule(source, ex) {
     return prevOffset + 1;
   }
 
-  const { index } = lookBehind(source.substring(0, tokenOffset), 0, true, true);
+  /*const { index } = lookBehind(source.substring(0, tokenOffset), 0, true, true);
 
   if (/^\+\+/.test(source.substring(index - 1)) || /^--/.test(source.substring(index - 1))) {
-    return lookBehind(source.substring(0, index), 0, true, true).index;
-  }
+    return lookBehind(source.substring(0, index - 1), 0, true, true).index + 1;
+  }*/
 
   // The offending token is separated from the previous token by at least one LineTerminator.
   if (isLineTerminator(source[prevOffset])) {
@@ -80,20 +84,17 @@ function autoinsertion(source) {
   parser.parser.lexer.options.ranges = true;
 
   // custom error handler
-  parser.Parser.prototype.parseError = function (str, hash) {
-    debugger;
-    if (hash.recoverable) {
-      this.trace(str);
-    } else {
-      throw new ParseError(str, hash);
-    }
-  };
+  // parser.Parser.prototype.parseError = function (str, hash) {};
+
+  // jison-gho
+  // parser.Parser.prototype.originalParseError = function (str, hash) {};
 
   function reloadParser() {
     parser.parser.yy.autoInsertions = [];
     parser.parser.yy.autoInsertionCount = 0;
     parser.parser.yy.autoInsertionOffset = 0;
     parser.parser.yy.originEx = null;
+    parser.parser.yy.comments = null;
   }
 
   function applyRule(s, ex) {
@@ -144,6 +145,7 @@ function autoinsertion(source) {
       }
       lastSrc = src;
       src = applyRule(src, ex);
+      // console.log(src);
       console.warn(`retry ${count} times time parsed: ${Date.now() - lastTime}`);
       if (!src) {
         const originEx = parser.parser.yy.originEx;

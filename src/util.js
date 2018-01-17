@@ -127,7 +127,6 @@ function lookBehind(source, offset, ignoreWhitespace, ignoreLineTerminator) {
     const isLT = ignoreLineTerminator && isLineTerminator(ch);
     return isWS || isLT;
   };
-
   let ch = source[curr];
 
   while (curr >= 0 && test(ch)) {
@@ -354,7 +353,72 @@ function parseOperator(operator, alias) {
 
   let res = '';
 
-  switch (this.topState()) {
+  if (alias === 'UpdateOperator') {
+    let { ch: prevCh, index: prevIndex } = lookBehind(this.matched, 2, true, false);
+    let hasLF = false;
+    let hasSemiColon = false;
+
+    if (isLineTerminator(prevCh)) {
+      hasLF = true;
+    }
+    prevCh = lookBehind(this.matched.substring(0, prevIndex + 1), 0, true, true).ch;
+
+
+    //
+    //   a
+    //   /**/++c
+    while (prevCh === '/' && this.matched[prevIndex-1] === '*') {
+      let i = prevIndex - 2;
+
+      let commentIndex = -1;
+
+      while (i >= 1) {
+        // find /*
+        if (this.matched[i] === '*' && this.matched[i-1] === '/') {
+          commentIndex = i - 1;
+          break;
+        }
+        i--;
+      }
+      if (commentIndex >= 0) {
+        const beforeComment = lookBehind(this.matched.substring(0, commentIndex), 0, true, false);
+        prevIndex = beforeComment.index;
+        prevCh = beforeComment.ch;
+
+        if (isLineTerminator(prevCh)) {
+          hasLF = true;
+        }
+        prevCh = lookBehind(this.matched.substring(0, prevIndex + 1), 0, true, true).ch;
+      } else {
+        break;
+      }
+    }
+
+    if (prevCh === ';' || prevCh === '{') {
+      hasSemiColon = true;
+    }
+
+    // No LF for UpdateExpression
+    //
+    // except:
+    //   (a &&
+    //      ++c)
+    //
+    //   {
+    //     ++c
+    //   }
+    if (hasLF && !hasSemiColon && this.topState() !== 'parentheses_start') {
+      throw new (require('./error').NoLineTerminatorError)('no line terminator', {
+        text: this.yytext,
+        token: alias,
+        line: this.yylloc.first_line,
+        offset: this.offset - this.yytext.length,
+        loc: this.yylloc,
+      });
+    }
+  }
+
+  switch (oldState) {
     case 'single_string_start':
       res = 'SingleStringCharacter';
       break;
@@ -768,10 +832,10 @@ function parseToken(token, alias) {
               last_column: this.yylloc.last_column,
               range: [
                 this.yylloc.range[0],
-                this.yylloc.range[1] - 2,
+                this.yylloc.range[1] - '=>'.length,
               ],
             },
-            offset: this.offset - 2,
+            offset: this.offset - '=>'.length,
           });
         }
       }
