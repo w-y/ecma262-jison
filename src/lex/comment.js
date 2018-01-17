@@ -22,6 +22,24 @@ exports.onCommentEnd = (yy, type, line, column, range) => {
   }
   yy.comment.loc.push([line, column]);
   yy.comment.range.push(range);
+
+  // NOTICE: need to fix range after auto semicolon insertion
+  // subtract insertion offset
+  if (yy.autoInsertions) {
+    const rangeStart = yy.comment.range[0];
+    let countStart = 0;
+
+    for (let i = 0; i < yy.autoInsertions.length; i++) {
+      if (yy.autoInsertions[i]) {
+        if (yy.autoInsertions[i] <= rangeStart) {
+          countStart++;
+        }
+      }
+    }
+    yy.comment.range[0] -= countStart;
+    yy.comment.range[1] -= countStart;
+  }
+
   yy.comments.push(yy.comment);
 };
 

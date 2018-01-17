@@ -380,14 +380,16 @@ function parseOperator(operator, alias) {
         offset--;
       }
       if (commentIndex >= 0) {
-        const beforeComment = lookBehind(this.matched.substring(0, commentIndex), 0, true, false);
+        let beforeComment = lookBehind(this.matched.substring(0, commentIndex), 0, true, false);
         prevIndex = beforeComment.index;
         prevCh = beforeComment.ch;
 
         if (isLineTerminator(prevCh)) {
           hasLF = true;
         }
-        prevCh = lookBehind(this.matched.substring(0, prevIndex + 1), 0, true, true).ch;
+        beforeComment = lookBehind(this.matched.substring(0, prevIndex + 1), 0, true, true);
+        prevIndex = beforeComment.index;
+        prevCh = beforeComment.ch;
       } else {
         break;
       }
@@ -411,8 +413,13 @@ function parseOperator(operator, alias) {
         text: this.yytext,
         token: alias,
         line: this.yylloc.first_line,
-        offset: this.offset - this.yytext.length,
         loc: this.yylloc,
+        offset: prevIndex + 1,
+        // if has comments before update operator,
+        // it seems to be better to insert before all the comments
+        // ;/*comments*/++c vs /*comments*/;++c
+        // the later is easier to implement since the offset is before update operator
+        // or we need to calculate the offset before the very first comments in raw
       });
     }
   }
@@ -834,7 +841,6 @@ function parseToken(token, alias) {
                 this.yylloc.range[1] - '=>'.length,
               ],
             },
-            offset: this.offset - '=>'.length,
           });
         }
       }

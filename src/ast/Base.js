@@ -74,11 +74,11 @@ function BaseNode({
       if (comment.leadingLinkNode) {
         if (comment.leadingLinkNode.range[0] >= this.range[0] &&
             comment.leadingLinkNode.range[1] <= this.range[1]) {
-          if (commentRange[1] < this.range[0]) {
+          if (commentRange[1] <= this.range[0]) {
             comment.leadingLinkNode = this;
           }
         }
-      } else if (commentRange[1] < this.range[0] && !comment.leadingLinkNode) {
+      } else if (commentRange[1] <= this.range[0] && !comment.leadingLinkNode) {
         comment.leadingLinkNode = this;
       }
 

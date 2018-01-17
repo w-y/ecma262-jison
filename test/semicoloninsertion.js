@@ -201,5 +201,25 @@ describe('automatic semicolon insertion', function() {
       done();
     });
 
+    it('LineTerminator occurs between identifier and ++ with comments', function(done) {
+      const ast = parser.parse('a = b\n/*some comment 1*/\n/*some comment 2*/++c\n');
+      assert.equal('ExpressionStatement', ast.body[0].type);
+      assert.equal('AssignmentExpression', ast.body[0].expression.type);
+
+      assert.equal('=', ast.body[0].expression.operator);
+      assert.equal('a', ast.body[0].expression.left.name);
+      assert.equal('b', ast.body[0].expression.right.name);
+
+      assert.equal('UpdateExpression', ast.body[1].expression.type);
+      assert.equal('++', ast.body[1].expression.operator);
+      assert.equal('c', ast.body[1].expression.operand.name);
+      assert.equal(2, ast.body[1].leadingComments.length);
+
+      assert.equal('some comment 1', ast.body[1].leadingComments[0].value);
+      assert.equal('some comment 2', ast.body[1].leadingComments[1].value);
+
+      done();
+    });
+
   });
 });

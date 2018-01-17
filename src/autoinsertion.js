@@ -41,7 +41,8 @@ function canApplyRule(source, ex) {
   if (ex.hash.exception instanceof require('./error').NoLineTerminatorError) {
     // ++/--
     if (text === '++' || text === '--') {
-      return lookBehind(source.substring(0, ex.hash.loc.range[0] + 1), 0, true, false).index;
+      return lookBehind(
+          source.substring(0, ex.hash.exception.hash.offset + 1), 0, true, false).index;
     }
     return ex.hash.loc.range[1] - 1;
   }
