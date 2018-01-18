@@ -72,10 +72,10 @@ function autoinsertion(source) {
   let res = null;
   let src = source;
 
-  // enable range info in loc
+  // enable range info in loc for original jison
   parser.parser.lexer.options.ranges = true;
 
-  // custom error handler
+  // custom error handler for original jison
   parser.Parser.prototype.parseError = function (str, hash) {
     if (hash.recoverable) {
       this.trace(str);
