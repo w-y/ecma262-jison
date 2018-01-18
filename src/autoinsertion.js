@@ -5,13 +5,18 @@ const { lookBehind } = require('./util');
 
 const EOF = 1;
 
+function isEOF(ex) {
+  return ex.hash && ex.hash.token === EOF;
+}
+
 /**
  * "
  *  The JS Interpreter finds an error,
  *  adds a semicolon,
  *  and runs the whole thing again."
  *                                -- Doug Crockford
- * when parse again, we need to reset all the flags
+ *
+ * when parse again, we need to reload the parser
  */
 
 function canApplyRule(source, ex) {
@@ -19,7 +24,6 @@ function canApplyRule(source, ex) {
   if (!ex.hash || !ex.hash.loc) {
     return false;
   }
-  const token = ex.hash.token;
   const text = ex.hash.text;
   const range = ex.hash.loc.range;
   const tokenOffset = range[0];
@@ -29,11 +33,11 @@ function canApplyRule(source, ex) {
   }
 
   // NOTICE: the end of the input stream of tokens
-  if (token === EOF) {
+  if (isEOF(ex)) {
     return tokenOffset;
   }
   // The offending token is }
-  if (token === '"}"') {
+  if (text === '}') {
     return tokenOffset;
   }
 
@@ -62,10 +66,6 @@ function canApplyRule(source, ex) {
     return prevOffset + 1;
   }
   return -1;
-}
-
-function isEOF(ex) {
-  return ex.hash && ex.hash.token === EOF;
 }
 
 function autoinsertion(source) {
