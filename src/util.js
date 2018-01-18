@@ -64,9 +64,9 @@ exports.getMVHexDigits = getMVHexDigits;
 function mergeLoc(fromLoc, toLoc) {
   return {
     first_line: fromLoc.first_line,
-    last_line: toLoc.lastLine,
+    last_line: toLoc.last_line,
     first_column: fromLoc.firts_column,
-    last_column: toLoc.lastColumn,
+    last_column: toLoc.last_column,
     range: [fromLoc.range[0], toLoc.range[1]],
   };
 }
