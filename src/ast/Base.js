@@ -66,21 +66,19 @@ function BaseNode({
   this.leadingComments = leadingComments;
   this.trailingComments = trailingComments;
 
-  const lexer = yy.lexer;
-
-  if (lexer.comments && lexer.comments.length > 0) {
-    for (let i = 0; i < lexer.comments.length; i++) {
-      const comment = lexer.comments[i];
-      const commentRange = lexer.comments[i].range;
+  if (yy.comments && yy.comments.length > 0) {
+    for (let i = 0; i < yy.comments.length; i++) {
+      const comment = yy.comments[i];
+      const commentRange = yy.comments[i].range;
 
       if (comment.leadingLinkNode) {
         if (comment.leadingLinkNode.range[0] >= this.range[0] &&
             comment.leadingLinkNode.range[1] <= this.range[1]) {
-          if (commentRange[1] < this.range[0]) {
+          if (commentRange[1] <= this.range[0]) {
             comment.leadingLinkNode = this;
           }
         }
-      } else if (commentRange[1] < this.range[0] && !comment.leadingLinkNode) {
+      } else if (commentRange[1] <= this.range[0] && !comment.leadingLinkNode) {
         comment.leadingLinkNode = this;
       }
 

@@ -1,13 +1,13 @@
 const idStartReg = require('unicode-6.3.0/Binary_Property/ID_Start/regex');
 const idContinueReg = require('unicode-6.3.0/Binary_Property/ID_Continue/regex');
 
-exports.idStart = idStartReg;
+exports.idStart = idStartReg.source;
 
-exports.idContinue = idContinueReg;
+exports.idContinue = idContinueReg.source;
 
 const unicodeIDStart = {
   conditions: ['INITIAL', 'brace_start', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'function_brace_start', 'block_brace_start', 'property_start', 'condition_start', 'parentheses_start', 'function_parentheses_start', 'jsxtag_start', 'jsxtag_closing', 'jsxtagname_start', 'jsxtag_attr_start', 'jsxtag_attr_value_start', 'jsx_child_block_start', 'jsx_spread_attr_start', 'import_start'],
-  rule: idStartReg,
+  rule: idStartReg.source,
   handler: `
     if (this.topState() === 'property_start') {
       this.popState();
@@ -25,7 +25,7 @@ const unicodeIDStart = {
 
 const unicodeIDContinue = {
   conditions: ['identifier_start'],
-  rule: idContinueReg,
+  rule: idContinueReg.source,
   handler: `
     return 'UnicodeIDContinue';
   `,

@@ -1,6 +1,3 @@
-const Generator = require('jison/lib/jison').Generator;
-// const Generator = require('jison-gho/lib/jison').Generator;
-
 const fs = require('fs');
 const path = require('path');
 
@@ -127,7 +124,7 @@ const {
 
 const Program = require('./bnf/Program');
 
-exports.grammar = {
+const grammar = (useJison = false) => ({
   comment: 'ECMA-262 7th Edition, 17.02.23 The es Grammar. Parses strings into ast.',
   author: 'w-y',
 
@@ -311,18 +308,44 @@ exports.grammar = {
   start: 'Program',
 
   operators: [['nonassoc', 'if'], ['nonassoc', 'else']],
-  bnf: transBnf(Program),
+  bnf: transBnf(Program, useJison),
+});
+
+
+// jison options
+// const options = { type: 'lr', moduleType: 'commonjs', moduleName: 'esparse' };
+
+// jison-gho options
+const options = {
+  type: 'lr',
+  moduleType: 'commonjs',
+  moduleName: 'esparse',
+  json: true,
+  compressTables: 0,
+  tokenStack: true,
+  ranges: true,
 };
 
-// const options = { type: 'lr', moduleType: 'commonjs', moduleName: 'esparse' };
-const options = { type: 'lr', moduleType: 'commonjs', moduleName: 'esparse', json: true, compressTables: 0, tokenStack: true, ranges: true };
+exports.main = function main(args) {
+  let code;
+  // NOTICE:
+  // force to use jison otherwise use jison-gho
+  let useJisonGho = true;
 
-
-exports.main = function main() {
-  const code = new Generator(exports.grammar, options).generate();
+  if (args.indexOf('--use-jison') !== -1) {
+    useJisonGho = false;
+  }
+  if (useJisonGho) {
+    const GeneratorGho = require('jison-gho/lib/jison').Generator;
+    console.log(grammar());
+    code = new GeneratorGho(grammar(), options).generate();
+  } else {
+    const Generator = require('jison/lib/jison').Generator;
+    code = new Generator(grammar(true), options).generate();
+  }
   fs.writeFileSync(`${path.dirname(__filename)}/parser.js`, code);
 };
 
 if (require.main === module) {
-  exports.main();
+  exports.main(process.argv.slice(2));
 }
