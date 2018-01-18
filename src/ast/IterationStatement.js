@@ -1,26 +1,24 @@
 const BaseNode = require('./Base');
 
-// const errorMsg =
-//  'semicolon can\'t become one of the two semicolons in the header of a for statement';
+const errorMsg = 'semicolon can\'t become one of the two semicolons in the header of a for statement';
 
-// TODO: now check forstatement's range, but forstatement may contain function
-// need to check if autoInsertionOffset === forstatement's semicolon offset
-function checkForAutoSemicolonInsertion(
-  /* yy, leftParenthesisRange, rightParenthesisRange, loc */) {
-  /* if (leftParenthesisRange && rightParenthesisRange && yy.autoInsertions) {
-    // semicolon can't become one of the two semicolons
-    // in the header of a for statement
-
+function checkForAutoSemicolonInsertion(yy, firstSemiRange, secondSemiRange) {
+  if (yy.autoInsertions) {
     for (let i = 0; i < yy.autoInsertions.length; i++) {
       const autoInsertionOffset = yy.autoInsertions[i];
 
-      // if (autoInsertionOffset > leftParenthesisRange[0]
-      //   && autoInsertionOffset < rightParenthesisRange[1]) {
-      //     throw new (require('../error').ParseError)(errorMsg,
-      //       { text: ';', token: ';', line: loc.first_line, loc, failedAutoSemicolon: true });
-      // }
+      if ((firstSemiRange && firstSemiRange.range[1]) === autoInsertionOffset ||
+          (secondSemiRange && secondSemiRange.range[1]) === autoInsertionOffset) {
+        // check if autoInsertionOffset === for statement semicolon offset
+        throw new (require('../error').InvalidASIError)(errorMsg, {
+          text: yy.lexer.yytext,
+          token: yy.lexer.yytext,
+          line: yy.lexer.yylloc.first_line,
+          loc: yy.lexer.yylloc,
+        });
+      }
     }
-  } */
+  }
 }
 
 function IterationStatementNode(type, test, body, ...args) {

@@ -58,6 +58,17 @@ describe('automatic semicolon insertion', function() {
       done();
     });
 
+    it(`for (a; b\n);`, function(done) {
+      try {
+        const ast = parser.parse('for (a; b\n);\n');
+        assert.equal(true, false);
+      } catch(ex) {
+        assert.equal(`semicolon can't become one of the two semicolons in the header of a for statement`, ex.exception.hash.exception.message);
+      }
+      done();
+    });
+
+
     it('no LineTerminator here', function(done) {
       const ast = parser.parse('function foo() {\n  return\n  a + b\n}');
       assert.equal('FunctionDeclaration', ast.body[0].type);

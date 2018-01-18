@@ -24,7 +24,7 @@ function canApplyRule(source, ex) {
   const range = ex.hash.loc.range;
   const tokenOffset = range[0];
 
-  if (token === '";"' && ex.hash.failedAutoSemicolon) {
+  if (text === ';' && ex.hash.exception instanceof require('./error').InvalidASIError) {
     return -1;
   }
 
@@ -151,6 +151,7 @@ function autoinsertion(source) {
         if (isEOF(originEx)) {
           break;
         } else {
+          originEx.exception = ex;
           throw originEx;
         }
       }
