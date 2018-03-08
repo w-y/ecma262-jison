@@ -3,10 +3,10 @@ const { ParseError } = require('./error');
 const parser = require('./parser');
 const { lookBehind } = require('./util');
 
-const EOF = 1;
-
 function isEOF(ex) {
-  return ex.hash && ex.hash.token === EOF;
+  // jison EOF = 1
+  // jison gho EOF = 'end of input'
+  return (ex.hash && ex.hash.token === 1) || (ex.hash.token === 'end of input');
 }
 
 /**
@@ -84,9 +84,6 @@ function autoinsertion(source) {
     }
   };
 
-  // jison-gho
-  // parser.Parser.prototype.originalParseError = function (str, hash) {};
-
   function reloadParser() {
     parser.parser.yy.autoInsertions = [];
     parser.parser.yy.autoInsertionCount = 0;
@@ -146,18 +143,24 @@ function autoinsertion(source) {
       console.warn(`retry ${count} times time parsed: ${Date.now() - lastTime}`);
       if (!src) {
         const originEx = parser.parser.yy.originEx;
-        reloadParser();
         // empty file
         if (isEOF(originEx)) {
           break;
         } else {
           originEx.exception = ex;
-          throw originEx;
+          reloadParser();
+          // throw originEx;
+          throw new ParseError(ex.message, ex.hash);
         }
       }
     }
   }
-  return false;
+  res = new (require('./ast/ScriptNode'))([], {
+    loc: parser.parser.yy.originEx.hash.loc,
+    yy: parser.parser.yy,
+  });
+  reloadParser();
+  return res;
 }
 
 module.exports = autoinsertion;

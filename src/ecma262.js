@@ -337,7 +337,6 @@ exports.main = function main(args) {
   }
   if (useJisonGho) {
     const GeneratorGho = require('jison-gho/lib/jison').Generator;
-    console.log(grammar());
     code = new GeneratorGho(grammar(), options).generate();
   } else {
     const Generator = require('jison/lib/jison').Generator;

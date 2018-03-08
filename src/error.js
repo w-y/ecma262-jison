@@ -1,6 +1,9 @@
 function ParseError(msg, hash) {
   this.message = msg;
   this.hash = hash;
+  this.lineNumber = hash.loc.first_line;
+  this.column = hash.loc.first_column;
+  this.index = hash.loc.range[0];
 }
 
 ParseError.prototype = Object.create(Error.prototype);

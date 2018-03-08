@@ -51,6 +51,9 @@ const MultiLineCommentCharsStart = {
   conditions: ['*'],
   rule: '/\\*',
   handler: `
+    if (this.topState() === 'single_line_comment_start') {
+      return require('./lex/comment').onComment(yy, this.match);
+    }
     if (this.topState() === 'single_string_start') {
       return 'SingleStringCharacter';
     }
