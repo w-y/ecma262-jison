@@ -163,6 +163,10 @@ function isDivAhead(state, currState, match) {
   if (currState === 'jsxtag_attr_start' && match === '}') {
     return false;
   }
+  // `${a}/b`
+  if (currState === 'template_string_head_start' && match === '}') {
+    return false;
+  }
   if (match === ']' ||
       match === ')' ||
       match === '}') {
@@ -318,7 +322,7 @@ function parseKeyword(keyword, alias) {
   if (this.topState() === 'brace_start' && ch === ':') {
     res = 'UnicodeIDStart';
   }
-  if (this.match === 'import') {
+  if (this.topState() === 'INITIAL' && this.match === 'import') {
     this.begin('import_start');
   }
   if (this.match === 'from') {
@@ -352,6 +356,10 @@ function parseOperator(operator, alias) {
   const oldState = this.topState();
 
   let res = '';
+
+  if (oldState === 'single_line_comment_start') {
+    return require('./lex/comment').onComment(this.yy, this.match);
+  }
 
   if (alias === 'UpdateOperator') {
     let { ch: prevCh, index: prevIndex } = lookBehind(this.matched, 2, true, false);

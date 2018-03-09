@@ -2,7 +2,7 @@ const parser = require('../src/index');
 
 const { createFileHelper } = require('./test/helpers');
 
-const fileHelper = createFileHelper('/tmp/test.js');
+const fileHelper = createFileHelper('/tmp/test5.js');
 
 fileHelper.readFileAsync((err, data) => {
   const ast = parser.parse(data);

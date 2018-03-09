@@ -2,3 +2,4 @@ parser.js
 mock/
 parser*.*
 test*.js
+examples/
