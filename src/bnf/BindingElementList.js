@@ -7,7 +7,7 @@ module.exports = {
   ],
   handlers: [
     '$$ = [$1]',
-    '$$ = $1.push([$3])',
+    '$$ = $1.concat([$3])',
   ],
   subRules: [
     require('./BindingElisionElement'),
