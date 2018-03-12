@@ -46,6 +46,7 @@ const decimalPoint = {
             this.topState() === 'function_parentheses_start' ||
             this.topState() === 'jsx_child_block_start' ||
             this.topState() === 'jsx_spread_attr_start' ||
+            this.topState() === 'jsxtag_attr_start' ||
             this.topState() === 'import_start') {
             const idStartReg = require('unicode-6.3.0/Binary_Property/ID_Start/regex');
             if (idStartReg.test(ch)) {
@@ -67,7 +68,7 @@ const decimalDigit = {
 };
 
 const decimalZero = {
-  conditions: ['INITIAL', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'brace_start', 'function_brace_start', 'block_brace_start', 'condition_start', 'parentheses_start', 'function_parentheses_start', 'jsx_child_block_start', 'jsx_spread_attr_start', 'import_start'],
+  conditions: ['INITIAL', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'brace_start', 'function_brace_start', 'block_brace_start', 'condition_start', 'parentheses_start', 'function_parentheses_start', 'jsx_child_block_start', 'jsx_spread_attr_start', 'import_start', 'jsxtag_attr_start'],
   rule: '0',
   handler: `
     this.begin('decimal_digit_start');
@@ -76,7 +77,7 @@ const decimalZero = {
 };
 
 const decimalNonZero = {
-  conditions: ['INITIAL', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'brace_start', 'function_brace_start', 'block_brace_start', 'condition_start', 'parentheses_start', 'function_parentheses_start', 'jsx_child_block_start', 'jsx_spread_attr_start', 'import_start'],
+  conditions: ['INITIAL', 'case_start', 'arrow_brace_start', 'template_string_head_start', 'brace_start', 'function_brace_start', 'block_brace_start', 'condition_start', 'parentheses_start', 'function_parentheses_start', 'jsx_child_block_start', 'jsx_spread_attr_start', 'import_start', 'jsxtag_attr_start'],
   rule: '[1-9]',
   handler: `
     this.begin('decimal_digit_start');
