@@ -361,6 +361,10 @@ function parseOperator(operator, alias) {
     return require('./lex/comment').onComment(this.yy, this.match);
   }
 
+  if (oldState === 'import_start' && this.match === ';') {
+    this.popState();
+  }
+
   if (alias === 'UpdateOperator') {
     let { ch: prevCh, index: prevIndex } = lookBehind(this.matched, 2, true, false);
     let hasLF = false;
