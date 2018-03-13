@@ -272,7 +272,8 @@ function parseKeyword(keyword, alias) {
       this.topState() === 'function_parentheses_start' ||
       this.topState() === 'jsx_child_block_start' ||
       this.topState() === 'jsx_spread_attr_start' ||
-      this.topState() === 'import_start'
+      this.topState() === 'import_start' ||
+      this.topState() === 'jsxtag_attr_start'
     ) {
     const idContinueReg = require('unicode-6.3.0/Binary_Property/ID_Continue/regex');
     if (idContinueReg.test(input[curr]) || input[curr] === '$' || input[curr] === '_') {
@@ -356,7 +357,7 @@ function parseOperator(operator, alias) {
   const oldState = this.topState();
 
   let res = '';
-
+ 
   if (oldState === 'single_line_comment_start') {
     return require('./lex/comment').onComment(this.yy, this.match);
   }
@@ -489,6 +490,14 @@ function parseOperator(operator, alias) {
     default:
       res = alias || operator;
       break;
+  }
+
+  // <a data-id />
+  if (this.match === '-' && oldState === 'identifier_start') {
+    if (this.topState() === 'jsxtag_start') {
+      this.begin('identifier_start');
+      return '-';
+    }
   }
 
   if (ch === '/') {
