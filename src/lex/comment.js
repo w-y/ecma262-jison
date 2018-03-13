@@ -125,15 +125,18 @@ const SingleLineCommentCharsStart = {
   conditions: ['*'],
   rule: '//',
   handler: `
-    // //// will not begin new state
-    if (this.topState() !== 'single_line_comment_start') {
-      this.begin('single_line_comment_start');
-    }
     if (this.topState() === 'single_string_start') {
       return 'SingleStringCharacter';
     }
     if (this.topState() === 'double_string_start') {
       return 'DoubleStringCharacter';
+    }
+    if (this.topState() === 'template_string_start') {
+      return require('./util').parseTemplateCharacters.call(this, this.match);
+    }
+    // //// will not begin new state
+    if (this.topState() !== 'single_line_comment_start') {
+      this.begin('single_line_comment_start');
     }
     require('./lex/comment').onCommentStart(yy, 'SingleLine', yylloc.first_line, yylloc.first_column, yylloc.range[0]);
     return '';
