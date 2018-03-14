@@ -8,6 +8,7 @@ module.exports = {
     `
       $$ = new (require('./ast/ScriptNode'))($1, { loc: this._$, yy });
       $$.sourceType = $1.sourceType;
+      delete $1.sourceType;
       if (yy.comments) {
         for (let i = 0; i < yy.comments.length; i++) {
           const comments = yy.comments;
