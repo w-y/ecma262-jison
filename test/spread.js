@@ -7,7 +7,7 @@ describe('spread', function() {
   let ast = null;
 
   before(function(done) {
-    const fileHelper = createFileHelper('../mock/spread.js');
+    const fileHelper = createFileHelper('./mock/spread.js');
     fileHelper.readFileAsync((err, data) => {
       ast = parser.parse(data);
       done();
