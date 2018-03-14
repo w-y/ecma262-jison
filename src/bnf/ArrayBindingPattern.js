@@ -17,7 +17,7 @@ module.exports = {
     '$$ = new (require(\'./ast/ArrayBindingPatternNode\'))($2, { loc: this._$, yy })',
     '$$ = new (require(\'./ast/ArrayBindingPatternNode\'))($2.concat([$3]), { loc: this._$, yy })',
     '$$ = new (require(\'./ast/ArrayBindingPatternNode\'))($2, { loc: this._$, yy })',
-    '$$ = new (require(\'./ast/ArrayBindingPatternNode\'))($2.concat([$3]), { loc: this._$, yy })',
+    '$$ = new (require(\'./ast/ArrayBindingPatternNode\'))($2.concat([$4]), { loc: this._$, yy })',
     '$$ = new (require(\'./ast/ArrayBindingPatternNode\'))($2.concat($4).concat([$5]), { loc: this._$, yy })',
     '$$ = new (require(\'./ast/ArrayBindingPatternNode\'))($2.concat($4), { loc: this._$, yy })',
   ],
