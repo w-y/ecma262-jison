@@ -357,7 +357,7 @@ function parseOperator(operator, alias) {
   const oldState = this.topState();
 
   let res = '';
- 
+
   if (oldState === 'single_line_comment_start') {
     return require('./lex/comment').onComment(this.yy, this.match);
   }
