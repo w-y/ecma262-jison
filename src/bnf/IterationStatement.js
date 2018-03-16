@@ -52,9 +52,9 @@ module.exports = {
         // $4 is an array of VariableDeclarator, we need the last one's range
         new (require('./ast/VariableStatement').VariableStatementNode)($4, { loc: {
           first_line: $3.first_line,
-          last_line: $4[$4.length-1].lastLine,
-          first_column: $3.firts_column,
-          last_column:  $4[$4.length-1].lastColumnu,
+          last_line: $4[$4.length-1].last_line,
+          first_column: $3.first_column,
+          last_column:  $4[$4.length-1].last_column,
           range: [$3.range[0], $4[$4.length-1].range[1]],
         }, yy }), $6, $8, $10, { loc: this._$, yy });
     `,
@@ -76,9 +76,9 @@ module.exports = {
         // $4 is a single VariableDeclarator
         new (require('./ast/VariableStatement').VariableStatementNode)([$4], { loc: {
           first_line: $3.first_line,
-          last_line: $4.lastLine,
-          first_column: $3.firts_column,
-          last_column:  $4.lastColumnu,
+          last_line: $4.last_line,
+          first_column: $3.first_column,
+          last_column:  $4.last_column,
           range: [$3.range[0], $4.range[1]],
         }, yy }), $6, $8, { loc: this._$, yy });
     `,
@@ -124,9 +124,9 @@ module.exports = {
       $$ = new (require('./ast/IterationStatement').ForStatementNode)(
         new (require('./ast/VariableStatement').VariableStatementNode)($4, { loc: {
           first_line: $3.first_line,
-          last_line: $4[$4.length-1].lastLine,
-          first_column: $3.firts_column,
-          last_column:  $4[$4.length-1].lastColumnu,
+          last_line: $4[$4.length-1].last_line,
+          first_column: $3.first_column,
+          last_column:  $4[$4.length-1].last_column,
           range: [$3.range[0], $4[$4.length-1].range[1]],
         }, yy }), null, $7, $9, { loc: this._$, yy });
     `,
@@ -135,9 +135,9 @@ module.exports = {
       $$ = new (require('./ast/IterationStatement').ForStatementNode)(
         new (require('./ast/VariableStatement').VariableStatementNode)($4, { loc: {
           first_line: $3.first_line,
-          last_line: $4[$4.length-1].lastLine,
-          first_column: $3.firts_column,
-          last_column:  $4[$4.length-1].lastColumnu,
+          last_line: $4[$4.length-1].last_line,
+          first_column: $3.first_column,
+          last_column:  $4[$4.length-1].last_column,
           range: [$3.range[0], $4[$4.length-1].range[1]],
         }, yy }), $6, null, $9, { loc: this._$, yy });
     `,
@@ -146,9 +146,9 @@ module.exports = {
       $$ = new (require('./ast/IterationStatement').ForStatementNode)(
         new (require('./ast/VariableStatement').VariableStatementNode)($4, { loc: {
           first_line: $3.first_line,
-          last_line: $4[$4.length-1].lastLine,
-          first_column: $3.firts_column,
-          last_column:  $4[$4.length-1].lastColumnu,
+          last_line: $4[$4.length-1].last_line,
+          first_column: $3.first_column,
+          last_column:  $4[$4.length-1].last_column,
           range: [$3.range[0], $4[$4.length-1].range[1]],
         }, yy }), null, null, $8, { loc: this._$, yy });
     `,
@@ -171,9 +171,9 @@ module.exports = {
         // $4 is a single VariableDeclarator
         new (require('./ast/VariableStatement').VariableStatementNode)([$4], { loc: {
           first_line: $3.first_line,
-          last_line: $4.lastLine,
-          first_column: $3.firts_column,
-          last_column:  $4.lastColumnu,
+          last_line: $4.last_line,
+          first_column: $3.first_column,
+          last_column:  $4.last_column,
           range: [$3.range[0], $4.range[1]],
         }, yy }), $6, $8, { loc: this._$, yy });
     `,
