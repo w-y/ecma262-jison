@@ -21,6 +21,9 @@ const RegexpStart = {
   rule: '/',
   handler: `
     if (require('./util').isDivAhead.call(this, this.topState())) {
+      if (this.topState() === 'exponent_start') {
+        this.popState();
+      }
       this.popState();
       return 'MultiplicativeOperator';
     } else {

@@ -140,6 +140,9 @@ exports.lookBehind = lookBehind;
 
 // check if next '/' is a div operator or start of a regular expression
 function isDivAhead(state, currState, match) {
+  if (state === 'exponent_start') {
+    return true;
+  }
   if (currState === 'jsxtag_start') {
     return false;
   }
