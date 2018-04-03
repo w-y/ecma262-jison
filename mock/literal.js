@@ -27,3 +27,16 @@ false;
 ({a_:1.2});
 ({a_});
 ({'$a' : 1.23});
+fibonacci = {[Symbol.iterator]() {}};
+obj = {
+    // __proto__
+    __proto__: theProtoObj,
+    // Shorthand for ‘handler: handler’
+    handler,
+    // Methods
+    toString() {
+      return foo;
+    },
+    // Computed (dynamic) property names
+    [ 'prop_' + (() => 1)() ]: 1
+};
