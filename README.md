@@ -55,6 +55,7 @@ src到lib:
 | jsx                       | ✅  |             |
 | Spread Element            | ✅  |             |
 | Spread Property           | ✅  |             |
+| ASI                       | ✅  | 出错加分号重试方式 |
 
 ## 示例
 
@@ -63,7 +64,9 @@ const code = 'foo;';
 
 const parser = require('ecma262-jison');
 
-parser.parse(code);
+const ast = parser.parse(code);
+
+console.log(JSON.stringify(ast, null, 2));
 ```
 
 [在线示例](https://w-y.github.io/ecma262-jison/demos/ast/index.html)
