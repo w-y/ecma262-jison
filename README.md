@@ -4,13 +4,13 @@
 >Nothing increases your learning power more than working on something big, real, confusing and frustrating.
 
    
-##安装
+## 安装
 
 
 `npm install ecma262-jison`
 
 
-##构建
+## 构建
 
 Nodejs v6版本以上，推荐使用v8或更高版本
 
@@ -36,7 +36,7 @@ src到lib:
 
 `npm run test`
 
-##特性
+## 特性
 
 目前已实现[ECMAScript(7.0)](http://www.ecma-international.org/ecma-262/7.0/index.html)的大部分语法特性，并扩展了JSX支持
 
@@ -56,7 +56,7 @@ src到lib:
 | Spread Element            | ✅  |             |
 | Spread Property           | ✅  |             |
 
-##示例
+## 示例
 
 ```js
 const code = 'foo;';
