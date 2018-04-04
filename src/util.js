@@ -1086,6 +1086,12 @@ function parseCaseDefault() {
     return parseKeyword.call(this, this.match);
   } else if (this.topState() === 'export_start') {
     this.popState();
+    // export default {
+    const { ch } = lookAhead(this.matches.input,
+      this.matches.index + this.match.length, true, true);
+    if (ch === '{') {
+      this.begin('brace_start');
+    }
     return parseKeyword.call(this, this.match);
   }
   const { ch } = lookAhead(this.matches.input,
