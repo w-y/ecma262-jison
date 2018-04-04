@@ -227,4 +227,54 @@ describe('literal', function() {
       done();
     });
   });
+  
+  describe('enhanced object literal', function() {
+    it('method definition as property', function(done) {
+      assert.equal('AssignmentExpression', ast.body[29].expression.type);
+      assert.equal('ObjectLiteral', ast.body[29].expression.right.type);
+      assert.equal(1, ast.body[29].expression.right.properties.length);
+      assert.equal('MethodDefinition', ast.body[29].expression.right.properties[0].type);
+      assert.equal('MemberExpression', ast.body[29].expression.right.properties[0].key.type);
+      assert.equal(true, ast.body[29].expression.right.properties[0].key.computed);
+      assert.equal('Symbol', ast.body[29].expression.right.properties[0].key.element.name);
+      assert.equal('iterator', ast.body[29].expression.right.properties[0].key.property.name);
+      assert.equal('FunctionExpression', ast.body[29].expression.right.properties[0].value.type);
+      assert.equal('BlockStatement', ast.body[29].expression.right.properties[0].value.body.type);
+      assert.equal(0, ast.body[29].expression.right.properties[0].value.body.body.length);
+      done();
+    });
+
+    it('enhanced', function(done) {
+      assert.equal('AssignmentExpression', ast.body[30].expression.type);
+      assert.equal('ObjectLiteral', ast.body[30].expression.right.type);
+      assert.equal(4, ast.body[30].expression.right.properties.length);
+      assert.equal('__proto__', ast.body[30].expression.right.properties[0].key.name);
+      assert.equal('theProtoObj', ast.body[30].expression.right.properties[0].value.name);
+
+      assert.equal('handler', ast.body[30].expression.right.properties[1].key.name);
+      assert.equal('handler', ast.body[30].expression.right.properties[1].value.name);
+
+      assert.equal('Identifier', ast.body[30].expression.right.properties[2].key.type);
+      assert.equal('FunctionExpression', ast.body[30].expression.right.properties[2].value.type);
+      assert.equal(1, ast.body[30].expression.right.properties[2].value.body.length);
+      assert.equal('ReturnStatement', ast.body[30].expression.right.properties[2].value.body[0].type);
+      assert.equal('foo', ast.body[30].expression.right.properties[2].value.body[0].params.name);
+
+      assert.equal('AdditiveExpression', ast.body[30].expression.right.properties[3].key.type);
+      assert.equal(true, ast.body[30].expression.right.properties[3].key.computed);
+      assert.equal('Literal', ast.body[30].expression.right.properties[3].key.left.type);
+      assert.equal('prop_', ast.body[30].expression.right.properties[3].key.left.value);
+      assert.equal('CallExpression', ast.body[30].expression.right.properties[3].key.right.type);
+      assert.equal('CoverParenthesizedExpression', ast.body[30].expression.right.properties[3].key.right.callee.type);
+      assert.equal('ArrowFunction', ast.body[30].expression.right.properties[3].key.right.callee.expressions[0].type);
+      assert.equal('Literal', ast.body[30].expression.right.properties[3].key.right.callee.expressions[0].body.type);
+      assert.equal(1, ast.body[30].expression.right.properties[3].key.right.callee.expressions[0].body.value);
+      assert.equal(0, ast.body[30].expression.right.properties[3].key.right.params.length);
+
+      assert.equal(1, ast.body[30].expression.right.properties[3].value.value);
+
+      done();
+    });
+
+  });
 });

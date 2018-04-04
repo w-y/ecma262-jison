@@ -5,7 +5,10 @@ module.exports = {
     '[ AssignmentExpression_In ]',
   ],
   handlers: [
-    '$$ = $2',
+    `
+      $2.computed = true; 
+      $$ = $2;
+    `,
   ],
   subRules: [
     require('./AssignmentExpression_In'),
