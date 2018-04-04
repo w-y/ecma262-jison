@@ -7,7 +7,11 @@
 ## 安装
 
 
-`npm install ecma262-jison`
+```bash
+
+npm install ecma262-jison
+
+```
 
 
 ## 构建
@@ -24,17 +28,28 @@ git clone https://github.com/w-y/ecma262-jison.git
 
 构建parser:
 
-```npm run buildparser`
+```bash
 
+npm run buildparser
+
+```
 
 src到lib:
 
-`npm run build`
+```bash
+
+npm run build
+
+```
 
 
 测试：
 
-`npm run test`
+```bash
+
+npm run test
+
+```
 
 ## 特性
 
