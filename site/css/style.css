@@ -419,59 +419,6 @@ a:focus {
     max-width: 40em
 }
 
-.btn {
-    font-family: IBM Plex Sans,helvetica,sans-serif;
-    font-weight: 700;
-    font-style: normal;
-    transition: all .4s cubic-bezier(.455,.03,.515,.955);
-    position: relative;
-    display: inline-block;
-    width: auto;
-    padding: 1.5em;
-    vertical-align: middle;
-    font-size: .5625000003rem;
-    letter-spacing: .15em;
-    color: #f4f1d0;
-    line-height: 1;
-    text-transform: uppercase;
-    text-decoration: none;
-    white-space: nowrap;
-    background-color: #111;
-    box-shadow: 0 5px 10px rgba(0,0,0,.3);
-    -webkit-font-smoothing: antialiased;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none
-}
-
-@media screen and (min-width: 30.77em) {
-    .btn {
-        font-size:calc(.5625000003rem + strip-unit0.1874999999rem * (100vw - 30.77em) / strip-unit43.076em)
-    }
-}
-
-@media screen and (min-width: 73.846em) {
-    .btn {
-        font-size:.7500000002rem
-    }
-}
-
-.btn svg {
-    margin-right: .75em
-}
-
-.btn:hover {
-    background-color: #000;
-    box-shadow: 0 10px 20px rgba(0,0,0,.5);
-    color: #fff
-}
-
-.btn:focus {
-    outline: none
-}
-
 body {
     margin: 0;
     background-color: #222;
@@ -829,3 +776,16 @@ body {
   text-decoration: none;
   transition: color .4s cubic-bezier(.455,.03,.515,.955)
 }
+
+@media (max-width: 31.25em) {
+  .markdown__body h1 {
+    font-size: 1.2em;
+  }
+  .markdown__body h2 {
+    font-size: 1em;
+  }
+  .markdown__body p, .markdown__body blockquote, .markdown__body ul, .markdown__body ol, .markdown__body dl, .markdown__body table, .markdown__body pre {
+    font-size: 0.8em;
+  }
+}
+
