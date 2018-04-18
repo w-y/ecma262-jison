@@ -533,7 +533,7 @@ body {
 }
 
 .wrapper {
-    overflow: hidden; 
+    overflow: hidden;
 }
 
 .intro {
@@ -584,7 +584,7 @@ body {
     transform: translateY(-50%);
 }
 
-@media (min-width: 62.31em) { 
+@media (min-width: 62.31em) {
     .intro__container {
         display: -ms-flexbox;
         display: flex;
@@ -771,7 +771,7 @@ body {
 .markdown__body blockquote {
   padding: 0 1em;
   color: #6a737d;
-  border-left: 0.25em solid #f4f1d0; 
+  border-left: 0.25em solid #f4f1d0;
 }
 
 .markdown__body pre {
@@ -789,14 +789,13 @@ body {
   padding-bottom: 0.3em;
   font-size: 2em;
   margin-bottom: 0.5em;
-  /* border-bottom: 1px solid #f4f1d0; */
 }
 
 .markdown__body h2 {
   padding-bottom: 0.3em;
   font-size: 1.5em;
   margin-bottom: 0.5em;
-  /* border-bottom: 1px solid #f4f1d0; */
+  margin-top: 1.5em;
 }
 
 .markdown__body p, .markdown__body blockquote, .markdown__body ul, .markdown__body ol, .markdown__body dl, .markdown__body table, .markdown__body pre {
@@ -829,7 +828,4 @@ body {
 .markdown__body a {
   text-decoration: none;
   transition: color .4s cubic-bezier(.455,.03,.515,.955)
-}
-
-@media (min-width: 62.31em) {
 }

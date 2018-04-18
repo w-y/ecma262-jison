@@ -176,7 +176,5 @@ if ('serviceWorker' in navigator) {
   // Listen for DOMContentLoaded event to init scrollLoop
   window.addEventListener('DOMContentLoaded', scrollEventLoop, false);
 
-
   loadContent('https://raw.githubusercontent.com/w-y/ecma262-jison/master/README.md');
-
 })();
