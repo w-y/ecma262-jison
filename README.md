@@ -55,7 +55,7 @@ npm run test
 
 ## 特性
 
-目前已实现[ECMAScript(7.0)](http://www.ecma-international.org/ecma-262/7.0/index.html)的大部分语法特性，并扩展了JSX支持
+目前已实现[ECMAScript(7.0)](http://www.ecma-international.org/ecma-262/7.0/index.html)的大部分语法特性，并扩展了[JSX](https://facebook.github.io/jsx/)支持
 
 |    特性                   | 支持 | 备注        |
 | ----------                | --- |  ---        |
