@@ -124,7 +124,7 @@ const {
 
 const Program = require('./bnf/Program');
 
-const grammar = (useJison = false) => ({
+const grammar = () => ({
   comment: 'ECMA-262 7th Edition, 17.02.23 The es Grammar. Parses strings into ast.',
   author: 'w-y',
 
@@ -308,12 +308,9 @@ const grammar = (useJison = false) => ({
   start: 'Program',
 
   operators: [['nonassoc', 'if'], ['nonassoc', 'else']],
-  bnf: transBnf(Program, useJison),
+  bnf: transBnf(Program, false),
 });
 
-
-// jison options
-// const options = { type: 'lr', moduleType: 'commonjs', moduleName: 'esparse' };
 
 // jison-gho options
 const options = {
@@ -326,22 +323,10 @@ const options = {
   ranges: true,
 };
 
-exports.main = function main(args) {
-  let code;
-  // NOTICE:
-  // force to use jison otherwise use jison-gho
-  let useJisonGho = true;
+exports.main = function main() {
+  const GeneratorGho = require('jison-gho/lib/jison').Generator;
+  const code = new GeneratorGho(grammar(), options).generate();
 
-  if (args.indexOf('--use-jison') !== -1) {
-    useJisonGho = false;
-  }
-  if (useJisonGho) {
-    const GeneratorGho = require('jison-gho/lib/jison').Generator;
-    code = new GeneratorGho(grammar(), options).generate();
-  } else {
-    const Generator = require('jison/lib/jison').Generator;
-    code = new Generator(grammar(true), options).generate();
-  }
   fs.writeFileSync(`${path.dirname(__filename)}/parser.js`, code);
 };
 

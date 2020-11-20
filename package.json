@@ -24,7 +24,6 @@
   },
   "homepage": "https://github.com/w-y/ecma262-jison#readme",
   "dependencies": {
-    "jison": "0.4.17",
     "jison-gho": "0.6.0-188",
     "unicode-6.3.0": "^0.7.0"
   },
@@ -36,6 +35,6 @@
     "eslint-config-airbnb": "^14.1.0",
     "eslint-config-airbnb-base": "^11.1.1",
     "eslint-plugin-import": "^2.2.0",
-    "mocha": "^3.3.0"
+    "mocha": "^8.2.1"
   }
 }
