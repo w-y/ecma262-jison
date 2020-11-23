@@ -77,7 +77,7 @@ exports.mergeLoc = mergeLoc;
 function lookAhead(source, offset, ignoreWhitespace, ignoreLineTerminator) {
   let curr = offset;
 
-  const test = function (ch) {
+  const test = function test(ch) {
     const isWS = ignoreWhitespace && isWhiteSpace(ch);
     const isLT = ignoreLineTerminator && isLineTerminator(ch);
     return isWS || isLT;
@@ -122,7 +122,7 @@ exports.lookAhead = lookAhead;
 function lookBehind(source, offset, ignoreWhitespace, ignoreLineTerminator) {
   let curr = source.length - offset - 1;
 
-  const test = function (ch) {
+  const test = function test(ch) {
     const isWS = ignoreWhitespace && isWhiteSpace(ch);
     const isLT = ignoreLineTerminator && isLineTerminator(ch);
     return isWS || isLT;
@@ -415,6 +415,10 @@ function parseOperator(operator, alias) {
       hasSemiColon = true;
     }
 
+    if (hasLF && !hasSemiColon && this.topState() !== 'parentheses_start') {
+      return 'LFUpdateOperator';
+    }
+
     // No LF for UpdateExpression
     //
     // except:
@@ -424,20 +428,21 @@ function parseOperator(operator, alias) {
     //   {
     //     ++c
     //   }
-    if (hasLF && !hasSemiColon && this.topState() !== 'parentheses_start') {
-      throw new (require('./error').NoLineTerminatorError)('no line terminator', {
-        text: this.yytext,
-        token: alias,
-        line: this.yylloc.first_line,
-        loc: this.yylloc,
-        offset: prevIndex + 1,
-        // if has comments before update operator,
-        // it seems to be better to insert before all the comments
-        // ;/*comments*/++c vs /*comments*/;++c
-        // the later is easier to implement since the offset is before update operator
-        // or we need to calculate the offset before the very first comments in raw
-      });
-    }
+
+    // if (hasLF && !hasSemiColon && this.topState() !== 'parentheses_start') {
+    //   throw new (require('./error').NoLineTerminatorError)('no line terminator', {
+    //     text: this.yytext,
+    //     token: alias,
+    //     line: this.yylloc.first_line,
+    //     loc: this.yylloc,
+    //     offset: prevIndex + 1,
+    //     // if has comments before update operator,
+    //     // it seems to be better to insert before all the comments
+    //     // ;/*comments*/++c vs /*comments*/;++c
+    //     // the later is easier to implement since the offset is before update operator
+    //     // or we need to calculate the offset before the very first comments in raw
+    //   });
+    // }
   }
 
   switch (oldState) {
@@ -850,23 +855,23 @@ function parseToken(token, alias) {
         // ArrowFunction[In, Yield] :
         //     ArrowParameters[?Yield] [no LineTerminator here] => ConciseBody[?In]
 
-        if (/^=>/.test(input.substring(i))) {
-          throw new (require('./error').NoLineTerminatorError)('no line terminator', {
-            text: this.yytext,
-            token: 'ArrowFunction',
-            line: this.yylloc.first_line,
-            loc: {
-              first_line: this.yylloc.first_line,
-              last_line: this.yylloc.last_line,
-              first_column: this.yylloc.first_column,
-              last_column: this.yylloc.last_column,
-              range: [
-                this.yylloc.range[0],
-                this.yylloc.range[1] - '=>'.length,
-              ],
-            },
-          });
-        }
+        // if (/^=>/.test(input.substring(i))) {
+        //   throw new (require('./error').NoLineTerminatorError)('no line terminator', {
+        //     text: this.yytext,
+        //     token: 'ArrowFunction',
+        //     line: this.yylloc.first_line,
+        //     loc: {
+        //       first_line: this.yylloc.first_line,
+        //       last_line: this.yylloc.last_line,
+        //       first_column: this.yylloc.first_column,
+        //       last_column: this.yylloc.last_column,
+        //       range: [
+        //         this.yylloc.range[0],
+        //         this.yylloc.range[1] - '=>'.length,
+        //       ],
+        //     },
+        //   });
+        // }
       }
       break;
   }
@@ -1106,3 +1111,14 @@ function parseCaseDefault() {
 
 exports.parseCaseDefault = parseCaseDefault;
 
+function getLoc(n) {
+  return {
+    range: n.range,
+    firstLine: n.firstLine,
+    firstColumn: n.firstColumn,
+    lastLine: n.lastLine,
+    lastColumn: n.lastColumn,
+  };
+}
+
+exports.getLoc = getLoc;

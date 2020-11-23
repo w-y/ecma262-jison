@@ -1,7 +1,5 @@
-import React from 'react';
 import pkg from 'scalameta-parsers/package.json';
 import defaultParserInterface from '../utils/defaultParserInterface';
-import SettingsRenderer from '../utils/SettingsRenderer';
 
 const ID = 'scalameta';
 
@@ -9,8 +7,10 @@ const dialects = {
   'Scala 2.10': 'Scala210',
   'Scala 2.11': 'Scala211',
   'Scala 2.12': 'Scala212',
+  'Scala 2.13': 'Scala213',
   'Sbt 0.13.6': 'Sbt0136',
   'Sbt 0.13.7': 'Sbt0137',
+  'Sbt 1': 'Sbt 1',
   'Dotty': 'Dotty',
   'Typelevel 2.11': 'Typelevel211',
   'Typelevel 2.12': 'Typelevel212',
@@ -18,18 +18,7 @@ const dialects = {
   'Paradise 2.12': 'Paradise212',
   'Paradise Typelevel 2.11': 'ParadiseTypelevel211',
   'Paradise Typelevel 2.12': 'ParadiseTypelevel212',
-}
-
-const defaultOptions = {
-  dialect: 'Scala 2.12',
-}
-
-const settingsConfiguration = {
-  fields: [
-    ['dialect', Object.keys(dialects)],
-  ],
-  required: new Set('dialect'),
-}
+};
 
 export default {
   ...defaultParserInterface,
@@ -45,11 +34,7 @@ export default {
   },
 
   parse(scalametaParser, code, options) {
-    const parsed = scalametaParser.parseSource(code, {
-      ...defaultOptions,
-      ...options,
-      dialect: dialects[defaultOptions.dialect || options.dialect],
-    });
+    const parsed = scalametaParser.parseSource(code, options);
     const { error, lineNumber, columnNumber } = parsed;
     if (error) {
       const e = new SyntaxError(parsed.error);
@@ -66,10 +51,6 @@ export default {
     }
   },
 
-  getNodeName(node) {
-    return node.type;
-  },
-
   opensByDefault(node, key) {
     return node.type === 'Program'
       || key === 'body'
@@ -77,14 +58,19 @@ export default {
       || key === 'stats';
   },
 
-  renderSettings(parserSettings, onChange) {
-    return (
-      <SettingsRenderer
-        settingsConfiguration={settingsConfiguration}
-        parserSettings={{...defaultOptions, ...parserSettings}}
-        onChange={onChange}
-      />
-    )
+  getDefaultOptions() {
+    return {
+      dialect: 'Scala213',
+    };
+  },
+
+  _getSettingsConfiguration() {
+    return {
+      fields: [
+        ['dialect', dialects],
+      ],
+      required: new Set('dialect'),
+    };
   },
 
 };

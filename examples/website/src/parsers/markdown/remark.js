@@ -1,18 +1,8 @@
 import React from 'react';
 import defaultParserInterface from '../utils/defaultParserInterface';
 import pkg from 'remark/package.json';
-import SettingsRenderer from '../utils/SettingsRenderer';
 
 const ID = 'remark';
-const defaultOptions = {
-  gfm: true,
-  commonmark: false,
-  footnotes: false,
-};
-
-const parserSettingsConfiguration = {
-  fields: Object.keys(defaultOptions),
-};
 
 export default {
   ...defaultParserInterface,
@@ -24,44 +14,63 @@ export default {
   locationProps: new Set(['position']),
 
   loadParser(callback) {
-    require(['remark'], callback);
+    require([
+      'remark',
+      'remark-gfm',
+      'remark-directive',
+      'remark-frontmatter',
+      'remark-math',
+    ], (remark, gfm, directive, frontmatter, math) =>
+      callback({ remark, gfm, directive, frontmatter, math }));
   },
 
-  parse(remark, code, options) {
-    return remark()
-      .data('settings', {...defaultOptions, ...options})
-      .parse(code);
+  parse({ remark, gfm, directive, frontmatter, math }, code, options) {
+    const plugins = [
+      options['remark-gfm'] ? gfm : false,
+      options['remark-directive'] ? directive : false,
+      options['remark-frontmatter'] ? [frontmatter, ['yaml', 'toml']] : false,
+      options['remark-math'] ? math : false,
+    ].filter((plugin) => plugin !== false);
+    return remark().use(plugins).parse(code);
   },
 
-  nodeToRange({position}) {
+  nodeToRange({ position }) {
     if (position) {
       return [position.start.offset, position.end.offset];
     }
-  },
-
-  getNodeName(node) {
-    return node.type;
   },
 
   opensByDefault(node, key) {
     return key === 'children';
   },
 
+  getDefaultOptions() {
+    return {
+      'remark-directive': false,
+      'remark-frontmatter': false,
+      'remark-gfm': false,
+      'remark-math': false,
+    };
+  },
+
   renderSettings(parserSettings, onChange) {
     return (
       <div>
         <p>
+          remark is extended through{' '}
           <a
-            href="https://github.com/remarkjs/remark/tree/master/packages/remark-parse#options"
-            target="_blank" rel="noopener noreferrer">
-            Option descriptions
+            href="https://github.com/remarkjs/remark/blob/HEAD/doc/plugins.md"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            plugins
           </a>
         </p>
-        <SettingsRenderer
-          settingsConfiguration={parserSettingsConfiguration}
-          parserSettings={{...defaultOptions, ...parserSettings}}
-          onChange={onChange}
-        />
+        {defaultParserInterface.renderSettings.call(
+          this,
+          parserSettings,
+          onChange,
+        )}
       </div>
     );
   },

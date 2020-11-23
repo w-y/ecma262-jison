@@ -14,7 +14,7 @@ export default {
   defaultParserID: 'recast',
 
   loadTransformer(callback) {
-    require(['jscodeshift'], jscodeshift => {
+    require(['../../../transpilers/babel', 'jscodeshift'], (transpile, jscodeshift) => {
         const { registerMethods } = jscodeshift;
 
         let origMethods;
@@ -37,19 +37,20 @@ export default {
           }
         };
 
-        callback({jscodeshift});
-      }
+        callback({ transpile: transpile.default, jscodeshift });
+      },
     );
   },
 
   transform(
-    {jscodeshift},
+    { transpile, jscodeshift },
     transformCode,
-    code
+    code,
   ) {
     sessionMethods.clear();
+    transformCode = transpile(transformCode);
     const transformModule = compileModule( // eslint-disable-line no-shadow
-      transformCode
+      transformCode,
     );
     const transform = transformModule.__esModule ?
       transformModule.default :
@@ -72,7 +73,7 @@ export default {
           counter[value] = (counter[value] ? counter[value] : 0) + quantity;
         },
       },
-      {}
+      {},
     );
     if (statsWasCalled) {
       console.log(JSON.stringify(counter, null, 4)); // eslint-disable-line no-console
@@ -84,7 +85,7 @@ export default {
     } else if (typeof result !== 'string') {
       throw new Error(
         'Transformers must either return undefined, null or a string, not ' +
-        `"${typeof result}".`
+        `"${typeof result}".`,
       );
     }
     return result;

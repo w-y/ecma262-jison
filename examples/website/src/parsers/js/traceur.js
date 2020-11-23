@@ -1,48 +1,8 @@
-import React from 'react'; // eslint-disable-line no-unused-vars
 import defaultParserInterface from '../utils/defaultParserInterface';
 import pkg from 'traceur/package.json';
-import SettingsRenderer from '../utils/SettingsRenderer';
 
 const ID = 'traceur';
 const FILENAME = 'astExplorer.js';
-
-const defaultOptions = {
-  SourceType: 'Module',
-  TolerateErrors: false,
-  commentCallback: true,
-  annotations: false,
-  arrayComprehension: false,
-  arrowFunctions: true,
-  asyncFunctions: false,
-  asyncGenerators: false,
-  blockBinding: true,
-  classes: true,
-  computedPropertyNames: true,
-  destructuring: true,
-  exponentiation: false,
-  exportFromExtended: false,
-  forOf: true,
-  forOn: false,
-  generatorComprehension: false,
-  generators: true,
-  jsx: true,
-  memberVariables: false,
-  numericLiterals: true,
-  propertyMethods: true,
-  propertyNameShorthand: true,
-  restParameters: true,
-  spread: true,
-  templateLiterals: true,
-  types: false,
-  unicodeEscapeSequences: true,
-};
-
-const parserSettingsConfiguration = {
-  fields :[
-    ['SourceType', ['Script', 'Module']],
-    ...Object.keys(defaultOptions).filter(x => x !== 'SourceType'),
-  ],
-};
 
 class Comment {
   constructor(sourceRange) {
@@ -66,7 +26,6 @@ export default {
   },
 
   parse(traceur, code, options) {
-    options = {...defaultOptions, ...options};
     let sourceFile = new traceur.syntax.SourceFile(FILENAME, code);
     let errorReporter = new traceur.util.ErrorReporter();
     errorReporter.reportMessageInternal = (sourceRange, message) => {
@@ -85,7 +44,7 @@ export default {
     let parser = new traceur.syntax.Parser(
       sourceFile,
       errorReporter,
-      new traceur.util.Options(options)
+      new traceur.util.Options(options),
     );
     let comments = [];
     parser.handleComment = sourceRange => {
@@ -103,22 +62,24 @@ export default {
   },
 
   *forEachProperty(node) {
-    if ('type' in node) {
-      yield {
-        value: node.type,
-        key: 'type',
+    if (node && typeof node === 'object') {
+      if ('type' in node) {
+        yield {
+          value: node.type,
+          key: 'type',
+        }
       }
-    }
-    for (let prop in node) {
-      if (prop === 'line_' || prop === 'column_') {
-        prop = prop.slice(0, -1);
-      }
-      if (prop === 'type' || prop === 'lineNumberTable') {
-        continue;
-      }
-      yield {
-        value: node[prop],
-        key: prop,
+      for (let prop in node) {
+        if (prop === 'line_' || prop === 'column_') {
+          prop = prop.slice(0, -1);
+        }
+        if (prop === 'type' || prop === 'lineNumberTable') {
+          continue;
+        }
+        yield {
+          value: node[prop],
+          key: prop,
+        }
       }
     }
   },
@@ -144,13 +105,45 @@ export default {
     );
   },
 
-  renderSettings(parserSettings, onChange) {
-    return (
-      <SettingsRenderer
-        settingsConfiguration={parserSettingsConfiguration}
-        parserSettings={{...defaultOptions, ...parserSettings}}
-        onChange={onChange}
-      />
-    );
+  getDefaultOptions() {
+    return {
+      SourceType: 'Module',
+      TolerateErrors: false,
+      commentCallback: true,
+      annotations: false,
+      arrayComprehension: false,
+      arrowFunctions: true,
+      asyncFunctions: false,
+      asyncGenerators: false,
+      blockBinding: true,
+      classes: true,
+      computedPropertyNames: true,
+      destructuring: true,
+      exponentiation: false,
+      exportFromExtended: false,
+      forOf: true,
+      forOn: false,
+      generatorComprehension: false,
+      generators: true,
+      jsx: true,
+      memberVariables: false,
+      numericLiterals: true,
+      propertyMethods: true,
+      propertyNameShorthand: true,
+      restParameters: true,
+      spread: true,
+      templateLiterals: true,
+      types: false,
+      unicodeEscapeSequences: true,
+    };
+  },
+
+  _getSettingsConfiguration(defaultOptions) {
+    return {
+      fields :[
+        ['SourceType', ['Script', 'Module']],
+        ...Object.keys(defaultOptions).filter(x => x !== 'SourceType'),
+      ],
+    };
   },
 };

@@ -1,6 +1,13 @@
-import {createSelector} from 'reselect';
 import isEqual from 'lodash.isequal';
 import {getParserByID, getTransformerByID} from '../parsers';
+
+// Our selectors are not computationally expensive so we can just use this
+// implementation.
+function createSelector(deps, f) {
+  return function(state) {
+    return f.apply(this, deps.map(d => d(state)));
+  }
+}
 
 // UI related
 
@@ -22,6 +29,10 @@ export function isLoadingSnippet(state) {
 
 export function showSettingsDialog(state) {
   return state.showSettingsDialog;
+}
+
+export function showSettingsDrawer(state) {
+  return state.showSettingsDrawer;
 }
 
 export function showShareDialog(state) {
@@ -46,8 +57,8 @@ export function getParserSettings(state) {
   return state.workbench.parserSettings;
 }
 
-export function getParseError(state) {
-  return state.workbench.parseError;
+export function getParseResult(state) {
+  return state.workbench.parseResult;
 }
 
 // Code related
@@ -70,7 +81,7 @@ export function getKeyMap (state) {
 
 const isCodeDirty = createSelector(
   [getCode, getInitialCode],
-  (code, initialCode) => code !== initialCode
+  (code, initialCode) => code !== initialCode,
 );
 
 // Transform related
@@ -87,18 +98,22 @@ export function getTransformer(state) {
   return getTransformerByID(state.workbench.transform.transformer);
 }
 
+export function getTransformResult(state) {
+  return state.workbench.transform.transformResult;
+}
+
 export function showTransformer(state) {
   return state.showTransformPanel;
 }
 
 const isTransformDirty = createSelector(
   [getTransformCode, getInitialTransformCode],
-  (code, initialCode) => code !== initialCode
+  (code, initialCode) => code !== initialCode,
 );
 
 export const canFork = createSelector(
   [getRevision],
-  (revision) => !!revision
+  (revision) => !!revision,
 );
 
 const canSaveCode = createSelector(
@@ -106,12 +121,12 @@ const canSaveCode = createSelector(
   (revision, dirty) => (
     !revision || // can always save if there is no revision
     dirty
-  )
+  ),
 );
 
 export const canSaveTransform = createSelector(
   [showTransformer, isTransformDirty],
-  (showTransformer, dirty) => showTransformer && dirty
+  (showTransformer, dirty) => showTransformer && dirty,
 );
 
 const didParserSettingsChange = createSelector(
@@ -126,7 +141,7 @@ const didParserSettingsChange = createSelector(
       )
     )
 
-  }
+  },
 );
 
 export const canSave = createSelector(
@@ -134,5 +149,5 @@ export const canSave = createSelector(
   (revision, canSaveCode, canSaveTransform, didParserSettingsChange) => (
     (canSaveCode || canSaveTransform || didParserSettingsChange) &&
     (!revision || revision.canSave())
-  )
+  ),
 );

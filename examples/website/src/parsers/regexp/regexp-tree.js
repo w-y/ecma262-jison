@@ -1,17 +1,7 @@
-import React from 'react';
 import defaultParserInterface from '../utils/defaultParserInterface';
 import pkg from 'regexp-tree/package.json';
-import SettingsRenderer from '../utils/SettingsRenderer';
 
 const ID = 'regexp-tree';
-
-const defaultOptions = {
-  captureLocations: true,
-};
-
-const settingsConfiguration = {
-  fields: Object.keys(defaultOptions),
-};
 
 export default {
   ...defaultParserInterface,
@@ -29,8 +19,6 @@ export default {
   },
 
   parse(regexpTree, code, options={}) {
-    options = Object.assign({}, defaultOptions, options);
-
     regexpTree
       .parser
       .setOptions(options);
@@ -44,10 +32,6 @@ export default {
     }
   },
 
-  getNodeName(node) {
-    return node.type;
-  },
-
   opensByDefault(node, key) {
     return (
       node.type === 'RegExp' ||
@@ -56,13 +40,10 @@ export default {
     );
   },
 
-  renderSettings(parserSettings, onChange) {
-    return (
-      <SettingsRenderer
-        settingsConfiguration={settingsConfiguration}
-        parserSettings={{...defaultOptions, ...parserSettings}}
-        onChange={onChange}
-      />
-    );
+  getDefaultOptions() {
+    return {
+      captureLocations: true,
+    };
   },
+
 };

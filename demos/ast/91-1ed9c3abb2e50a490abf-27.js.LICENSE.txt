@@ -1,0 +1,10 @@
+/*!
+ * 
+ *   Package: php-parser
+ *   Parse PHP code from JS and returns its AST
+ *   Build: 6da88e7e7acbe4a154b4 - 3/27/2020
+ *   Copyright (C) 2020 Glayzzle (BSD-3-Clause)
+ *   @authors https://github.com/glayzzle/php-parser/graphs/contributors
+ *   @url http://glayzzle.com        
+ *       
+ */
