@@ -11,10 +11,12 @@ function mapStateToProps(state) {
     // changed and we can save.
     defaultTransformCode: selectors.getInitialTransformCode(state),
     transformCode: selectors.getTransformCode(state),
-    mode: selectors.getParser(state).category.id,
-    code: selectors.getCode(state),
+    mode:
+      selectors.getParser(state).category.editorMode ||
+      selectors.getParser(state).category.id,
     enableFormatting: selectors.getFormattingState(state),
     keyMap: selectors.getKeyMap(state),
+    transformResult: selectors.getTransformResult(state),
   };
 }
 

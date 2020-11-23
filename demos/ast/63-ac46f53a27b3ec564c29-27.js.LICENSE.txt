@@ -1,0 +1,1 @@
+/*! @author Toru Nagashima <https://github.com/mysticatea> */

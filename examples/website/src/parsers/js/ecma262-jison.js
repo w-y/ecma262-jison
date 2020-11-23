@@ -1,33 +1,7 @@
-import React from 'react'; // eslint-disable-line no-unused-vars
 import defaultParserInterface from './utils/defaultESTreeParserInterface';
 import pkg from 'ecma262-jison/package.json';
-import SettingsRenderer from '../utils/SettingsRenderer';
 
 const ID = 'ecma262-jison';
-const defaultOptions = {
-  sourceType: 'module',
-  loc: false,
-  range: true,
-  tokens: false,
-  comment: false,
-  attachComment: false,
-  tolerant: false,
-  jsx: true,
-};
-
-const parserSettingsConfiguration = {
-  fields: [
-    ['sourceType', ['script', 'module']],
-    'range',
-    'loc',
-    'attachComment',
-    'comment',
-    'tokens',
-    'tolerant',
-    'jsx',
-  ],
-  required: new Set(['range']),
-};
 
 export default {
   ...defaultParserInterface,
@@ -43,29 +17,51 @@ export default {
   },
 
   parse(esJison, code, options) {
-    return esJison.parse(code, {...defaultOptions, ...options});
+    return esJison.parse(code, options);
   },
 
   *forEachProperty(node) {
-    for (let prop in node) {
-      if (typeof node[prop] === 'function') {
-        continue;
+    if (node && typeof node === 'object') {
+      for (let prop in node) {
+        if (typeof node[prop] === 'function') {
+          continue;
+        }
+        yield {
+          value: node[prop],
+          key: prop,
+          computed: false,
+        };
       }
-      yield {
-        value: node[prop],
-        key: prop,
-        computed: false,
-      };
     }
   },
 
-  renderSettings(parserSettings, onChange) {
-    return (
-      <SettingsRenderer
-        settingsConfiguration={parserSettingsConfiguration}
-        parserSettings={{...defaultOptions, ...parserSettings}}
-        onChange={onChange}
-      />
-    );
+  getDefaultOptions() {
+    return {
+      sourceType: 'module',
+      loc: false,
+      range: true,
+      tokens: false,
+      comment: false,
+      attachComment: false,
+      tolerant: false,
+      jsx: true,
+    };
   },
+
+  _getSettingsConfiguration() {
+    return {
+      fields: [
+        ['sourceType', ['script', 'module']],
+        'range',
+        'loc',
+        'attachComment',
+        'comment',
+        'tokens',
+        'tolerant',
+        'jsx',
+      ],
+      required: new Set(['range']),
+    };
+  },
+
 };

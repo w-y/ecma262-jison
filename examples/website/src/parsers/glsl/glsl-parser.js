@@ -20,7 +20,7 @@ export default {
   loadParser(callback) {
     require(['glsl-tokenizer/string', 'glsl-parser/direct'], (
       tokenize,
-      parse
+      parse,
     ) => {
       callback({ tokenize, parse });
     });
@@ -43,7 +43,7 @@ export default {
             ? nextSibling.token.position -
                 (nextSibling.token.preceding || [])
                   .reduce((s, n) => s + (n.data || '').length, 0)
-            : end
+            : end,
         );
       });
     }
@@ -55,10 +55,6 @@ export default {
     if (loc) {
       return [loc.start, loc.end];
     }
-  },
-
-  getNodeName(node) {
-    return node.type;
   },
 
   opensByDefault(node, key) {

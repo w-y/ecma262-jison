@@ -1,17 +1,7 @@
-import React from 'react';
 import defaultParserInterface from '../utils/defaultParserInterface';
 import pkg from 'graphql/package.json';
-import SettingsRenderer from '../utils/SettingsRenderer';
 
 const ID = 'graphql-js';
-const defaultOptions = {
-  noLocation: false,
-  noSource: false,
-};
-
-const parserSettingsConfiguration = {
-  fields: Object.keys(defaultOptions),
-};
 
 export default {
   ...defaultParserInterface,
@@ -21,6 +11,7 @@ export default {
   version: pkg.version,
   homepage: pkg.homepage,
   locationProps: new Set(['loc']),
+  typeProps: new Set(['kind']),
 
   loadParser(callback) {
     require(['graphql/language'], ({ parse }) => {
@@ -29,7 +20,7 @@ export default {
   },
 
   parse({ parse }, code, options) {
-    return parse(code, {...defaultOptions, ...options});
+    return parse(code, options);
   },
 
   nodeToRange(node) {
@@ -46,13 +37,10 @@ export default {
     return key === 'definitions';
   },
 
-  renderSettings(parserSettings, onChange) {
-    return (
-      <SettingsRenderer
-        settingsConfiguration={parserSettingsConfiguration}
-        parserSettings={{...defaultOptions, ...parserSettings}}
-        onChange={onChange}
-      />
-    );
+  getDefaultOptions() {
+    return {
+      noLocation: false,
+      noSource: false,
+    };
   },
 };
