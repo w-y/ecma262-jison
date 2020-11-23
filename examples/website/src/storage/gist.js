@@ -3,7 +3,7 @@ import api from './api';
 import {getParserByID} from '../parsers';
 
 function getIDAndRevisionFromHash() {
-  let match = global.location.hash.match(/^#\/gist\/([^\/]+)(?:\/([^\/]+))?/);
+  let match = global.location.hash.match(/^#\/gist\/([^/]+)(?:\/([^/]+))?/);
   if (match) {
     return {
       id: match[1],
@@ -18,7 +18,7 @@ function fetchSnippet(snippetID, revisionID='latest') {
     `/gist/${snippetID}` + (revisionID ? `/${revisionID}` : ''),
     {
       method: 'GET',
-    }
+    },
   )
   .then(response => {
     if (response.ok) {
@@ -62,7 +62,7 @@ export function create(data) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
-    }
+    },
   )
   .then(response => {
     if (response.ok) {
@@ -93,7 +93,7 @@ export function update(revision, data) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(data),
-        }
+        },
       )
       .then(response => {
         if (response.ok) {
@@ -117,7 +117,7 @@ export function fork(revision, data) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
-    }
+    },
   )
   .then(response => {
     if (response.ok) {

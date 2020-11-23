@@ -1,22 +1,28 @@
-import React from 'react'; // eslint-disable-line no-unused-vars
 import defaultParserInterface from './utils/defaultESTreeParserInterface';
 import pkg from 'flow-parser/package.json';
-import SettingsRenderer from '../utils/SettingsRenderer';
 
 const ID = 'flow';
 export const defaultOptions = {
+  enums: false,
   esproposal_class_instance_fields: true,
   esproposal_class_static_fields: true,
   esproposal_decorators: true,
   esproposal_export_star_as: true,
+  esproposal_optional_chaining: true,
+  esproposal_nullish_coalescing: true,
+  tokens: false,
   types: true,
 };
 export const parserSettingsConfiguration = {
   fields: [
+    'enums',
     'esproposal_class_instance_fields',
     'esproposal_class_static_fields',
     'esproposal_decorators',
     'esproposal_export_star_as',
+    'esproposal_optional_chaining',
+    'esproposal_nullish_coalescing',
+    'tokens',
     'types',
   ],
 };
@@ -35,16 +41,14 @@ export default {
   },
 
   parse(flowParser, code, options) {
-    return flowParser.parse(code, {...defaultOptions, ...options});
+    return flowParser.parse(code, options);
   },
 
-  renderSettings(parserSettings, onChange) {
-    return (
-      <SettingsRenderer
-        settingsConfiguration={parserSettingsConfiguration}
-        parserSettings={{...defaultOptions, ...parserSettings}}
-        onChange={onChange}
-      />
-    );
+  getDefaultOptions() {
+    return defaultOptions;
+  },
+
+  _getSettingsConfiguration() {
+    return parserSettingsConfiguration;
   },
 };

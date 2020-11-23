@@ -1,28 +1,16 @@
-import React from 'react';
 import defaultParserInterface from '../utils/defaultParserInterface';
 import pkg from 'typescript/package.json';
-import SettingsRenderer from '../utils/SettingsRenderer';
 
 const ID = 'typescript';
 const FILENAME = 'astExplorer.ts';
 
-const defaultOptions = {
-  experimentalDecorators: true,
-  experimentalAsyncFunctions: true,
-  jsx: true,
-};
-
-const parserSettingsConfiguration = {
-  fields: [
-    'experimentalDecorators',
-    'experimentalAsyncFunctions',
-    'jsx',
-  ],
-};
-
-let ts;
 let getComments;
 const syntaxKind = {};
+
+// Typescript uses `process` somehow
+if (!global.process) {
+  global.process = {}
+}
 
 export default {
   ...defaultParserInterface,
@@ -32,6 +20,7 @@ export default {
   version: pkg.version,
   homepage: pkg.homepage,
   locationProps: new Set(['pos', 'end']),
+  typeProps: new Set(['kind']),
 
   loadParser(callback) {
     require(['typescript'], _ts => {
@@ -43,13 +32,11 @@ export default {
             }
         }
 
-        callback(ts = _ts);
+        callback(_ts);
     });
   },
 
   parse(ts, code, options) {
-    options = {...defaultOptions, ...options};
-
     const compilerHost/*: ts.CompilerHost*/ = {
       fileExists: () => true,
       getCanonicalFileName: filename => filename,
@@ -75,7 +62,7 @@ export default {
     }, compilerHost);
 
     const sourceFile = program.getSourceFile(filename);
-    
+
     getComments = (node, isTrailing) => {
       if (node.parent) {
         const nodePos = isTrailing ? node.end : node.pos;
@@ -100,7 +87,7 @@ export default {
 
     return sourceFile;
   },
-  
+
   getNodeName(node) {
     if (node.kind) {
       return syntaxKind[node.kind];
@@ -108,31 +95,33 @@ export default {
   },
 
   _ignoredProperties: new Set([
-    'constructor',
+    'file',
     'parent',
   ]),
 
   *forEachProperty(node) {
-    for (let prop in node) {
-      if (this._ignoredProperties.has(prop) || prop.charAt(0) === '_') {
-        continue;
+    if (node && typeof node === 'object') {
+      for (let prop in node) {
+        if (this._ignoredProperties.has(prop) || prop.charAt(0) === '_') {
+          continue;
+        }
+        yield {
+          value: node[prop],
+          key: prop,
+        };
       }
-      yield {
-        value: node[prop],
-        key: prop,
-      };
-    }
-    if (node.parent) {
-      yield {
-        value: getComments(node),
-        key: 'leadingComments',
-        computed: true,
-      };
-      yield {
-        value: getComments(node, true),
-        key: 'trailingCommments',
-        computed: true,
-      };
+      if (node.parent) {
+        yield {
+          value: getComments(node),
+          key: 'leadingComments',
+          computed: true,
+        };
+        yield {
+          value: getComments(node, true),
+          key: 'trailingComments',
+          computed: true,
+        };
+      }
     }
   },
 
@@ -146,7 +135,7 @@ export default {
     }
   },
 
-  opensByDefault(node, key) {
+  opensByDefault(_, key) {
     return (
       key === 'statements' ||
       key === 'declarationList' ||
@@ -154,13 +143,11 @@ export default {
     );
   },
 
-  renderSettings(parserSettings, onChange) {
-    return (
-      <SettingsRenderer
-        settingsConfiguration={parserSettingsConfiguration}
-        parserSettings={{...defaultOptions, ...parserSettings}}
-        onChange={onChange}
-      />
-    );
+  getDefaultOptions() {
+    return {
+      experimentalDecorators: true,
+      jsx: true,
+    };
   },
+
 };

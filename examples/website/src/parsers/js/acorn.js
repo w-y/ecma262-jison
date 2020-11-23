@@ -1,38 +1,8 @@
 import React from 'react';
 import defaultParserInterface from './utils/defaultESTreeParserInterface';
 import pkg from 'acorn/package.json';
-import SettingsRenderer from '../utils/SettingsRenderer';
 
 const ID = 'acorn';
-const defaultOptions = {
-  ecmaVersion: 7,
-  sourceType: 'module',
-  allowReserved: false,
-  allowReturnOutsideFunction: false,
-  allowImportExportEverywhere: false,
-  allowHashBang: false,
-  locations: false,
-  loose: false,
-  ranges: false,
-  preserveParens: false,
-  'plugins.jsx': true,
-};
-
-const settingsConfiguration = {
-  fields: [
-    ['ecmaVersion', [3, 5, 6, 7, 8], x => Number(x)],
-    ['sourceType', ['script', 'module']],
-    'allowReserved',
-    'allowReturnOutsideFunction',
-    'allowImportExportEverywhere',
-    'allowHashBang',
-    'locations',
-    'loose',
-    'ranges',
-    'preserveParens',
-    'plugins.jsx',
-  ],
-};
 
 export default {
   ...defaultParserInterface,
@@ -44,26 +14,27 @@ export default {
   locationProps: new Set(['range', 'loc', 'start', 'end']),
 
   loadParser(callback) {
-    require(['acorn', 'acorn/dist/acorn_loose', 'acorn-jsx/inject'], (acorn, acornLoose, jsxInject) => {
-      acorn = jsxInject(acorn);
+    require(['acorn', 'acorn-loose', 'acorn-jsx'], (acorn, acornLoose, acornJsx) => {
       callback({
         acorn,
         acornLoose,
+        acornJsx,
       });
     });
   },
 
   parse(parsers, code, options={}) {
-    options = Object.assign({}, defaultOptions, options);
-    const parser = options.loose ?
-      parsers.acornLoose.parse_dammit :
-      parsers.acorn.parse;
+    let parser;
+    if (options['plugins.jsx'] && !options.loose) {
+      const cls = parsers.acorn.Parser.extend(parsers.acornJsx());
+      parser = cls.parse.bind(cls);
+    } else {
+      parser = options.loose ?
+        parsers.acornLoose.parse:
+        parsers.acorn.parse;
+    }
 
-    // put deep option into correspondent place
-    return parser(code, {
-      ...options,
-      plugins: options['plugins.jsx'] && !options.loose ? { jsx: true } : {},
-    });
+    return parser(code, options);
   },
 
   nodeToRange(node) {
@@ -72,21 +43,57 @@ export default {
     }
   },
 
+  getDefaultOptions() {
+    return {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      allowReserved: false,
+      allowReturnOutsideFunction: false,
+      allowImportExportEverywhere: false,
+      allowAwaitOutsideFunction: false,
+      allowHashBang: false,
+      locations: false,
+      loose: false,
+      ranges: false,
+      preserveParens: false,
+      'plugins.jsx': true,
+    };
+  },
+
+  _getSettingsConfiguration() {
+    return {
+      fields: [
+        ['ecmaVersion', [3, 5, 6, 7, 8, 9, 10, 11, 12, 'latest'], x => x === 'latest' ? x : Number(x)],
+        ['sourceType', ['script', 'module']],
+        'allowReserved',
+        'allowReturnOutsideFunction',
+        'allowImportExportEverywhere',
+        'allowAwaitOutsideFunction',
+        'allowHashBang',
+        'locations',
+        'loose',
+        'ranges',
+        'preserveParens',
+        'plugins.jsx',
+      ],
+    };
+  },
+
   renderSettings(parserSettings, onChange) {
     return (
       <div>
         <p>
           <a
-            href="https://github.com/marijnh/acorn/blob/master/src/options.js"
+            href="https://github.com/acornjs/acorn/blob/master/acorn/src/options.js"
             target="_blank" rel="noopener noreferrer">
             Option descriptions
           </a>
         </p>
-        <SettingsRenderer
-          settingsConfiguration={settingsConfiguration}
-          parserSettings={{...defaultOptions, ...parserSettings}}
-          onChange={onChange}
-        />
+        {defaultParserInterface.renderSettings.call(
+          this,
+          parserSettings,
+          onChange,
+        )}
       </div>
     );
   },

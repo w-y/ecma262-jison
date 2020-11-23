@@ -1,7 +1,5 @@
-import React from 'react';
 import defaultParserInterface from './utils/defaultESTreeParserInterface';
-import pkg from 'babylon6/babylon-package';
-import SettingsRenderer from '../utils/SettingsRenderer';
+import pkg from 'babylon6/package.json';
 
 const availablePlugins = [
   'asyncGenerators',
@@ -24,6 +22,7 @@ export const defaultOptions = {
   sourceType: 'module',
   allowImportExportEverywhere: false,
   allowReturnOutsideFunction: false,
+  tokens: false,
   plugins: [
     'asyncGenerators',
     'classConstructorCall',
@@ -45,6 +44,7 @@ export const parserSettingsConfiguration = {
     ['sourceType', ['module', 'script']],
     'allowReturnOutsideFunction',
     'allowImportExportEverywhere',
+    'tokens',
     {
       key: 'plugins',
       title: 'Plugins',
@@ -52,7 +52,7 @@ export const parserSettingsConfiguration = {
       settings: settings => settings.plugins || defaultOptions.plugins,
       values: plugins => availablePlugins.reduce(
         (obj, name) => ((obj[name] = plugins.indexOf(name) > -1), obj),
-        {}
+        {},
       ),
     },
   ],
@@ -66,13 +66,14 @@ export default {
   version: pkg.version,
   homepage: pkg.homepage,
   locationProps: new Set(['loc', 'start', 'end']),
+  showInMenu: false,
 
   loadParser(callback) {
     require(['babylon6'], callback);
   },
 
   parse(babylon, code, options) {
-    return babylon.parse(code, {...defaultOptions, ...options});
+    return babylon.parse(code, options);
   },
 
   getNodeName(node) {
@@ -90,13 +91,12 @@ export default {
     }
   },
 
-  renderSettings(parserSettings, onChange) {
-    return (
-      <SettingsRenderer
-        settingsConfiguration={parserSettingsConfiguration}
-        parserSettings={{...defaultOptions, ...parserSettings}}
-        onChange={onChange}
-      />
-    );
+  getDefaultOptions() {
+    return defaultOptions;
   },
+
+  _getSettingsConfiguration() {
+    return parserSettingsConfiguration;
+  },
+
 };
