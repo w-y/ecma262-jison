@@ -25,7 +25,7 @@
     "html-webpack-plugin": "^2.28.0",
     "http-server": "^0.10.0",
     "inline-manifest-webpack-plugin": "^3.0.1",
-    "js-yaml": "^3.5.2",
+    "js-yaml": "^3.13.1",
     "json-loader": "^0.5.3",
     "postcss-loader": "^2.0.5",
     "progress-bar-webpack-plugin": "^1.9.3",
