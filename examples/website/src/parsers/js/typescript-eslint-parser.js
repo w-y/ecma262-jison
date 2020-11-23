@@ -1,41 +1,7 @@
-import React from 'react';
 import defaultParserInterface from './utils/defaultESTreeParserInterface';
-import pkg from 'typescript-eslint-parser/package.json';
-import SettingsRenderer from '../utils/SettingsRenderer';
+import pkg from '@typescript-eslint/parser/package.json';
 
-const ID = 'typescript-eslint-parser';
-
-const defaultOptions = {
-  range: true,
-  loc: false,
-  tokens: false,
-  comment: false,
-  tolerant: false,
-  useJSXTextNode: false,
-
-  ecmaFeatures: {
-    jsx: true,
-  },
-};
-
-const parserSettingsConfiguration = {
-  fields: [
-    'range',
-    'loc',
-    'tokens',
-    'comment',
-    'tolerant',
-    'useJSXTextNode',
-    {
-      key: 'ecmaFeatures',
-      title: 'ecmaFeatures',
-      fields: Object.keys(defaultOptions.ecmaFeatures),
-      settings:
-        settings => settings.ecmaFeatures || {...defaultOptions.ecmaFeatures},
-    },
-  ],
-  required: new Set(['range']),
-};
+const ID = '@typescript-eslint/parser';
 
 export default {
   ...defaultParserInterface,
@@ -43,24 +9,52 @@ export default {
   id: ID,
   displayName: ID,
   version: pkg.version,
-  homepage: pkg.homepage,
+  homepage: pkg.homepage || 'https://typescript-eslint.io/',
   locationProps: new Set(['loc', 'start', 'end', 'range']),
 
   loadParser(callback) {
-    require(['typescript-eslint-parser'], callback);
+    require(['@typescript-eslint/parser'], callback);
   },
 
   parse(parser, code, options) {
-    return parser.parse(code, {...defaultOptions, ...options} );
+    return parser.parse(code, options);
   },
 
-  renderSettings(parserSettings, onChange) {
-    return (
-      <SettingsRenderer
-        settingsConfiguration={parserSettingsConfiguration}
-        parserSettings={{...defaultOptions, ...parserSettings}}
-        onChange={onChange}
-      />
-    );
+  getDefaultOptions() {
+    return {
+      range: true,
+      loc: false,
+      tokens: false,
+      comment: false,
+      useJSXTextNode: false,
+      ecmaVersion: 6,
+      sourceType: 'module',
+
+      ecmaFeatures: {
+        jsx: true,
+      },
+    };
+  },
+
+  _getSettingsConfiguration(defaultOptions) {
+    return {
+      fields: [
+        ['ecmaVersion', [3, 5, 6, 7, 8, 9], value => Number(value)],
+        ['sourceType', ['script', 'module']],
+        'range',
+        'loc',
+        'tokens',
+        'comment',
+        'useJSXTextNode',
+        {
+          key: 'ecmaFeatures',
+          title: 'ecmaFeatures',
+          fields: Object.keys(defaultOptions.ecmaFeatures),
+          settings:
+          settings => settings.ecmaFeatures || {...defaultOptions.ecmaFeatures},
+        },
+      ],
+      required: new Set(['range']),
+    };
   },
 };

@@ -13,11 +13,18 @@ export default {
   defaultParserID: 'babylon7',
 
   loadTransformer(callback) {
-    require(['prettier'], callback);
+    require(
+      ['../../../transpilers/babel', 'prettier/standalone', 'prettier/parser-babel'],
+      (transpile, prettier, babel) => callback({ transpile: transpile.default, prettier, babel }),
+    );
   },
 
-  transform(prettier, transformCode, code) {
+  transform({ transpile, prettier, babel }, transformCode, code) {
+    transformCode = transpile(transformCode);
     const options = compileModule(transformCode);
-    return prettier.format(code, options.default || options);
+    return prettier.format(
+      code,
+      Object.assign({plugins: [babel]}, options.default || options),
+    );
   },
 };
